@@ -1,0 +1,27 @@
+{
+  "name": "project-server",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Server for ...",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest",
+    "lint": "eslint .",
+    "start": "node index.js"
+  },
+  "keywords": [],
+  "contributors": [
+    "Student1 <student1@middlebury.edu>",
+    "Student2 <student2@middlebury.edu>"
+  ],
+  "license": "Apache-2.0",
+  "devDependencies": {
+    "eslint": "^4.19.1",
+    "eslint-config-airbnb-base": "^12.1.0",
+    "eslint-plugin-import": "^2.9.0",
+    "jest": "^22.4.3"
+  },
+  "dependencies": {
+    "express": "^4.16.3"
+  }
+}
