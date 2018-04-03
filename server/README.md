@@ -30,7 +30,10 @@ and `.eslintrc.json` configured with:
 
 ```
 {
-  "extends": "airbnb-base"
+  "extends": "airbnb-base",
+  "env": {
+    "jest": true
+  }
 }
 ```
 

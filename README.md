@@ -4,6 +4,16 @@ This repository combines the client and server into a single repository that can
 
 The client was created with [create-react-app](https://github.com/facebookincubator/create-react-app) (CRA) and the server is a separate Node.js application. The client-server integration is based on this [tutorial](https://www.fullstackreact.com/articles/using-create-react-app-with-a-server/) and [repository](https://github.com/fullstackreact/food-lookup-demo). This repository will be referred to as the "top-level" to distinguish it from the client and server.
 
+## Installing Dependencies
+
+The skeleton is structured as three separate packages and so the dependencies need to be installed independently in each of the top-level, the client and the server, i.e.:
+
+```
+npm install
+npm install --prefix client
+npm install --prefix server
+```
+
 ## Running the Application
 
 The combined application, client and server, can be run with `npm start` in the top-level directory. `npm start` launches the CRA development server on http://localhost:3000 and the backend server on http://localhost:3001. By setting the `proxy` field in the client `package.json`, the client development server will proxy any unrecognized requests to the server.
@@ -13,15 +23,13 @@ The combined application, client and server, can be run with `npm start` in the 
 The client application can be independently tested as described in the [CRA documentation](https://github.com/facebookincubator/create-react-app/blob/master/packages/react-scripts/template/README.md#running-tests), i.e.:
 
 ```
-cd client
-npm test
+npm test --prefix client
 ```
 
 The server can be similarly independently tested:
 
 ```
-cd server
-npm test
+npm test --prefix server
 ```
 
 ## Linting
@@ -29,15 +37,13 @@ npm test
 Both the client and server can be independently linted via:
 
 ```
-cd client
-npm run lint
+npm run lint --prefix client
 ```
 
 and
 
 ```
-cd server
-npm run lint
+npm run lint --prefix server
 ```
 
 ## Continuous Integration
@@ -68,7 +74,7 @@ Assuming that you have a Heroku account, have installed the [Heroku command line
     git push heroku master
     ```
 
-Depending on how you implement your backend, you will likely need create "addons" for your database, etc. and migrate/seed your database before you deploy.
+Depending on how you implement your backend, you will likely need create "addons" for your database, etc. and migrate then seed your database before you deploy.
 
 ## Deploying to Basin
 
