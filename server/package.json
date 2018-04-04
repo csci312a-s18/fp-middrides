@@ -1,8 +1,8 @@
 {
-  "name": "middrides-server",
+  "name": "fp-middrides-server",
   "version": "0.1.0",
   "private": true,
-  "description": "Server for ...",
+  "description": "Server for Midd Rides App",
   "main": "index.js",
   "scripts": {
     "test": "jest",
