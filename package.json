@@ -1,5 +1,5 @@
 {
-  "name": "Midd Rides",
+  "name": "middrides",
   "version": "0.1.0",
   "private": true,
   "description": "CSCI 0312 Final Project: Midd Rides App",
@@ -13,7 +13,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/csci312a-s18/fp-middrides.git"
+    "url": "git+https://github.com/csci312a-s18/fp-middrides.git"
   },
   "cacheDirectories": [
     "client/node_modules",
@@ -34,5 +34,10 @@
   "license": "Apache-2.0",
   "devDependencies": {
     "concurrently": "^3.5.1"
-  }
+  },
+  "bugs": {
+    "url": "https://github.com/csci312a-s18/fp-middrides/issues"
+  },
+  "homepage": "https://github.com/csci312a-s18/fp-middrides#readme",
+  "dependencies": {}
 }

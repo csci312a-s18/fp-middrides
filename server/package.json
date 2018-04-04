@@ -1,5 +1,5 @@
 {
-  "name": "project-server",
+  "name": "middrides-server",
   "version": "0.1.0",
   "private": true,
   "description": "Server for ...",
@@ -11,8 +11,15 @@
   },
   "keywords": [],
   "contributors": [
-    "Student1 <student1@middlebury.edu>",
-    "Student2 <student2@middlebury.edu>"
+    "Ian Blow iblow@middlebury.edu",
+    "Reid Buzby rbuzby@middlebury.edu",
+    "Rachel Kang rkang@middlebury.edu",
+    "Silas Keeter skeeter@middlebury.edu",
+    "Parker Lawlor plawlor@middlebury.edu",
+    "Crystal Paudyal cpaudyal@middlebury.edu",
+    "Woojin Richardson wrichardson@middlebury.edu",
+    "Julia Silva jsilva@middlebury.edu",
+    "Jacob Volz jvolz@middlebury.edu"
   ],
   "license": "Apache-2.0",
   "devDependencies": {
