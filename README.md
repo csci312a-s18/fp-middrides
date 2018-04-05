@@ -1,3 +1,16 @@
+## Travis-CI badge
+
+[![Build Status](https://travis-ci.com/csci312a-s18/fp-middrides.svg?token=qYmu3y7BTGS4dNjpSe2a&branch=master)](https://travis-ci.com/csci312a-s18/fp-middrides)
+
+
+## Need the Application Addresses:
+The application aims to increase the efficiency of the "Midd Rides" bus service at Middlebury College. The serves as a platform to request rides and provides the live location about of the van.
+
+##Link to deployed application on Heroku
+
+https://gentle-sea-19680.herokuapp.com/
+
+
 # Project Skeleton Top-level
 
 This repository combines the client and server into a single repository that can be co-developed, tested and ultimately deployed to Heroku or basin.cs.middlebury.edu.
@@ -90,4 +103,6 @@ Your project can be deployed to basin.cs.middlebury.edu (where it is typically r
 
   	```
   	NODE_ENV=production PORT=5042 npm run start --prefix server
+      
   	```
+
