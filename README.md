@@ -1,4 +1,4 @@
-# Project Skeleton Top-level
+# Project MiddRides Top-level
 
 This repository combines the client and server into a single repository that can be co-developed, tested and ultimately deployed to Heroku or basin.cs.middlebury.edu.
 
