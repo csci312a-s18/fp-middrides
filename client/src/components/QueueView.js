@@ -6,6 +6,9 @@ const HorizontalUL = styled.ul`
   list-style:none;
 `;
 
+// to-do:
+// work on the alignment
+
 const ViewHeader = styled.li`
   display:inline;
   padding: 20px;
