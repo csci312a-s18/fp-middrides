@@ -39,5 +39,7 @@
     "url": "https://github.com/csci312a-s18/fp-middrides/issues"
   },
   "homepage": "https://github.com/csci312a-s18/fp-middrides#readme",
-  "dependencies": {}
+  "dependencies": {
+    "styled-components": "^3.2.5"
+  }
 }
