@@ -4,7 +4,7 @@ import ContentArea from './components/ContentArea';
 
 const MiddRidesTitle = styled.h1`
  text-align: center;
-`
+`;
 
 /* eslint-disable react/prefer-stateless-function */
 class App extends Component {
