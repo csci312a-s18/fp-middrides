@@ -19,7 +19,10 @@
     "client/node_modules",
     "server/node_modules"
   ],
-  "keywords": [],
+  "keywords": [
+    "server",
+    "middridesserver"
+  ],
   "contributors": [
     "Ian Blow iblow@middlebury.edu",
     "Reid Buzby rbuzby@middlebury.edu",
@@ -38,8 +41,5 @@
   "bugs": {
     "url": "https://github.com/csci312a-s18/fp-middrides/issues"
   },
-  "homepage": "https://github.com/csci312a-s18/fp-middrides#readme",
-  "dependencies": {
-    "styled-components": "^3.2.5"
-  }
+  "homepage": "https://github.com/csci312a-s18/fp-middrides#readme"
 }
