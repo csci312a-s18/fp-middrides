@@ -1,3 +1,8 @@
+/*
+  Form implements a form for creating a new ride request or editing an existing
+  one.
+*/
+
 import React, { Component } from 'react';
 // import Proptypes from 'prop-types';
 // import styled from 'styled-components';
