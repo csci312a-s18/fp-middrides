@@ -1,0 +1,10 @@
+[{
+    "location":"ADK",
+    "destination":"elot",
+    "timestamp":"1"
+  },
+  {
+    "location":"elot",
+    "destination":"CFA",
+    "timestamp":"2"
+  }]
