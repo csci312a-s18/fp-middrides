@@ -15,7 +15,7 @@ function UserView(props) {
   return (
     <div>
       <p>
-      aiiiight so this is where the gps and all them stuff goes u feel.
+      so this is where the gps and all them stuff goes u feel.
       theres gonna be a lil box here with a gps of the car u feel.
       we dont have none of that ready yet so this is it for now
       </p>

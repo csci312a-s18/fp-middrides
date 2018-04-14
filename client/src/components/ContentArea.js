@@ -39,7 +39,7 @@ class ContentArea extends Component {
           <DivContainer>
             <div>
             Hello World! This is where the queue and names of passengers
-            and shiiiiii will go. below is the submit and cancel buttons,
+            and stuff will go. below is the submit and cancel buttons,
             one of them cancels the request and takes u back to prev page
             and submit submits the ride.
             </div>
