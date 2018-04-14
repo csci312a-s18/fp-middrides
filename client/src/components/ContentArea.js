@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import UserView from './UserView';
-import styled from 'styled-components';
+import 'styled-components';
 
 
 const DivContainer = styled.div`
