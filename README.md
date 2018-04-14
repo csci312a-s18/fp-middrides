@@ -7,7 +7,7 @@
 ## Need the Application Addresses:
 The application aims to increase the efficiency of the "Midd Rides" bus service at Middlebury College. The serves as a platform to request rides and provides the live location about of the van.
 
-## Link to deployed application on Heroku
+##Link to deployed application on Heroku
 
 https://gentle-sea-19680.herokuapp.com/
 

@@ -6,6 +6,8 @@ const MiddRidesTitle = styled.h1`
  text-align: center;
 `;
 
+import Form from './components/Form';
+
 /* eslint-disable react/prefer-stateless-function */
 class App extends Component {
   render() {
@@ -13,7 +15,6 @@ class App extends Component {
       <div className="App">
         <MiddRidesTitle> MIDDRIDES </MiddRidesTitle>
         <ContentArea />
-
       </div>
     );
   }
