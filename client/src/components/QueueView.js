@@ -58,18 +58,6 @@ requests.push(req1);
 requests.push(req2);
 requests.push(req3);
 
-// function QueueViewHeader() {
-//   const items = ['Id', 'Origin', 'Destination', '#people'];
-//   const sectionItems = items.map(section => (
-//     <ViewHeader key={section}>{section}</ViewHeader>
-//   ));
-//   return (
-//     <div>
-//       <HorizontalUL>{sectionItems}</HorizontalUL>
-//     </div>
-//   );
-// }
-
 const headers = ['Id', 'Origin', 'Destination', '#people', 'Completed?'];
 
 class QueueView extends Component {
