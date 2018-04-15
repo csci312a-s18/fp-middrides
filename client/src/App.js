@@ -1,19 +1,15 @@
-import React from 'react';
-import styled from 'styled-components';
+import React, { Component } from 'react';
+import Form from './components/Form';
 
-import QueueView from './components/QueueView';
-
-const CenteredTitle = styled.h1`
-  text-align: center;
-`;
-
-function App() {
-  return (
-    <div className="App">
-      <CenteredTitle>MiddRides Queue</CenteredTitle>
-      <QueueView />
-    </div>
-  );
+/* eslint-disable react/prefer-stateless-function */
+class App extends Component {
+  render() {
+    return (
+      <div className="App">
+        <Form />
+      </div>
+    );
+  }
 }
 
 export default App;
