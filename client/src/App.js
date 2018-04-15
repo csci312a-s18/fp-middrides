@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
 import ContentArea from './components/ContentArea';
-import Form from './components/Form';
+//import Form from './components/Form';
 
 const MiddRidesTitle = styled.p`
  text-align: center;
