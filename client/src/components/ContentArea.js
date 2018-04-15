@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import 'styled-components';
-
+import styled from 'styled-components';
+import UserView from './UserView';
 
 const DivContainer = styled.div`
   margin: 40px;
