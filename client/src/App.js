@@ -10,6 +10,28 @@ const MiddRidesTitle = styled.p`
  font-size: 2em;
 `;
 
+const cors = require('cors');
+const express = require('express');
+const bodyParser = require('body-parser');
+const { ObjectID, MongoError } = require('mongodb'); // eslint-disable-line no-unused-vars
+
+const app = express();
+
+const corsOptions = {
+  methods: ['GET', 'PUT', 'POST', 'DELETE'],
+  origin: '*',
+  allowedHeaders: ['Content-Type', 'Accept', 'X-Requested-With', 'Origin'],
+};
+
+app.use(cors(corsOptions));
+app.use(bodyParser.json());
+
+app.get('/requests', (request, response, next) => {
+  db.collection('requests').find().toArray().then((documents) => { // eslint-disable-line no-unused-vars
+    response.send(documents);
+  }, next);
+});
+
 /* eslint-disable react/prefer-stateless-function */
 class App extends Component {
   render() {
@@ -22,4 +44,7 @@ class App extends Component {
   }
 }
 
-export default App;
+module.exports = {
+  app,
+  setDb: (newDb) => { db = newDb; }, // eslint-disable-line no-undef
+};
