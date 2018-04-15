@@ -90,36 +90,18 @@ class QueueView extends Component {
           </tr>
         </thead>
         <tbody>
-          {this.state.queue.map(request =>
+          {this.state.queue.map(request => (
             <tr key={request.id}>
               <Td>{request.id}</Td>
               <Td>{request.from}</Td>
               <Td>{request.to}</Td>
               <Td>{request.count}</Td>
               <Td>{request.completed}</Td>
-            </tr>)}
+            </tr>))}
         </tbody>
       </Table>
     );
   }
 }
-
-  // render() {
-  //
-  //   const queueHeader = (<QueueViewHeader />);
-  //   const requestList = this.state.queue.map(section => (
-  //     <ViewHeader key={section}>
-  //       {section.id}     {section.from}     {section.to}     {section.count}
-  //       <br />
-  //     </ViewHeader>
-  //   ));
-  //   return (
-  //     <div>
-  //       {queueHeader}
-  //       <HorizontalUL>{requestList}</HorizontalUL>
-  //     </div>
-  //   );
-  // }
-// }
 
 export default QueueView;
