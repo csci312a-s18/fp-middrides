@@ -1,3 +1,4 @@
+
 ## Travis-CI badge
 
 [![Build Status](https://travis-ci.com/csci312a-s18/fp-middrides.svg?token=qYmu3y7BTGS4dNjpSe2a&branch=master)](https://travis-ci.com/csci312a-s18/fp-middrides)
@@ -11,7 +12,7 @@ The application aims to increase the efficiency of the "Midd Rides" bus service 
 https://gentle-sea-19680.herokuapp.com/
 
 
-# Project Skeleton Top-level
+# Project MiddRides Top-level
 
 This repository combines the client and server into a single repository that can be co-developed, tested and ultimately deployed to Heroku or basin.cs.middlebury.edu.
 
