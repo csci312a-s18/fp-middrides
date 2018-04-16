@@ -2,9 +2,9 @@
 const http = require('http');
 const url = require('url');
 const { MongoClient } = require('mongodb');
-const { app, setDb } = require('./app');
+const { server, setDb } = require('./server');
 
-const mongoURL = process.env.MONGODB_URI || 'https://gentle-sea-19680.herokuapp.com/';
+const mongoURL = process.env.MONGODB_URI || 'mongodb://middrides:middridesapp1@ds247699.mlab.com:47699/heroku_b4q7q9zw';
 
 MongoClient.connect(mongoURL, (err, database) => {
   if (err) {
@@ -16,7 +16,7 @@ MongoClient.connect(mongoURL, (err, database) => {
 
     // We create the server explicitly (instead of using app.listen()) to
     // provide an example of how we would create a https server
-    const server = http.createServer(app).listen(process.env.PORT || 3000);
-    console.log('Listening on port %d', server.address().port);
+    const middrides_server = http.createServer(server).listen(process.env.PORT || 5000);
+    console.log('Listening on port %d', middrides_server.address().port);
   }
 });
