@@ -1,19 +1,24 @@
-import React from 'react';
+import React, { Component } from 'react';
 import styled from 'styled-components';
+import ContentArea from './components/ContentArea';
+// import Form from './components/Form';
 
-import QueueView from './components/QueueView';
-
-const CenteredTitle = styled.h1`
-  text-align: center;
+const MiddRidesTitle = styled.p`
+ text-align: center;
+ color: #000080;
+ font-size: 2em;
 `;
 
-function App() {
-  return (
-    <div className="App">
-      <CenteredTitle>MiddRides Queue</CenteredTitle>
-      <QueueView />
-    </div>
-  );
+/* eslint-disable react/prefer-stateless-function */
+class App extends Component {
+  render() {
+    return (
+      <div className="App">
+        <MiddRidesTitle> MiddRides </MiddRidesTitle>
+        <ContentArea />
+      </div>
+    );
+  }
 }
 
 export default App;
