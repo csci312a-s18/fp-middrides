@@ -25,7 +25,7 @@ const Th = styled.th`
   padding: 15px;
   text-align: left;
   border-bottom: 1px solid #ddd;
-  background-color: #4CAF50;
+  background-color: #000080;
   color: white;
 `;
 

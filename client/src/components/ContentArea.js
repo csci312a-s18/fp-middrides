@@ -93,14 +93,8 @@ class ContentArea extends Component {
   }
 
   handleCancel() {
-    const cancelledRequest = Object.assign({}, this.state.currentRequest, { active: false });
     fetch(`/requests/${this.state.currentRequest._id}`, {
-      method: 'PUT',
-      body: JSON.stringify(cancelledRequest),
-      headers: new Headers({
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      }),
+      method: 'Delete',
     }).then((response) => {
       if (!response.ok) {
         throw new Error(response.status_text);
