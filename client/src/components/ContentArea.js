@@ -3,7 +3,6 @@ import styled from 'styled-components';
 
 import QueueView from './QueueView';
 import RequestForm from './RequestForm';
-
 const DivContainer = styled.div`
   width: 80%;
   margin-left: auto;
@@ -26,17 +25,18 @@ class ContentArea extends Component {
   }
 
   componentDidMount() {
-    fetch('/requests')
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error(response.status_text);
-        }
-        return response.json();
-      })
-      .then((data) => {
-        this.setState({ requests: data });
-      })
-      .catch(err => console.log(err)); // eslint-disable-line no-console
+  fetch('/requests', { headers: new Headers({ Accept: 'application/json' }) })
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error(response.status_text);
+      }
+      return response.json();
+    })
+    .then((data) => {
+      const sortedData = data.sort(this.sortRequests);
+      this.setState({ requests: sortedData });
+    })
+    .catch(err => console.log(err)); // eslint-disable-line no-console
   }
 
   handleFormReturn(newRequest) {
@@ -98,6 +98,16 @@ class ContentArea extends Component {
     this.setState({ currentRequest: null });
   }
 
+sortRequests(a, b) { // eslint-disable-line class-methods-use-this
+  if (a.timestamp < b.timestamp) {
+    return 1;
+  }
+  if (a.timestamp > b.timestamp) {
+    return -1;
+  }
+  return 0;
+}
+
   render() {
     if (this.state.viewmode === 'UserStart') {
       const gps = (
@@ -107,7 +117,7 @@ class ContentArea extends Component {
           we dont have none of that ready yet so this is it for now
         </p>);
       const queueview = (<QueueView
-        requests={this.state.requests}
+        queue={this.state.queue}
       />);
 
       const requestRideButton = <input type="button" value="Request Ride" onClick={() => this.setState({ viewmode: 'RequestRide' })} />;
