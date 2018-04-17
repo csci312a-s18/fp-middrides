@@ -20,6 +20,38 @@ server.get('/requests', (request, response, next) => {
   }, next);
 });
 
+server.post('/requests', (request, response, next) => {
+  const newRequest = Object.assign({ extract: '' }, request.body);
+  db.collection('requests').insertOne(newRequest).then((result) => {
+    response.send(result.ops[0]);
+  }, next);
+});
+
+server.put('/requests/:id', (request, response, next) => {
+  const updatedRequest = Object.assign(
+    { extract: '' },
+    request.body,
+    { _id: ObjectID.createFromHexString(request.params.id) },
+  );
+  db.collection('request')
+    .findOneAndUpdate(
+      { _id: updatedRequest._id },
+      { $set: updatedRequest },
+      { returnOriginal: false },
+    )
+    .then((result) => {
+      response.send(result.value);
+    }, next);
+});
+
+server.delete('/requests/:id', (request, response, next) => {
+  db.collection('requests')
+    .deleteOne({ _id: ObjectID.createFromHexString(request.params.id) })
+    .then(() => {
+      response.sendStatus(200);
+    }, next);
+});
+
 // express only serves static assets in production
 if (process.env.NODE_ENV === 'production') {
   // Resolve client build directory as absolute path to avoid errors in express
