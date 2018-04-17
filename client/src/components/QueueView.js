@@ -32,7 +32,7 @@ const Th = styled.th`
 const headers = ['Name', 'Passengers', 'Current Location', 'Destination'];
 
 class QueueView extends Component {
-  constructor(props) {
+  constructor() {
     super();
   }
 
