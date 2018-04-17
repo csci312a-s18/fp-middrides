@@ -9,8 +9,12 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "concurrently \"npm start --prefix server\" \"npm start --prefix client\"",
+<<<<<<< HEAD
     "heroku-postbuild": "npm install --prefix client && npm install --only=dev --no-shrinkwrap --prefix client && npm run build --prefix client && npm install --prefix server",
     "lint": "eslint ."
+=======
+    "heroku-postbuild": "npm install --prefix client && npm install --only=dev --no-shrinkwrap --prefix client && npm run build --prefix client && npm install --prefix server"
+>>>>>>> 2148c1b5d0cc1f13a04850f6a0f10bbcd2f2efe8
   },
   "repository": {
     "type": "git",
@@ -34,10 +38,14 @@
   ],
   "license": "Apache-2.0",
   "devDependencies": {
+<<<<<<< HEAD
     "concurrently": "^3.5.1",
     "eslint": "^4.19.1",
     "eslint-config-airbnb-base": "^12.1.0",
     "eslint-plugin-import": "^2.11.0"
+=======
+    "concurrently": "^3.5.1"
+>>>>>>> 2148c1b5d0cc1f13a04850f6a0f10bbcd2f2efe8
   },
   "bugs": {
     "url": "https://github.com/csci312a-s18/fp-middrides/issues"

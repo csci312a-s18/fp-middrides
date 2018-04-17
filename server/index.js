@@ -16,7 +16,11 @@ MongoClient.connect(mongoURL, (err, database) => {
 
     // We create the server explicitly (instead of using app.listen()) to
     // provide an example of how we would create a https server
+<<<<<<< HEAD
     const middrides_server = http.createServer(server).listen(process.env.PORT || 3001);
+=======
+    const middrides_server = http.createServer(server).listen(process.env.PORT || 5000);
+>>>>>>> 2148c1b5d0cc1f13a04850f6a0f10bbcd2f2efe8
     console.log('Listening on port %d', middrides_server.address().port);
   }
 });
