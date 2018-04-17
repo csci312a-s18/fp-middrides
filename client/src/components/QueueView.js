@@ -1,13 +1,12 @@
 import React, { Component } from 'react';
-// import PropTypes from 'prop-types';
+import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
 const Table = styled.table`
   border: 1px solid black;
   border-collapse: collapse;
   width: 80%;
-  margin-left: auto;
-  margin-right: auto;
+  margin: align-left;
 `;
 
 const Td = styled.td`
@@ -29,42 +28,13 @@ const Th = styled.th`
   color: white;
 `;
 
-const requests = [];
-const req1 = {
-  id: 1,
-  from: 'Bihall',
-  to: 'Atwater',
-  count: 2,
-  completed: 'No',
-};
-
-const req2 = {
-  id: 2,
-  from: 'Proctor',
-  to: 'ADK',
-  count: 3,
-  completed: 'Yes',
-};
-
-const req3 = {
-  id: 3,
-  from: 'E lot',
-  to: 'Ridgeline',
-  count: 1,
-  completed: 'No',
-};
-
-requests.push(req1);
-requests.push(req2);
-requests.push(req3);
-
 const headers = ['Id', 'Origin', 'Destination', '#people', 'Completed?'];
 
 class QueueView extends Component {
-  constructor() {
+  constructor(props) {
     super();
     this.state = {
-      queue: requests,
+      queue: props.requests,
     };
   }
 
@@ -91,5 +61,15 @@ class QueueView extends Component {
     );
   }
 }
+
+QueueView.propTypes = {
+  requests: PropTypes.arrayOf(PropTypes.shape({
+    id: PropTypes.string,
+    from: PropTypes.string,
+    to: PropTypes.string,
+    count: PropTypes.string,
+    completed: PropTypes.string,
+  })).isRequired,
+};
 
 export default QueueView;
