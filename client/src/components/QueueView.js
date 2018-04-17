@@ -38,21 +38,7 @@ class QueueView extends Component {
       queue: [],
     };
   }
-
-  sortRequests(a, b) {
-    if (a.timestamp < b.timestamp) {
-      return -1;
-    }
-    if (a.timestamp > b.timestamp) {
-      return 1;
-    }
-    else {
-      return 0;
-    }
-  }
-
   componentDidMount() {
-
     fetch('/requests', { headers: new Headers({ Accept: 'application/json' }) })
       .then((response) => {
         if (!response.ok) {
@@ -65,6 +51,16 @@ class QueueView extends Component {
         this.setState({ queue: sortedData });
       })
       .catch(err => console.log(err)); // eslint-disable-line no-console
+  }
+
+  sortRequests(a, b) { // eslint-disable-line class-methods-use-this
+    if (a.timestamp < b.timestamp) {
+      return -1;
+    }
+    if (a.timestamp > b.timestamp) {
+      return 1;
+    }
+    return 0;
   }
 
   render() {

@@ -1,3 +1,4 @@
+/* eslint-disable no-underscore-dangle */
 const cors = require('cors');
 const express = require('express');
 const bodyParser = require('body-parser');
@@ -15,14 +16,14 @@ server.use(cors(corsOptions));
 server.use(bodyParser.json());
 
 server.get('/requests', (request, response, next) => {
-  db.collection('requests').find().toArray().then((documents) => { // eslint-disable-line no-unused-vars
+  db.collection('requests').find().toArray().then((documents) => { // eslint-disable-line no-undef
     response.send(documents);
   }, next);
 });
 
 server.post('/requests', (request, response, next) => {
   const newRequest = Object.assign({ extract: '' }, request.body);
-  db.collection('requests').insertOne(newRequest).then((result) => {
+  db.collection('requests').insertOne(newRequest).then((result) => { // eslint-disable-line no-undef
     response.send(result.ops[0]);
   }, next);
 });
@@ -33,7 +34,7 @@ server.put('/requests/:id', (request, response, next) => {
     request.body,
     { _id: ObjectID.createFromHexString(request.params.id) },
   );
-  db.collection('requests')
+  db.collection('requests') // eslint-disable-line no-undef
     .findOneAndUpdate(
       { _id: updatedRequest._id },
       { $set: updatedRequest },
@@ -45,7 +46,7 @@ server.put('/requests/:id', (request, response, next) => {
 });
 
 server.delete('/requests/:id', (request, response, next) => {
-  db.collection('requests')
+  db.collection('requests') // eslint-disable-line no-undef
     .deleteOne({ _id: ObjectID.createFromHexString(request.params.id) })
     .then(() => {
       response.sendStatus(200);
