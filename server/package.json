@@ -7,9 +7,14 @@
   "scripts": {
     "test": "jest",
     "lint": "eslint .",
-    "start": "node index.js"
+    "start": "node index.js",
+    "mongo": "mongod --config mongod.conf",
+    "postinstall": "node postinstall.js"
   },
-  "keywords": [],
+  "keywords": [
+    "server",
+    "middridesserver"
+  ],
   "contributors": [
     "Ian Blow iblow@middlebury.edu",
     "Reid Buzby rbuzby@middlebury.edu",
@@ -23,12 +28,18 @@
   ],
   "license": "Apache-2.0",
   "devDependencies": {
-    "eslint": "^4.19.1",
+    "eslint": "^4.15.0",
     "eslint-config-airbnb-base": "^12.1.0",
-    "eslint-plugin-import": "^2.9.0",
-    "jest": "^22.4.3"
+    "eslint-plugin-import": "^2.8.0",
+    "jest": "^22.4.3",
+    "mongodb-memory-server": "^1.7.3",
+    "supertest": "^3.0.0"
   },
   "dependencies": {
-    "express": "^4.16.3"
+    "body-parser": "^1.18.2",
+    "cors": "^2.8.4",
+    "db-errors": "^0.1.0",
+    "express": "^4.16.2",
+    "mongodb": "^3.0.5"
   }
 }

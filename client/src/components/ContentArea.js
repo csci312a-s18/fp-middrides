@@ -2,37 +2,6 @@ import React, { Component } from 'react';
 import styled from 'styled-components';
 import QueueView from './QueueView';
 
-// replace the placeholder requests with the requests from server
-const fakeRequests = [];
-const req1 = {
-  id: 1,
-  from: 'Bihall',
-  to: 'Atwater',
-  count: 2,
-  completed: 'No',
-};
-
-const req2 = {
-  id: 2,
-  from: 'Proctor',
-  to: 'ADK',
-  count: 3,
-  completed: 'Yes',
-};
-
-const req3 = {
-  id: 3,
-  from: 'E lot',
-  to: 'Ridgeline',
-  count: 1,
-  completed: 'No',
-};
-
-fakeRequests.push(req1);
-fakeRequests.push(req2);
-fakeRequests.push(req3);
-
-
 const DivContainer = styled.div`
   width: 80%;
   margin-left: auto;
@@ -44,9 +13,35 @@ class ContentArea extends Component {
     super(props);
     this.state = {
       viewmode: 'UserStart',
-      requests: fakeRequests, // replace this with the requests from server
+      queue: [],
     };
   }
+
+  componentDidMount() {
+    fetch('/requests', { headers: new Headers({ Accept: 'application/json' }) })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(response.status_text);
+        }
+        return response.json();
+      })
+      .then((data) => {
+        const sortedData = data.sort(this.sortRequests);
+        this.setState({ queue: sortedData });
+      })
+      .catch(err => console.log(err)); // eslint-disable-line no-console
+  }
+
+  sortRequests(a, b) { // eslint-disable-line class-methods-use-this
+    if (a.timestamp < b.timestamp) {
+      return -1;
+    }
+    if (a.timestamp > b.timestamp) {
+      return 1;
+    }
+    return 0;
+  }
+
   render() {
     if (this.state.viewmode === 'UserStart') {
       const gps = (
@@ -56,7 +51,7 @@ class ContentArea extends Component {
           we dont have none of that ready yet so this is it for now
         </p>);
       const queueview = (<QueueView
-        requests={this.state.requests}
+        queue={this.state.queue}
       />);
       const btnRequestRide = (<input
         type="button"
