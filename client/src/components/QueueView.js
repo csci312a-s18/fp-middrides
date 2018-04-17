@@ -1,14 +1,13 @@
 /* eslint-disable no-underscore-dangle */
 import React, { Component } from 'react';
-// import PropTypes from 'prop-types';
+import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
 const Table = styled.table`
   border: 1px solid black;
   border-collapse: collapse;
   width: 80%;
-  margin-left: auto;
-  margin-right: auto;
+  margin: align-left;
 `;
 
 const Td = styled.td`
@@ -33,7 +32,7 @@ const Th = styled.th`
 const headers = ['Name', 'Passengers', 'Current Location', 'Destination'];
 
 class QueueView extends Component {
-  constructor() {
+  constructor(props) {
     super();
     this.state = {
       queue: [],
@@ -86,5 +85,15 @@ class QueueView extends Component {
     );
   }
 }
+
+QueueView.propTypes = {
+  requests: PropTypes.arrayOf(PropTypes.shape({
+    id: PropTypes.string,
+    from: PropTypes.string,
+    to: PropTypes.string,
+    count: PropTypes.string,
+    completed: PropTypes.string,
+  })).isRequired,
+};
 
 export default QueueView;
