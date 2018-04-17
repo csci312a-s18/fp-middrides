@@ -1,5 +1,5 @@
 /* eslint-disable no-underscore-dangle */
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
@@ -31,42 +31,26 @@ const Th = styled.th`
 
 const headers = ['Name', 'Passengers', 'Current Location', 'Destination'];
 
-class QueueView extends Component {
-  constructor() {
-    super();
-  }
-
-  sortRequests(a, b) { // eslint-disable-line class-methods-use-this
-    if (a.timestamp < b.timestamp) {
-      return -1;
-    }
-    if (a.timestamp > b.timestamp) {
-      return 1;
-    }
-    return 0;
-  }
-
-  render() {
-    return (
-      <Table>
-        <thead>
-          <tr>
-            {headers.map(title =>
-              <Th key={title}>{title}</Th>)}
-          </tr>
-        </thead>
-        <tbody>
-          {this.props.queue.map(request => (
-            <tr key={request._id}>
-              <Td>{request.name}</Td>
-              <Td>{request.passengers}</Td>
-              <Td>{request.currentLocation}</Td>
-              <Td>{request.destination}</Td>
-            </tr>))}
-        </tbody>
-      </Table>
-    );
-  }
+function QueueView(props) {
+  return (
+    <Table>
+      <thead>
+        <tr>
+          {headers.map(title =>
+            <Th key={title}>{title}</Th>)}
+        </tr>
+      </thead>
+      <tbody>
+        {props.queue.map(request => (
+          <tr key={request._id}>
+            <Td>{request.name}</Td>
+            <Td>{request.passengers}</Td>
+            <Td>{request.currentLocation}</Td>
+            <Td>{request.destination}</Td>
+          </tr>))}
+      </tbody>
+    </Table>
+  );
 }
 
 QueueView.propTypes = {

@@ -27,10 +27,19 @@ class ContentArea extends Component {
       })
       .then((data) => {
         const sortedData = data.sort(this.sortRequests);
-        console.log(sortedData);
         this.setState({ queue: sortedData });
       })
       .catch(err => console.log(err)); // eslint-disable-line no-console
+  }
+
+  sortRequests(a, b) { // eslint-disable-line class-methods-use-this
+    if (a.timestamp < b.timestamp) {
+      return -1;
+    }
+    if (a.timestamp > b.timestamp) {
+      return 1;
+    }
+    return 0;
   }
 
   render() {
