@@ -1,6 +1,10 @@
+/* eslint-disable no-underscore-dangle */
+
 import React, { Component } from 'react';
 import styled from 'styled-components';
+
 import QueueView from './QueueView';
+import RequestForm from './RequestForm';
 
 const DivContainer = styled.div`
   width: 80%;
@@ -8,13 +12,19 @@ const DivContainer = styled.div`
   margin-right: auto;
 `;
 
+const ButtonBar = styled.div`
+`;
+
 class ContentArea extends Component {
   constructor(props) {
     super(props);
     this.state = {
       viewmode: 'UserStart',
-      queue: [],
+      requests: [],
+      currentRequest: null,
     };
+
+    this.handleCancel = this.handleCancel.bind(this);
   }
 
   componentDidMount() {
@@ -27,17 +37,88 @@ class ContentArea extends Component {
       })
       .then((data) => {
         const sortedData = data.sort(this.sortRequests);
-        this.setState({ queue: sortedData });
+        this.setState({ requests: sortedData });
       })
       .catch(err => console.log(err)); // eslint-disable-line no-console
   }
 
+  handleFormReturn(newRequest) {
+    if (newRequest) { // Not a cancel
+      if (this.state.currentArticle) { // Update existing request
+        fetch(`/requests/${this.state.currentRequest._id}`, {
+          method: 'PUT',
+          body: JSON.stringify(newRequest),
+          headers: new Headers({
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+          }),
+        }).then((response) => {
+          if (!response.ok) {
+            throw new Error(response.status_text);
+          }
+          return response.json();
+        }).then((updatedRequest) => {
+          const updatedRequests = this.state.requests.map((request) => {
+            if (request._id === updatedRequest._id) {
+              return updatedRequest;
+            }
+            return request;
+          });
+          this.setState({ requests: updatedRequests });
+          this.setState({ currentRequest: updatedRequest });
+        }).catch(err => console.log(err)); // eslint-disable-line no-console
+      } else { // Create new request
+        fetch('/requests', {
+          method: 'POST',
+          body: JSON.stringify(newRequest),
+          headers: new Headers({
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+          }),
+        }).then((response) => {
+          if (!response.ok) {
+            throw new Error(response.status_text);
+          }
+          return response.json();
+        }).then((createdRequest) => {
+          const updatedRequests = this.state.requests;
+          updatedRequests.push(createdRequest);
+          this.setState({ requests: updatedRequests });
+          this.setState({ currentRequest: createdRequest });
+        }).catch(err => console.log(err)); // eslint-disable-line no-console
+      }
+    }
+    // Switch to the user main view
+    this.setState({ viewmode: 'UserStart' });
+  }
+
+  handleCancel() {
+    const cancelledRequest = Object.assign({}, this.state.currentRequest, { active: false });
+    fetch(`/requests/${this.state.currentRequest._id}`, {
+      method: 'PUT',
+      body: JSON.stringify(cancelledRequest),
+      headers: new Headers({
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      }),
+    }).then((response) => {
+      if (!response.ok) {
+        throw new Error(response.status_text);
+      }
+      return response.json();
+    }).catch(err => console.log(err)); // eslint-disable-line no-console
+    const updatedRequests = this.state.requests
+      .filter(request => request._id !== this.state.currentRequest._id);
+    this.setState({ requests: updatedRequests });
+    this.setState({ currentRequest: null });
+  }
+
   sortRequests(a, b) { // eslint-disable-line class-methods-use-this
     if (a.timestamp < b.timestamp) {
-      return -1;
+      return 1;
     }
     if (a.timestamp > b.timestamp) {
-      return 1;
+      return -1;
     }
     return 0;
   }
@@ -46,53 +127,50 @@ class ContentArea extends Component {
     if (this.state.viewmode === 'UserStart') {
       const gps = (
         <p>
-          so this is where the gps and all them stuff goes u feel.
-          theres gonna be a lil box here with a gps of the car u feel.
-          we dont have none of that ready yet so this is it for now
+          GPS
         </p>);
       const queueview = (<QueueView
-        queue={this.state.queue}
+        requests={this.state.requests}
       />);
-      const btnRequestRide = (<input
+
+      const requestRideButton = (<input
         type="button"
         value="Request Ride"
         onClick={() => this.setState({ viewmode: 'RequestRide' })}
       />);
+
+      // const changeRideButton = (<input
+      //   type="button" value="Change Ride"
+      //   onClick={() => this.setState({ viewmode: 'RequestRide' })}
+      // />);
+
+      const cancelRideButton = (<input
+        type="button"
+        value="Cancel Ride"
+        onClick={this.handleCancel}
+      />);
+
+      let buttons;
+      if (this.state.currentRequest) {
+        buttons = (<ButtonBar>{cancelRideButton}</ButtonBar>);
+      } else {
+        buttons = (<ButtonBar>{requestRideButton}</ButtonBar>);
+      }
+
       return (
         <DivContainer>
           {gps}
           {queueview}
           <br />
-          {btnRequestRide}
+          {buttons}
         </DivContainer>
       );
-    } else if (this.state.viewmode === 'RequestRide') {
-      const btnCancelRide = (<input
-        type="button"
-        value="Cancel"
-        onClick={() => this.setState({ viewmode: 'UserStart' })}
-      />);
-      const btnSubmitRide = (<input
-        type="button"
-        value="Submit"
-        onClick={() => this.setState({ viewmode: 'UserStart' })}
-      />);
-      return (
-        <DivContainer>
-          <div>
-            Hello World! This is where the queue and names of passengers
-            and stuff will go. below is the submit and cancel buttons,
-            one of them cancels the request and takes u back to prev page
-            and submit submits the ride.
-          </div>
-          <div>{btnSubmitRide} {btnCancelRide}</div>
-        </DivContainer>
-      );
-      // show request form
-      // this is where the request ride html elements should go
     }
     return (
-      <div> hello </div>
+      <RequestForm
+        request={this.state.currentRequest}
+        complete={(newRequest) => { this.handleFormReturn(newRequest); }}
+      />
     );
   }
 }

@@ -41,7 +41,7 @@ function QueueView(props) {
         </tr>
       </thead>
       <tbody>
-        {props.queue.map(request => (
+        {props.requests.map(request => (
           <tr key={request._id}>
             <Td>{request.name}</Td>
             <Td>{request.passengers}</Td>
@@ -54,7 +54,7 @@ function QueueView(props) {
 }
 
 QueueView.propTypes = {
-  queue: PropTypes.arrayOf(PropTypes.shape({
+  requests: PropTypes.arrayOf(PropTypes.shape({
     _id: PropTypes.string,
     name: PropTypes.string,
     passengers: PropTypes.string,
