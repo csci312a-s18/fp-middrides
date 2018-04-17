@@ -128,7 +128,7 @@ class RequestForm extends Component {
         {stopOptions}
       </DestinationSelect>);
 
-    const submitButton = <input type="button" disabled={this.state.name === '' || this.state.passengers === '' || this.state.currentLocation === '' || this.state.destination === '' || this.state.currentLocation === this.state.destination} onClick={this.handleSubmit} value="Submit" />;
+    const submitButton = <input type="button" disabled={this.state.name || this.state.passengers || this.state.currentLocation || this.state.destination || this.state.currentLocation === this.state.destination} onClick={this.handleSubmit} value="Submit" />;
 
     const cancelButton = <input type="button" onClick={this.handleCancel} value="Cancel" />;
 

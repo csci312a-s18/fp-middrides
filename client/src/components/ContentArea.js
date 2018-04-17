@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
 
-import QueueView from './QueueView';
-import RequestForm from './RequestForm';
+import QueueView from './QueueView';import RequestForm from './RequestForm';
 
 const DivContainer = styled.div`
   width: 80%;
@@ -15,6 +14,8 @@ class ContentArea extends Component {
     super(props);
     this.state = {
       viewmode: 'UserStart',
+      requests: [],
+      currentRequest: null,
     };
   }
 
@@ -84,8 +85,7 @@ class ContentArea extends Component {
           {gps}
           {queueview}
           <br />
-          {btnRequestRide}
-        </DivContainer>
+          {btnRequestRide}        </DivContainer>
       );
     }
     return (
