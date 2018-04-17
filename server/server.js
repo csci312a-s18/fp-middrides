@@ -33,7 +33,7 @@ server.put('/requests/:id', (request, response, next) => {
     request.body,
     { _id: ObjectID.createFromHexString(request.params.id) },
   );
-  db.collection('request')
+  db.collection('requests')
     .findOneAndUpdate(
       { _id: updatedRequest._id },
       { $set: updatedRequest },
@@ -65,10 +65,6 @@ if (process.env.NODE_ENV === 'production') {
     response.sendFile(path.join(buildPath, 'index.html'));
   });
 }
-
-// TODO: Add any middleware here
-
-// TODO: Add your routes here
 
 module.exports = {
   server,

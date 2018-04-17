@@ -29,35 +29,6 @@ const Th = styled.th`
   color: white;
 `;
 
-// const requests = [];
-// const req1 = {
-//   id: 1,
-//   from: 'Bihall',
-//   to: 'Atwater',
-//   count: 2,
-//   completed: 'No',
-// };
-//
-// const req2 = {
-//   id: 2,
-//   from: 'Proctor',
-//   to: 'ADK',
-//   count: 3,
-//   completed: 'Yes',
-// };
-//
-// const req3 = {
-//   id: 3,
-//   from: 'E lot',
-//   to: 'Ridgeline',
-//   count: 1,
-//   completed: 'No',
-// };
-//
-// requests.push(req1);
-// requests.push(req2);
-// requests.push(req3);
-
 const headers = ['Id', 'Origin', 'Destination', '#people', 'Completed?'];
 
 class QueueView extends Component {
@@ -68,49 +39,19 @@ class QueueView extends Component {
     };
   }
 
-  setStatus(id, status) {
-    const oldRequest = this.state.queue.find(request => id === request.id);
-    const newRequest = Object.assign({}, oldRequest, { completed: status });
-
-    fetch(`/requests/${id}`, {
-      method: 'PUT',
-      body: JSON.stringify(newRequest),
-      headers: new Headers({
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      }),
-    }).then((response) => {
-      if (!response.ok) {
-        throw new Error(response.status_text);
-      }
-      return response.json();
-    }).then((updatedRequest) => {
-      const updatedRequests = this.state.queue.map((request) => {
-        if (request.id === updatedRequest.id) {
-          return updatedRequest;
-        }
-        return request;
-      });
-      this.setState({ queue: updatedRequests });
-    }).catch(err => console.log(err)); // eslint-disable-line no-console
+  sortRequests(a, b) {
+    if (a.timestamp < b.timestamp) {
+      return -1;
+    }
+    if (a.timestamp > b.timestamp) {
+      return 1;
+    }
+    else {
+      return 0;
+    }
   }
 
   componentDidMount() {
-    // const newRequest = {id: 1, from: "ADK", to: "elot", count: 4, completed: 'No'};
-    //
-    // fetch('/requests', {
-    //   method: 'POST',
-    //   body: JSON.stringify(newRequest),
-    //   headers: new Headers({
-    //     Accept: 'application/json',
-    //     'Content-Type': 'application/json',
-    //   }),
-    // }).then((response) => {
-    //   if (!response.ok) {
-    //     throw new Error(response.status_text);
-    //   }
-    //   return response.json();
-    // });
 
     fetch('/requests', { headers: new Headers({ Accept: 'application/json' }) })
       .then((response) => {
@@ -120,12 +61,10 @@ class QueueView extends Component {
         return response.json();
       })
       .then((data) => {
-        console.log(data);
-        this.setState({ queue: data });
+        const sortedData = data.sort(this.sortRequests);
+        this.setState({ queue: sortedData });
       })
       .catch(err => console.log(err)); // eslint-disable-line no-console
-
-    this.setStatus(1, "Yes");
   }
 
   render() {

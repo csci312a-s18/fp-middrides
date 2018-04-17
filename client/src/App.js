@@ -3,7 +3,6 @@ import React, { Component } from 'react';
 import styled from 'styled-components';
 import ContentArea from './components/ContentArea';
 // import Form from './components/Form';
-import QueueView from './components/QueueView';
 
 const MiddRidesTitle = styled.p`
  text-align: center;
@@ -17,7 +16,7 @@ class App extends Component {
     return (
       <div className="App">
         <MiddRidesTitle> MiddRides </MiddRidesTitle>
-        <QueueView />
+        <ContentArea />
       </div>
     );
   }
