@@ -1,5 +1,5 @@
-const { app } = require('./server');
+const { server } = require('./server');
 
 test('Server "smoke" test', () => {
-  expect(app).toBeDefined();
+  expect(server).toBeDefined();
 });
