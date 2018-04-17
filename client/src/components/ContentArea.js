@@ -85,7 +85,8 @@ class ContentArea extends Component {
           {gps}
           {queueview}
           <br />
-          {btnRequestRide}        </DivContainer>
+          {btnRequestRide}
+        </DivContainer>
       );
     }
     return (
