@@ -1,6 +1,6 @@
 /*
-  Request displays the name, number of passengers, current location and destination of a request passed
-  down in its props.
+  Request displays the name, number of passengers, current location and
+  destination of a request passed down in its props.
 
   props:
     request: Request to display
@@ -30,7 +30,7 @@ export const RequestShape = PropTypes.shape({
   passengers: PropTypes.string, // needs to be converted to integer to be handled
   currentLocation: PropTypes.string,
   destination: PropTypes.string,
-  active: PropTypes.string,  // needs to be converted to boolean to be handled
+  active: PropTypes.string, // needs to be converted to boolean to be handled
   timestamp: PropTypes.string,
 });
 

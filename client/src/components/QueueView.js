@@ -54,7 +54,7 @@ function QueueView(props) {
 }
 
 QueueView.propTypes = {
-  queue: PropTypes.arrayOf(PropTypes.shape({
+  requests: PropTypes.arrayOf(PropTypes.shape({
     _id: PropTypes.string,
     name: PropTypes.string,
     passengers: PropTypes.string,

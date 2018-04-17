@@ -117,7 +117,10 @@ class RequestForm extends Component {
     ));
 
     const currentLocation = (
-      <CurrentLocationSelect value={this.state.currentLocation} onChange={this.handleCurrentLocation}>
+      <CurrentLocationSelect
+        value={this.state.currentLocation}
+        onChange={this.handleCurrentLocation}
+      >
         <option value="" disabled hidden>Select a current location</option>
         {stopOptions}
       </CurrentLocationSelect>);
