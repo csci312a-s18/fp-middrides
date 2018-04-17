@@ -39,13 +39,36 @@ class ContentArea extends Component {
     .catch(err => console.log(err)); // eslint-disable-line no-console
   }
 
+  handleCancel() {
+    const cancelledRequest = Object.assign({}, this.state.currentRequest, { active: false });
+    fetch(`/requests/${this.state.currentRequest._id}`, {
+      method: 'PUT',
+      body: JSON.stringify(cancelledRequest),
+      headers: new Headers({
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      }),
+    }).then((response) => {
+      if (!response.ok) {
+        throw new Error(response.status_text);
+      }
+      return response.json();
+    }).catch(err => console.log(err)); // eslint-disable-line no-console
+    const updatedRequests = this.state.requests.filter(request => request._id !== this.state.currentRequest._id);
+    this.setState({ requests: updatedRequests });
+    this.setState({ currentRequest: null });
+  }
+
   handleFormReturn(newRequest) {
       if (newRequest) { // Not a cancel
         if (this.state.currentArticle) { // Update existing request
           fetch(`/requests/${this.state.currentRequest._id}`, {
             method: 'PUT',
             body: JSON.stringify(newRequest),
-            headers: new Headers({ 'Content-type': 'application/json' }),
+            headers: new Headers({
+              Accept: 'application/json',
+              'Content-Type': 'application/json',
+            }),
           }).then((response) => {
             if (!response.ok) {
               throw new Error(response.status_text);
@@ -62,10 +85,13 @@ class ContentArea extends Component {
             this.setState({ currentRequest: updatedRequest });
           }).catch(err => console.log(err)); // eslint-disable-line no-console
         } else { // Create new request
-          fetch('/requests', {
+          fetch(`/requests`, {
             method: 'POST',
             body: JSON.stringify(newRequest),
-            headers: new Headers({ 'Content-type': 'application/json' }),
+            headers: new Headers({
+              Accept: 'application/json',
+              'Content-Type': 'application/json',
+            }),
           }).then((response) => {
             if (!response.ok) {
               throw new Error(response.status_text);
@@ -75,7 +101,7 @@ class ContentArea extends Component {
             const updatedRequests = this.state.requests;
             updatedRequests.push(createdRequest);
             this.setState({ requests: updatedRequests });
-            this.setState({ currentArticle: createdRequest });
+            this.setState({ currentRequest: createdRequest });
           }).catch(err => console.log(err)); // eslint-disable-line no-console
         }
     }
@@ -84,17 +110,22 @@ class ContentArea extends Component {
   }
 
   handleCancel() {
-    const cancelledRequest = Object.assign(this.state.currentRequest, { active: false });
+    const cancelledRequest = Object.assign({}, this.state.currentRequest, { active: false });
     fetch(`/requests/${this.state.currentRequest._id}`, {
       method: 'PUT',
       body: JSON.stringify(cancelledRequest),
-      headers: new Headers({ 'Content-type': 'application/json' }),
+      headers: new Headers({
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      }),
     }).then((response) => {
       if (!response.ok) {
         throw new Error(response.status_text);
       }
       return response.json();
     }).catch(err => console.log(err)); // eslint-disable-line no-console
+    const updatedRequests = this.state.requests.filter(request => request._id !== this.state.currentRequest._id);
+    this.setState({ requests: updatedRequests });
     this.setState({ currentRequest: null });
   }
 
@@ -112,22 +143,20 @@ sortRequests(a, b) { // eslint-disable-line class-methods-use-this
     if (this.state.viewmode === 'UserStart') {
       const gps = (
         <p>
-          so this is where the gps and all them stuff goes u feel.
-          theres gonna be a lil box here with a gps of the car u feel.
-          we dont have none of that ready yet so this is it for now
+          GPS
         </p>);
       const queueview = (<QueueView
-        queue={this.state.queue}
+        requests={this.state.requests}
       />);
 
       const requestRideButton = <input type="button" value="Request Ride" onClick={() => this.setState({ viewmode: 'RequestRide' })} />;
-      const changeRideButton = <input type="button" value="Change Ride" onClick={() => this.setState({ mode: 'RequestRide' })} />;
+      // const changeRideButton = <input type="button" value="Change Ride" onClick={() => this.setState({ viewmode: 'RequestRide' })} />;
       const cancelRideButton = (<input type="button" value="Cancel Ride" onClick={this.handleCancel}
       />);
 
       let buttons;
-      if (this.state.currentArticle) {
-        buttons = (<ButtonBar>{changeRideButton} {cancelRideButton}</ButtonBar>);
+      if (this.state.currentRequest) {
+        buttons = (<ButtonBar>{cancelRideButton}</ButtonBar>);
       } else {
         buttons = (<ButtonBar>{requestRideButton}</ButtonBar>);
       }
