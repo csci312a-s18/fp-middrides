@@ -1,9 +1,42 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
-import UserView from './UserView';
+import QueueView from './QueueView';
+
+// replace the placeholder requests with the requests from server
+const fakeRequests = [];
+const req1 = {
+  id: 1,
+  from: 'Bihall',
+  to: 'Atwater',
+  count: 2,
+  completed: 'No',
+};
+
+const req2 = {
+  id: 2,
+  from: 'Proctor',
+  to: 'ADK',
+  count: 3,
+  completed: 'Yes',
+};
+
+const req3 = {
+  id: 3,
+  from: 'E lot',
+  to: 'Ridgeline',
+  count: 1,
+  completed: 'No',
+};
+
+fakeRequests.push(req1);
+fakeRequests.push(req2);
+fakeRequests.push(req3);
+
 
 const DivContainer = styled.div`
-  margin: 40px;
+  width: 80%;
+  margin-left: auto;
+  margin-right: auto;
 `;
 
 class ContentArea extends Component {
@@ -11,16 +44,31 @@ class ContentArea extends Component {
     super(props);
     this.state = {
       viewmode: 'UserStart',
+      requests: fakeRequests, // replace this with the requests from server
     };
   }
   render() {
     if (this.state.viewmode === 'UserStart') {
-      const userview = (<UserView
-        changeView={() => this.setState({ viewmode: 'RequestRide' })}
+      const gps = (
+        <p>
+          so this is where the gps and all them stuff goes u feel.
+          theres gonna be a lil box here with a gps of the car u feel.
+          we dont have none of that ready yet so this is it for now
+        </p>);
+      const queueview = (<QueueView
+        requests={this.state.requests}
+      />);
+      const btnRequestRide = (<input
+        type="button"
+        value="Request Ride"
+        onClick={() => this.setState({ viewmode: 'RequestRide' })}
       />);
       return (
         <DivContainer>
-          {userview}
+          {gps}
+          {queueview}
+          <br />
+          {btnRequestRide}
         </DivContainer>
       );
     } else if (this.state.viewmode === 'RequestRide') {
