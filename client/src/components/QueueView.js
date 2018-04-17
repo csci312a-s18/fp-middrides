@@ -1,3 +1,4 @@
+/* eslint-disable no-underscore-dangle */
 import React, { Component } from 'react';
 // import PropTypes from 'prop-types';
 import styled from 'styled-components';
@@ -29,7 +30,7 @@ const Th = styled.th`
   color: white;
 `;
 
-const headers = ['Id', 'Origin', 'Destination', '#people', 'Completed?'];
+const headers = ['Name', 'Passengers', 'Current Location', 'Destination'];
 
 class QueueView extends Component {
   constructor() {
@@ -74,12 +75,11 @@ class QueueView extends Component {
         </thead>
         <tbody>
           {this.state.queue.map(request => (
-            <tr key={request.id}>
-              <Td>{request.id}</Td>
-              <Td>{request.from}</Td>
-              <Td>{request.to}</Td>
-              <Td>{request.count}</Td>
-              <Td>{request.completed}</Td>
+            <tr key={request._id}>
+              <Td>{request.name}</Td>
+              <Td>{request.passengers}</Td>
+              <Td>{request.currentLocation}</Td>
+              <Td>{request.destination}</Td>
             </tr>))}
         </tbody>
       </Table>
