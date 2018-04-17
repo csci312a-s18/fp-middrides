@@ -6,8 +6,9 @@ import ContentArea from './components/ContentArea';
 
 const MiddRidesTitle = styled.p`
  text-align: center;
- color: #000080;
+ background-color: #000080;
  font-size: 2em;
+ color: white;
 `;
 
 /* eslint-disable react/prefer-stateless-function */
