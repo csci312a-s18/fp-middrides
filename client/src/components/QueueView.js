@@ -34,23 +34,6 @@ const headers = ['Name', 'Passengers', 'Current Location', 'Destination'];
 class QueueView extends Component {
   constructor(props) {
     super();
-    this.state = {
-      queue: [],
-    };
-  }
-  componentDidMount() {
-    fetch('/requests', { headers: new Headers({ Accept: 'application/json' }) })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error(response.status_text);
-        }
-        return response.json();
-      })
-      .then((data) => {
-        const sortedData = data.sort(this.sortRequests);
-        this.setState({ queue: sortedData });
-      })
-      .catch(err => console.log(err)); // eslint-disable-line no-console
   }
 
   sortRequests(a, b) { // eslint-disable-line class-methods-use-this
@@ -73,7 +56,7 @@ class QueueView extends Component {
           </tr>
         </thead>
         <tbody>
-          {this.state.queue.map(request => (
+          {this.props.queue.map(request => (
             <tr key={request._id}>
               <Td>{request.name}</Td>
               <Td>{request.passengers}</Td>
@@ -87,12 +70,13 @@ class QueueView extends Component {
 }
 
 QueueView.propTypes = {
-  requests: PropTypes.arrayOf(PropTypes.shape({
-    id: PropTypes.string,
-    from: PropTypes.string,
-    to: PropTypes.string,
-    count: PropTypes.string,
-    completed: PropTypes.string,
+  queue: PropTypes.arrayOf(PropTypes.shape({
+    _id: PropTypes.string,
+    name: PropTypes.string,
+    passengers: PropTypes.string,
+    currentLocation: PropTypes.string,
+    destination: PropTypes.string,
+    active: PropTypes.bool,
   })).isRequired,
 };
 
