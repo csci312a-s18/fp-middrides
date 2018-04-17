@@ -1,37 +1,8 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
+
 import QueueView from './QueueView';
-
-// replace the placeholder requests with the requests from server
-const fakeRequests = [];
-const req1 = {
-  id: 1,
-  from: 'Bihall',
-  to: 'Atwater',
-  count: 2,
-  completed: 'No',
-};
-
-const req2 = {
-  id: 2,
-  from: 'Proctor',
-  to: 'ADK',
-  count: 3,
-  completed: 'Yes',
-};
-
-const req3 = {
-  id: 3,
-  from: 'E lot',
-  to: 'Ridgeline',
-  count: 1,
-  completed: 'No',
-};
-
-fakeRequests.push(req1);
-fakeRequests.push(req2);
-fakeRequests.push(req3);
-
+import RequestForm from './RequestForm';
 
 const DivContainer = styled.div`
   width: 80%;
@@ -44,9 +15,54 @@ class ContentArea extends Component {
     super(props);
     this.state = {
       viewmode: 'UserStart',
-      requests: fakeRequests, // replace this with the requests from server
     };
   }
+
+  handleFormReturn(newRequest) {
+      if (newRequest) { // Not a cancel
+
+        // if (this.state.currentArticle) { // Update existing article
+        //   fetch(`/articles/${this.state.currentArticle._id}`, {
+        //     method: 'PUT',
+        //     body: JSON.stringify(newArticle),
+        //     headers: new Headers({ 'Content-type': 'application/json' }),
+        //   }).then((response) => {
+        //     if (!response.ok) {
+        //       throw new Error(response.status_text);
+        //     }
+        //     return response.json();
+        //   }).then((updatedArticle) => {
+        //     const updatedCollection = this.state.collection.map((article) => {
+        //       if (article._id === updatedArticle._id) {
+        //         return updatedArticle;
+        //       }
+        //       return article;
+        //     });
+        //     this.setState({ collection: updatedCollection });
+        //     this.setState({ currentArticle: updatedArticle });
+        //   }).catch(err => console.log(err)); // eslint-disable-line no-console
+        // } else { // Create new article
+          fetch('/requests', {
+            method: 'POST',
+            body: JSON.stringify(newRequest),
+            headers: new Headers({ 'Content-type': 'application/json' }),
+          }).then((response) => {
+            if (!response.ok) {
+              throw new Error(response.status_text);
+            }
+            return response.json();
+          }).then((createdRequest) => {
+            const updatedRequests = this.state.requests;
+            updatedRequests.push(createdRequest);
+            this.setState({ requests: updatedRequests });
+            // this.setState({ currentArticle: createdArticle });
+          }).catch(err => console.log(err)); // eslint-disable-line no-console
+        }
+
+      // Switch to the user main view
+      this.setState({ viewmode: 'UserStart'});
+    }
+
   render() {
     if (this.state.viewmode === 'UserStart') {
       const gps = (
@@ -71,33 +87,11 @@ class ContentArea extends Component {
           {btnRequestRide}
         </DivContainer>
       );
-    } else if (this.state.viewmode === 'RequestRide') {
-      const btnCancelRide = (<input
-        type="button"
-        value="Cancel"
-        onClick={() => this.setState({ viewmode: 'UserStart' })}
-      />);
-      const btnSubmitRide = (<input
-        type="button"
-        value="Submit"
-        onClick={() => this.setState({ viewmode: 'UserStart' })}
-      />);
-      return (
-        <DivContainer>
-          <div>
-            Hello World! This is where the queue and names of passengers
-            and stuff will go. below is the submit and cancel buttons,
-            one of them cancels the request and takes u back to prev page
-            and submit submits the ride.
-          </div>
-          <div>{btnSubmitRide} {btnCancelRide}</div>
-        </DivContainer>
-      );
-      // show request form
-      // this is where the request ride html elements should go
     }
     return (
-      <div> hello </div>
+      <RequestForm
+        complete={(newRequest) => {this.handleFormReturn(newRequest); }}
+      />
     );
   }
 }
