@@ -19,7 +19,6 @@ server.get('/requests', (request, response, next) => {
     response.send(documents);
   }, next);
 });
-<<<<<<< HEAD
 
 server.post('/requests', (request, response, next) => {
   const newRequest = Object.assign({ extract: '' }, request.body);
@@ -52,8 +51,6 @@ server.delete('/requests/:id', (request, response, next) => {
       response.sendStatus(200);
     }, next);
 });
-=======
->>>>>>> 2148c1b5d0cc1f13a04850f6a0f10bbcd2f2efe8
 
 // express only serves static assets in production
 if (process.env.NODE_ENV === 'production') {
