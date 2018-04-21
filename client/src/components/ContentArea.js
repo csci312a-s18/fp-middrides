@@ -115,10 +115,10 @@ class ContentArea extends Component {
 
   sortRequests(a, b) { // eslint-disable-line class-methods-use-this
     if (a.timestamp < b.timestamp) {
-      return 1;
+      return -1;
     }
     if (a.timestamp > b.timestamp) {
-      return -1;
+      return 1;
     }
     return 0;
   }
