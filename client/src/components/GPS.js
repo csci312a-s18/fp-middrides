@@ -1,6 +1,7 @@
-import React, { Component, ReactDOM } from 'react';
+import React, { Component } from 'react';
 import styled from 'styled-components';
 import GoogleMapReact from 'google-map-react';
+import MapContainer from './Map';
 
 const Map = styled.div`
         height: 400px;
@@ -11,16 +12,14 @@ class GPS extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      location  : {lat:43.61, lng:-73.19},
+      lat:44.0153,
+      lng:-73.1673,
     };
   }
 
   render(){
     return(
-    <GoogleMapReact
-    bootstrapURLKeys={ { key: [process.env.GOOGLEAPI_KEY] } }
-    defaultCenter={this.state.location}
-    defaultZoom={12}/>
+    <MapContainer lat = {this.state.lat} lng = {this.state.lng}/>
   );}
 }
 export default GPS;
