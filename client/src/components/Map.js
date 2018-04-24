@@ -2,6 +2,11 @@ import React, { Component } from 'react';
 
 import {Map, InfoWindow, Marker, GoogleApiWrapper} from 'google-maps-react';
 
+const style = {
+  width: '100%',
+  height: '400px'
+}
+
 export class MapContainer extends Component {
   constructor(props){
     super(props)
@@ -12,9 +17,15 @@ export class MapContainer extends Component {
   }
   render() {
     return (
-      <Map google={this.props.google} initialCenter={{
+      <Map google={this.props.google}
+          initialCenter={{
             lat:this.state.lat, lng:this.state.lng
-          }} zoom={14}>
+          }}
+          style={style}
+          zoom={14}>
+      <Marker onClick={this.onMarkerClick}
+            name={'Current location'} />
+
       </Map>
     );
   }
