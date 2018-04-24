@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import {Map, InfoWindow, Marker, GoogleApiWrapper} from 'google-maps-react';
+import {Map, Marker, GoogleApiWrapper} from 'google-maps-react';
 
 const style = {
   width: '100%',
@@ -11,8 +11,8 @@ export class MapContainer extends Component {
   constructor(props){
     super(props)
     this.state = {
-      lat: props.lat ? props.lat : 43.61,
-      lng: props.lng ? props.lng : -73.19,
+      lat: props.lat ? props.lat : 44.0153,
+      lng: props.lng ? props.lng : -73.1673,
     }
   }
   render() {

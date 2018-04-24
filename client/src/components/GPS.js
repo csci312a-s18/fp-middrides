@@ -1,12 +1,6 @@
 import React, { Component } from 'react';
-import styled from 'styled-components';
-import GoogleMapReact from 'google-map-react';
 import MapContainer from './Map';
 
-const Map = styled.div`
-        height: 400px;
-        width: 100%;
-        `;
 
 class GPS extends Component {
   constructor(props) {
