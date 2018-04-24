@@ -46,6 +46,10 @@
   "dependencies": {
     "fp-middrides-client": "file:client",
     "fp-middrides-server": "file:server",
+<<<<<<< HEAD
     "prefix": "^1.0.0"
+=======
+    "google-maps-react": "^2.0.0"
+>>>>>>> created map component and used it to render a map controlled by the location in GPS
   }
 }
