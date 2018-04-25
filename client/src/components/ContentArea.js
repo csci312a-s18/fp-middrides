@@ -64,8 +64,10 @@ class ContentArea extends Component {
             }
             return request;
           });
-          this.setState({ requests: updatedRequests });
-          this.setState({ currentRequest: updatedRequest });
+          this.setState({
+            requests: updatedRequests,
+            currentRequest: updatedRequest,
+          });
         }).catch(err => console.log(err)); // eslint-disable-line no-console
       } else { // Create new request
         fetch('/requests', {
@@ -81,10 +83,13 @@ class ContentArea extends Component {
           }
           return response.json();
         }).then((createdRequest) => {
-          const updatedRequests = this.state.requests;
+          const updatedRequests = this.state.requests.slice();
           updatedRequests.push(createdRequest);
-          this.setState({ requests: updatedRequests });
-          this.setState({ currentRequest: createdRequest });
+
+          this.setState({
+            requests: updatedRequests,
+            currentRequest: createdRequest,
+          });
         }).catch(err => console.log(err)); // eslint-disable-line no-console
       }
     }
@@ -109,8 +114,10 @@ class ContentArea extends Component {
     }).catch(err => console.log(err)); // eslint-disable-line no-console
     const updatedRequests = this.state.requests
       .filter(request => request._id !== this.state.currentRequest._id);
-    this.setState({ requests: updatedRequests });
-    this.setState({ currentRequest: null });
+    this.setState({
+      requests: updatedRequests,
+      currentRequest: null,
+    });
   }
 
   sortRequests(a, b) { // eslint-disable-line class-methods-use-this
@@ -139,10 +146,11 @@ class ContentArea extends Component {
         onClick={() => this.setState({ viewmode: 'RequestRide' })}
       />);
 
-      // const changeRideButton = (<input
-      //   type="button" value="Change Ride"
-      //   onClick={() => this.setState({ viewmode: 'RequestRide' })}
-      // />);
+      const editRideButton = (<input
+        type="button"
+        value="Edit Ride"
+        onClick={() => this.setState({ viewmode: 'RequestRide' })}
+      />);
 
       const cancelRideButton = (<input
         type="button"
@@ -152,7 +160,7 @@ class ContentArea extends Component {
 
       let buttons;
       if (this.state.currentRequest) {
-        buttons = (<ButtonBar>{cancelRideButton}</ButtonBar>);
+        buttons = (<ButtonBar>{editRideButton} {cancelRideButton}</ButtonBar>);
       } else {
         buttons = (<ButtonBar>{requestRideButton}</ButtonBar>);
       }
