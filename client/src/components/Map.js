@@ -36,11 +36,11 @@ export class MapContainer extends Component {
 }
 
 export default GoogleApiWrapper({
-  apiKey: ('AIzaSyCsls1CEvSm07LGXVVt1xoTKeYY1dagA8k'),
+  apiKey: process.env.GOOGLEAPI_KEY,
 })(MapContainer);
 
 MapContainer.propTypes = {
-  lat: PropTypes.string.isRequired,
-  lng: PropTypes.string.isRequired,
-  google: PropTypes.string.isRequired,
+  lat: PropTypes.number.isRequired,
+  lng: PropTypes.number.isRequired,
+  google: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
 };
