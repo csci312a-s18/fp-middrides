@@ -36,7 +36,7 @@ export class MapContainer extends Component {
 }
 
 export default GoogleApiWrapper({
-  apiKey: process.env.GOOGLEAPI_KEY,
+  apiKey: 'AIzaSyAvOrHV6khC62g8fEuiExotGDSVBBGxPOA', // migrate hardcode to => process.env.GOOGLEAPI_KEY when done with project
 })(MapContainer);
 
 MapContainer.propTypes = {
