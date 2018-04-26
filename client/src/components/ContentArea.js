@@ -5,6 +5,7 @@ import styled from 'styled-components';
 
 import QueueView from './QueueView';
 import RequestForm from './RequestForm';
+import GPS from './GPS';
 
 const DivContainer = styled.div`
   width: 80%;
@@ -125,10 +126,6 @@ class ContentArea extends Component {
 
   render() {
     if (this.state.viewmode === 'UserStart') {
-      const gps = (
-        <p>
-          GPS
-        </p>);
       const queueview = (<QueueView
         requests={this.state.requests}
       />);
@@ -159,7 +156,7 @@ class ContentArea extends Component {
 
       return (
         <DivContainer>
-          {gps}
+          <GPS />
           {queueview}
           <br />
           {buttons}
