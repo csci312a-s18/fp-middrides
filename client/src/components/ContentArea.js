@@ -10,9 +10,14 @@ const DivContainer = styled.div`
   width: 80%;
   margin-left: auto;
   margin-right: auto;
+  margin: auto;
 `;
 
 const ButtonBar = styled.div`
+`;
+
+const CenteredContainer = styled.div`
+  text-align: center;
 `;
 
 class ContentArea extends Component {
@@ -22,9 +27,13 @@ class ContentArea extends Component {
       viewmode: 'UserStart',
       requests: [],
       currentRequest: null,
+      password: '',
     };
 
     this.handleCancel = this.handleCancel.bind(this);
+    this.handlePassword = this.handlePassword.bind(this);
+    this.handleLogin = this.handleLogin.bind(this);
+    this.handleCancelLogin = this.handleCancelLogin.bind(this);
   }
 
   componentDidMount() {
@@ -113,6 +122,22 @@ class ContentArea extends Component {
     this.setState({ currentRequest: null });
   }
 
+  handlePassword(event) {
+    this.setState({ password: event.target.value });
+  }
+
+  handleCancelLogin() {
+    this.setState({ password: '', viewmode: 'UserStart' });
+  }
+
+  handleLogin() {
+    if (this.state.password === '12345') { // temporary password
+      this.setState({ viewmode: 'DispatcherMode' });
+    } else {
+      alert('Wrong password. Try again!');
+    }
+  }
+
   sortRequests(a, b) { // eslint-disable-line class-methods-use-this
     if (a.timestamp < b.timestamp) {
       return 1;
@@ -124,6 +149,7 @@ class ContentArea extends Component {
   }
 
   render() {
+    // view for user
     if (this.state.viewmode === 'UserStart') {
       const gps = (
         <p>
@@ -131,6 +157,7 @@ class ContentArea extends Component {
         </p>);
       const queueview = (<QueueView
         requests={this.state.requests}
+        mode={this.state.viewmode}
       />);
 
       const requestRideButton = (<input
@@ -139,39 +166,88 @@ class ContentArea extends Component {
         onClick={() => this.setState({ viewmode: 'RequestRide' })}
       />);
 
-      // const changeRideButton = (<input
-      //   type="button" value="Change Ride"
-      //   onClick={() => this.setState({ viewmode: 'RequestRide' })}
-      // />);
-
       const cancelRideButton = (<input
         type="button"
         value="Cancel Ride"
         onClick={this.handleCancel}
       />);
 
+      const enterDispatcherView = (<input
+        type="button"
+        value="Dispatcher Log-In"
+        onClick={() => this.setState({ viewmode: 'DispatcherLogin' })}
+      />);
+
       let buttons;
+
       if (this.state.currentRequest) {
-        buttons = (<ButtonBar>{cancelRideButton}</ButtonBar>);
+        buttons = (<ButtonBar>{cancelRideButton}{enterDispatcherView}</ButtonBar>);
       } else {
-        buttons = (<ButtonBar>{requestRideButton}</ButtonBar>);
+        buttons = (<ButtonBar>{requestRideButton}{enterDispatcherView}</ButtonBar>);
       }
 
       return (
         <DivContainer>
           {gps}
+          {buttons}
+          <br />
           {queueview}
           <br />
-          {buttons}
         </DivContainer>
       );
+
+    // view dispatcher mode
+    } else if (this.state.viewmode === 'DispatcherMode') {
+      const queueview = (<QueueView
+        requests={this.state.requests}
+        mode={this.state.viewmode}
+      />);
+
+      const addRideButton = (<input
+        type="button"
+        value="Add a Ride"
+        onClick={() => this.setState({ viewmode: 'RequestRide' })}
+      />);
+
+      const enterDispatcherView = (<input
+        type="button"
+        value="Dispatcher Log-out"
+        onClick={() => this.setState({ viewmode: 'UserStart' })}
+      />);
+
+      const buttons = (<ButtonBar>{addRideButton}{enterDispatcherView}</ButtonBar>);
+
+      return (
+        <DivContainer>
+          <CenteredContainer>
+          Dispatcher Mode
+          </CenteredContainer>
+          {buttons}
+          <br />
+          {queueview}
+          <br />
+        </DivContainer>
+      );
+      // view to request a ride
+    } else if (this.state.viewmode === 'RequestRide') {
+      return (
+        <RequestForm
+          request={this.state.currentRequest}
+          complete={(newRequest) => { this.handleFormReturn(newRequest); }}
+        />
+      );
+    // view to login to dispatchermode
+    } else if (this.state.viewmode === 'DispatcherLogin') {
+      return (
+        <CenteredContainer>
+          Password:
+          <input type="password" onChange={this.handlePassword} />
+          <br />
+          <input type="button" value="Login" onClick={this.handleLogin} />
+          <input type="button" value="Cancel" onClick={this.handleCancelLogin} />
+        </CenteredContainer>
+      );
     }
-    return (
-      <RequestForm
-        request={this.state.currentRequest}
-        complete={(newRequest) => { this.handleFormReturn(newRequest); }}
-      />
-    );
   }
 }
 
