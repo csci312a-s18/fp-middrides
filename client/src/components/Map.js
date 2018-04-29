@@ -11,10 +11,28 @@ export class MapContainer extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      lat: props.lat ? props.lat : 44.0153,
-      lng: props.lng ? props.lng : -73.1673,
+      lat: props.lat,
+      lng: props.lng,
     };
   }
+
+  updateLocation(latitude, longitude) {
+    const newLocation = Object.assign({}, this.state.currentRequest, { latitude: latitude, longitude: longitude });
+    fetch(`/shuttleLocation/${this.latLngID}`, {
+      method: 'PUT',
+      body: JSON.stringify(newLocation),
+      headers: new Headers({
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      }),
+    }).then((response) => {
+      if (!response.ok) {
+        throw new Error(response.status_text);
+      }
+      return response.json();
+    }).catch(err => console.log(err)); // eslint-disable-line no-console
+  }
+
   render() {
     return (
       <Map

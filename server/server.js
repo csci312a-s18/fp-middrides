@@ -12,6 +12,8 @@ const corsOptions = {
   allowedHeaders: ['Content-Type', 'Accept', 'X-Requested-With', 'Origin'],
 };
 
+const latLngID = '5ae396ed734d1d133182d27a';
+
 server.use(cors(corsOptions));
 server.use(bodyParser.json());
 
@@ -53,6 +55,31 @@ server.delete('/requests/:id', (request, response, next) => {
       response.sendStatus(200);
     }, next);
 });
+
+
+server.put('/shuttleLocation/:id'), (request, response, next) => {
+  const updatedLocation = Object.assign(
+    { extract: '' },
+    request.body,
+    { _id: ObjectID.createFromHexString(request.params.id) },
+  );
+  db.collection('shuttleLocation') // eslint-disable-line no-undef
+    .findOneAndUpdate(
+      { _id: updatedRequest._id },
+      { $set: updatedRequest },
+      { returnOriginal: false },
+    )
+    .then((result) => {
+      response.send(result.value);
+    }, next);
+});
+
+server.get(`/shuttleLocation/${latLngID}`), (request, response, next) => {
+  db.collection('requests/' + latLngID).find().toArray().then((documents) => { // eslint-disable-line no-undef
+    response.send(documents);
+  }, next);
+});
+
 
 // express only serves static assets in production
 if (process.env.NODE_ENV === 'production') {
