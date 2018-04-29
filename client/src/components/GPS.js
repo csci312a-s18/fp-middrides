@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 /* eslint-disable import/no-named-as-default */
 import MapContainer from './Map';
-
+//import geolocation from 'geolocation';
 
 const options = {
   enableHighAccuracy: false,
-  timeout: 5000,
-  maximumAge: 0,
+  timeout: 10000,
+  maximumAge: 100,
 };
 
 class GPS extends Component {
@@ -17,11 +17,7 @@ class GPS extends Component {
       lng: null,
       latLngID: '5ae396ed734d1d133182d27a',
     };
-  }
-
-  success(points) {
-    this.updateLocation(points.coords.latitude, points.coords.longitude);
-    this.getLocation();
+    navigator.geolocation.getCurrentPosition(this.success, this.error, options);
   }
 
   error(err) {
@@ -66,15 +62,18 @@ class GPS extends Component {
       .catch(err => console.log(err)); // eslint-disable-line no-console
   }
 
+  success(points) {
+    this.updateLocation(points.coords.latitude, points.coords.longitude);
+    this.getLocation();
+  }
+
   render() {
 
-    let geoCoord = navigator.geoLocation.getCurrentPosition(this.success, this.error, options);
+    navigator.geolocation.getCurrentPosition(this.success, this.error, options);
 
-    if (navigator.geoLocation) {
-      return (
-        <MapContainer lat={this.state.lat} lng={this.state.lng} />
-      );
-    }
+    return (
+      <MapContainer lat={this.state.lat} lng={this.state.lng} />
+    );
 
   }
 }
