@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Map, Marker, GoogleApiWrapper } from 'google-maps-react';
 
 const style = {
-  width: '100%',
+  width: '80%',
   height: '400px',
 };
 
@@ -14,23 +14,6 @@ export class MapContainer extends Component {
       lat: props.lat,
       lng: props.lng,
     };
-  }
-
-  updateLocation(latitude, longitude) {
-    const newLocation = Object.assign({}, this.state.currentRequest, { latitude: latitude, longitude: longitude });
-    fetch(`/shuttleLocation/${this.latLngID}`, {
-      method: 'PUT',
-      body: JSON.stringify(newLocation),
-      headers: new Headers({
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      }),
-    }).then((response) => {
-      if (!response.ok) {
-        throw new Error(response.status_text);
-      }
-      return response.json();
-    }).catch(err => console.log(err)); // eslint-disable-line no-console
   }
 
   render() {

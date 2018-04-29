@@ -57,7 +57,7 @@ server.delete('/requests/:id', (request, response, next) => {
 });
 
 
-server.put('/shuttleLocation/:id'), (request, response, next) => {
+server.put('/shuttleLocation/:id', (request, response, next) => {
   const updatedLocation = Object.assign(
     { extract: '' },
     request.body,
@@ -65,8 +65,8 @@ server.put('/shuttleLocation/:id'), (request, response, next) => {
   );
   db.collection('shuttleLocation') // eslint-disable-line no-undef
     .findOneAndUpdate(
-      { _id: updatedRequest._id },
-      { $set: updatedRequest },
+      { _id: updatedLocation._id },
+      { $set: updatedLocation },
       { returnOriginal: false },
     )
     .then((result) => {
@@ -74,8 +74,8 @@ server.put('/shuttleLocation/:id'), (request, response, next) => {
     }, next);
 });
 
-server.get(`/shuttleLocation/${latLngID}`), (request, response, next) => {
-  db.collection('requests/' + latLngID).find().toArray().then((documents) => { // eslint-disable-line no-undef
+server.get('/shuttleLocation', (request, response, next) => {
+  db.collection('shuttleLocation').find().toArray().then((documents) => { // eslint-disable-line no-undef
     response.send(documents);
   }, next);
 });
