@@ -3,6 +3,12 @@ import React, { Component } from 'react';
 import MapContainer from './Map';
 
 
+const options = {
+  enableHighAccuracy: false,
+  timeout: 5000,
+  maximumAge: 0,
+};
+
 class GPS extends Component {
   constructor(props) {
     super(props);
@@ -11,8 +17,15 @@ class GPS extends Component {
       lng: null,
       latLngID: '5ae396ed734d1d133182d27a',
     };
-    this.updateLocation(37.77, -122.41);
+  }
+
+  success(points) {
+    this.updateLocation(points.coords.latitude, points.coords.longitude);
     this.getLocation();
+  }
+
+  error(err) {
+    console.warn(`ERROR(${err.code}): ${err.message}`);
   }
 
   updateLocation(latitude, longitude) {
@@ -54,9 +67,15 @@ class GPS extends Component {
   }
 
   render() {
-    return (
-      <MapContainer lat={this.state.lat} lng={this.state.lng} />
-    );
+
+    let geoCoord = navigator.geoLocation.getCurrentPosition(this.success, this.error, options);
+
+    if (navigator.geoLocation) {
+      return (
+        <MapContainer lat={this.state.lat} lng={this.state.lng} />
+      );
+    }
+
   }
 }
 export default GPS;
