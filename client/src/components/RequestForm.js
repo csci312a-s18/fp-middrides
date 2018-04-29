@@ -68,7 +68,7 @@ class RequestForm extends Component {
       passengers: this.state.passengers,
       currentLocation: this.state.currentLocation,
       destination: this.state.destination,
-      active: true,
+      active: 'Pending',
       timestamp: now.toISOString(),
     };
 

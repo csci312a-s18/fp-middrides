@@ -25,6 +25,8 @@ const RequestCurrentLocation = styled.div`
 const RequestDestination = styled.div`
 `;
 
+const RequestActive = styled.div`
+`;
 export const RequestShape = PropTypes.shape({
   name: PropTypes.string,
   passengers: PropTypes.string, // needs to be converted to integer to be handled
@@ -41,6 +43,7 @@ function Request(props) {
       <RequestPassengers>{props.request.passengers}</RequestPassengers>
       <RequestCurrentLocation>{props.request.currentLocation}</RequestCurrentLocation>
       <RequestDestination>{props.request.destination}</RequestDestination>
+      <RequestActive>{props.request.active}</RequestActive>
     </RequestContainer>
   );
 }

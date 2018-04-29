@@ -2,31 +2,47 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import ContentArea from './ContentArea';
 
 class QueueView extends Component {
   constructor(props) {
     super(props);
 
+
     this.handleInactive = this.handleInactive.bind(this);
-    this.handleDelete = this.handleDelete.bind(this);
-  }
-
-  handleInactive() {
 
   }
+  handleInactive(props) {
+    if (this.props.currentRequest) {
+      const updatedRequests = this.props.requests
+        .filter(request => request._id == this.props.currentRequest._id);
+    } else{
+      const updatedRequests = this.props.requests
+        .filter(request => request._id == this.props.requests.request._id);
+    }
+    const inactiveRequest = this.updatedRequests.request;
+    this.inactiveRequest.active = 'Inactive';
+    this.setState({ currentRequest: inactiveRequest });
 
-  handleDelete() {
-    // Invoke this.props.deleteRequest(id)
+    this.props.complete(inactiveRequest);
   }
+
+
+  // handleCancel(props) {
+  //   // Invoke this.props.deleteRequest(id)
+  //   const cancelledRequest = Object.assign({}, this.props.currentRequest, { active: false });
+  //   const updatedRequests = this.props.requests
+  //     .filter(request => request._id !== this.state.currentRequest._id);
+  //   this.props.requests(updatedRequests);
+  //   }
+
 
   render() {
-    const headers = ['Name', 'Passengers', 'Current Location', 'Destination'];
+    const headers = ['Name', 'Passengers', 'Current Location', 'Destination', 'Status'];
 
     const Table = styled.table`
       border: 1px solid black;
       border-collapse: collapse;
-      width: 90%;
+      width: 100%;
       margin: align-left;
     `;
 
@@ -66,6 +82,7 @@ class QueueView extends Component {
                 <Td>{request.passengers}</Td>
                 <Td>{request.currentLocation}</Td>
                 <Td>{request.destination}</Td>
+                <Td>{request.active}</Td>
               </tr>))}
           </tbody>
         </Table>
@@ -87,14 +104,11 @@ class QueueView extends Component {
                 <Td>{request.passengers}</Td>
                 <Td>{request.currentLocation}</Td>
                 <Td>{request.destination}</Td>
+                <Td>{request.active}</Td>
                 <Td><input
                   type="button"
+                  onClick={() => this.handleInactive()}
                   value="Inactive"
-                  /* onClick={() => this.props.handleInactive(request._active)} */
-                />
-                  <input
-                    type="button"
-                    value="Delete"
                   />
                 </Td>
               </tr>))}
@@ -112,9 +126,10 @@ QueueView.propTypes = {
     passengers: PropTypes.string,
     currentLocation: PropTypes.string,
     destination: PropTypes.string,
-    active: PropTypes.bool,
+    active: PropTypes.string,
   })).isRequired,
   viewmode: PropTypes.string,
+  complete: PropTypes.func.isRequired,
 };
 
 export default QueueView;

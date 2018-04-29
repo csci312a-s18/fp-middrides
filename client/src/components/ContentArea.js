@@ -102,7 +102,7 @@ class ContentArea extends Component {
   }
 
   handleCancel() {
-    const cancelledRequest = Object.assign({}, this.state.currentRequest, { active: false });
+    const cancelledRequest = Object.assign({}, this.state.currentRequest, { active: 'Inactive' });
     fetch(`/requests/${this.state.currentRequest._id}`, {
       method: 'PUT',
       body: JSON.stringify(cancelledRequest),
@@ -158,6 +158,8 @@ class ContentArea extends Component {
       const queueview = (<QueueView
         requests={this.state.requests}
         mode={this.state.viewmode}
+        complete={(inactiveRequest) => { this.handleFormReturn(inactiveRequest); }}
+        currentRequest={this.state.currentRequest}
       />);
 
       const requestRideButton = (<input
@@ -201,6 +203,8 @@ class ContentArea extends Component {
       const queueview = (<QueueView
         requests={this.state.requests}
         mode={this.state.viewmode}
+        complete={(inactiveRequest) => { this.handleFormReturn(inactiveRequest); }}
+        currentRequest={this.state.currentRequest}
       />);
 
       const addRideButton = (<input
@@ -225,6 +229,7 @@ class ContentArea extends Component {
           {buttons}
           <br />
           {queueview}
+          complete={(newRequest) => { this.handleFormReturn(newRequest); }}
           <br />
         </DivContainer>
       );
