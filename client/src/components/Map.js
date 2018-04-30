@@ -7,8 +7,8 @@ const style = {
   height: '400px',
 };
 
+const middleburyLatLong = { lat: 44.0153, lng: -73.1673 };
 
-const centerStart = { lat: 44.0153, lng: -73.1673 };
 export class MapContainer extends Component {
   constructor(props) {
     super(props);
@@ -43,7 +43,7 @@ export class MapContainer extends Component {
       <Map
         google={this.props.google}
         initialCenter={{
-            lat: centerStart.lat, lng: centerStart.lng,
+            lat: middleburyLatLong.lat, lng: middleburyLatLong.lng,
           }}
         style={style}
         zoom={14}

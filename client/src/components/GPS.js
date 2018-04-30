@@ -10,6 +10,7 @@ const options = {
 };
 
 const latLngID = '5ae396ed734d1d133182d27a';
+
 function updateLocation(latitude, longitude) {
   const newLocation = Object.assign({}, {
     _id: {
@@ -45,7 +46,6 @@ function success(points) {
 class GPS extends Component {
   constructor(props) {
     super(props);
-    this.success = this.success.bind(this);
   }
 
   componentDidMount() {
