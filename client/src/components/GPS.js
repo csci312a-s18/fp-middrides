@@ -34,7 +34,7 @@ const request4 = {
 
 const requests = [request1, request2, request3];
 
-function recursiveAlgorithm(currentStop, requests, path, seatsLeft) {
+function RecursiveAlgorithm(currentStop, requests, path, seatsLeft) {
   const updatedRequests = [];
   const id = [];
   requests.forEach(request => updatedRequests.push(Object.assign({}, request)));
@@ -101,3 +101,5 @@ for (let i = 0; i < paths.length; i++) {
 }
 // paths.forEach(request => console.log(request.id));
 // console.log(paths.length);
+
+export default RecursiveAlgorithm;
