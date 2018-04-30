@@ -6,7 +6,7 @@ import MapContainer from './Map';
 const options = {
   enableHighAccuracy: false,
   timeout: 10000,
-  maximumAge: 100,
+  maximumAge: 0,
 };
 
 class GPS extends Component {
@@ -17,7 +17,23 @@ class GPS extends Component {
       lng: null,
       latLngID: '5ae396ed734d1d133182d27a',
     };
-    navigator.geolocation.getCurrentPosition(this.success, this.error, options);
+  }
+
+  componentDidMount() {
+    if (true) {
+      setTimeout(() => {
+        navigator.geolocation.getCurrentPosition(this.success, this.error, options);
+      }, 1000);
+    }
+    else {
+      this.getLocation();
+    }
+  }
+
+  success(points) {
+    console.log(points.coords.latitude, points.coords.longitude);
+    this.updateLocation(points.coords.latitude, points.coords.longitude);
+    this.setState( { lat: points.coords.latitude, lng: points.coords.longitude });
   }
 
   error(err) {
@@ -62,19 +78,10 @@ class GPS extends Component {
       .catch(err => console.log(err)); // eslint-disable-line no-console
   }
 
-  success(points) {
-    this.updateLocation(points.coords.latitude, points.coords.longitude);
-    this.getLocation();
-  }
-
   render() {
-
-    navigator.geolocation.getCurrentPosition(this.success, this.error, options);
-
     return (
       <MapContainer lat={this.state.lat} lng={this.state.lng} />
     );
-
   }
 }
 export default GPS;
