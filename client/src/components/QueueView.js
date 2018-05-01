@@ -8,23 +8,23 @@ class QueueView extends Component {
     super(props);
 
 
-    this.handleInactive = this.handleInactive.bind(this);
+
 
   }
-  handleInactive(props) {
-    if (this.props.currentRequest) {
-      const updatedRequests = this.props.requests
-        .filter(request => request._id == this.props.currentRequest._id);
-    } else{
-      const updatedRequests = this.props.requests
-        .filter(request => request._id == this.props.requests.request._id);
-    }
-    const inactiveRequest = this.updatedRequests.request;
-    this.inactiveRequest.active = 'Inactive';
-    this.setState({ currentRequest: inactiveRequest });
-
-    this.props.complete(inactiveRequest);
-  }
+  // handleInactive(props) {
+  //   if (this.props.currentRequest) {
+  //     const updatedRequests = this.props.requests
+  //       .filter(request => request._id == this.props.currentRequest._id);
+  //   } else{
+  //     const updatedRequests = this.props.requests
+  //       .filter(request => request._id == this.props.requests.request._id);
+  //   }
+  //   const inactiveRequest = this.updatedRequests.request;
+  //   this.inactiveRequest.active = 'inactive';
+  //   this.setState({ currentRequest: inactiveRequest });
+  //
+  //   this.props.complete(inactiveRequest);
+  // }
 
 
   // handleCancel(props) {
@@ -107,9 +107,14 @@ class QueueView extends Component {
                 <Td>{request.active}</Td>
                 <Td><input
                   type="button"
-                  onClick={() => this.handleInactive()}
+                  onClick={() => this.props.completeInactive(request._id)}
                   value="Inactive"
                   />
+                    <input
+                    type="button"
+                    onClick={() => this.props.completePickedUp(request._id)}
+                    value="Picked Up"
+                    />
                 </Td>
               </tr>))}
           </tbody>
@@ -129,7 +134,7 @@ QueueView.propTypes = {
     active: PropTypes.string,
   })).isRequired,
   viewmode: PropTypes.string,
-  complete: PropTypes.func.isRequired,
+  completeInactive: PropTypes.func.isRequired,
 };
 
 export default QueueView;
