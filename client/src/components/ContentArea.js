@@ -112,8 +112,13 @@ class ContentArea extends Component {
         }).catch(err => console.log(err)); // eslint-disable-line no-console
       }
     }
-    // Switch to the user main view
-    this.setState({ viewmode: 'UserStart' });
+    if (this.state.viewmode === 'RequestRideUser') {
+      // Switch to the user main view
+      this.setState({ viewmode: 'UserStart' });
+    } else {
+      // Switch to the dispatcher view
+      this.setState({ viewmode: 'DispatcherMode' });
+    }
   }
 
   handleCancel() {
@@ -301,7 +306,7 @@ class ContentArea extends Component {
       const requestRideButton = (<input
         type="button"
         value="Request Ride"
-        onClick={() => this.setState({ viewmode: 'RequestRide' })}
+        onClick={() => this.setState({ viewmode: 'RequestRideUser' })}
       />);
 
       const cancelRideButton = (<input
@@ -349,7 +354,7 @@ class ContentArea extends Component {
       const addRideButton = (<input
         type="button"
         value="Add a Ride"
-        onClick={() => this.setState({ viewmode: 'RequestRide' })}
+        onClick={() => this.setState({ viewmode: 'RequestRideDispatcher' })}
       />);
 
       const enterDispatcherView = (<input
@@ -372,16 +377,24 @@ class ContentArea extends Component {
           <br />
         </DivContainer>
       );
-      // view to request a ride
-    } else if (this.state.viewmode === 'RequestRide') {
+      // view to request a ride for User
+    } else if (this.state.viewmode === 'RequestRideUser') {
       return (
         <RequestForm
           requests={this.state.currentRequest}
           complete={(newRequest) => { this.handleFormReturn(newRequest); }}
         />
       );
-    // view to login to dispatchermode
+    // view to request a ride for Dispatcher
+    } else if (this.state.viewmode === 'RequestRideDispatcher') {
+      return (
+        <RequestForm
+          requests={this.state.currentRequest}
+          complete={(newRequest) => { this.handleFormReturn(newRequest); }}
+        />
+      );
     }
+    // view to login to dispatchermode
     return (
       <CenteredContainer>
           Password:
