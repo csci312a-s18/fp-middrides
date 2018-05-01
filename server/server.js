@@ -16,7 +16,8 @@ server.use(cors(corsOptions));
 server.use(bodyParser.json());
 
 server.get('/requests', (request, response, next) => {
-  db.collection('requests').find().toArray().then((documents) => { // eslint-disable-line no-undef
+  const query = { active: true };
+  db.collection('requests').find(query).toArray().then((documents) => { // eslint-disable-line no-undef
     response.send(documents);
   }, next);
 });
