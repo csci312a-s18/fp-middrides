@@ -25,12 +25,19 @@ const RequestCurrentLocation = styled.div`
 const RequestDestination = styled.div`
 `;
 
+const RequestActive = styled.div`
+`;
+
+const RequestIsPickedUp = styled.div`
+`;
+
 export const RequestShape = PropTypes.shape({
   name: PropTypes.string,
   passengers: PropTypes.string, // needs to be converted to integer to be handled
   currentLocation: PropTypes.string,
   destination: PropTypes.string,
   active: PropTypes.string, // needs to be converted to boolean to be handled
+  isPickedUp: PropTypes.string,
   timestamp: PropTypes.string,
 });
 
@@ -41,6 +48,8 @@ function Request(props) {
       <RequestPassengers>{props.request.passengers}</RequestPassengers>
       <RequestCurrentLocation>{props.request.currentLocation}</RequestCurrentLocation>
       <RequestDestination>{props.request.destination}</RequestDestination>
+      <RequestActive>{props.request.active}</RequestActive>
+      <RequestIsPickedUp>{props.request.isPickedUp}</RequestIsPickedUp>
     </RequestContainer>
   );
 }

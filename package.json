@@ -43,5 +43,9 @@
     "url": "https://github.com/csci312a-s18/fp-middrides/issues"
   },
   "homepage": "https://github.com/csci312a-s18/fp-middrides#readme",
-  "dependencies": {}
+  "dependencies": {
+    "fp-middrides-client": "file:client",
+    "fp-middrides-server": "file:server",
+    "prefix": "^1.0.0"
+  }
 }
