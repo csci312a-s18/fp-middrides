@@ -4,11 +4,7 @@ const url = require('url');
 const { MongoClient } = require('mongodb');
 const { server, setDb } = require('./server');
 
-<<<<<<< HEAD
 const mongoURL = process.env.MONGODB_URI || 'mongodb://heroku_b4q7q9zw:v258t3bsmg9o77vm4jq1e6peal@ds247699.mlab.com:47699/heroku_b4q7q9zw';
-=======
-const mongoURL = 'mongodb://middrides:middridesapp1@ds247699.mlab.com:47699/heroku_b4q7q9zw';
->>>>>>> Added new functionality in the server to keep a latitude and logitude field for the location of the shuttle. Added functions to update the location and pull the location. Build is currently failing due to internal server issues.
 
 MongoClient.connect(mongoURL, (err, database) => {
   if (err) {
