@@ -36,18 +36,10 @@ function updateLocation(latitude, longitude) {
 }
 
 function error(err) {
-  console.warn(`ERROR(${err.code}): ${err.message}`);
+  console.warn(`ERROR(${err.code}): ${err.message}`); // eslint-disable-line no-console
 }
 
-// function interval() {
-//   setInterval(function() {
-//
-//     }, 1000);
-// }
-
-
 function success(points) {
-  console.log(points.coords.latitude, points.coords.longitude);
   updateLocation(points.coords.latitude, points.coords.longitude);
 }
 
@@ -60,7 +52,6 @@ class GPS extends Component {
   }
 
   componentDidMount() {
-    console.log('mounted');
     // change true to boolean for whether dispatcher account is open or not
     if (this.props.isDispatcher) {
       this.setState({ interval: setInterval(function(){ navigator.geolocation.getCurrentPosition(success, error, options); }, 1000)})
@@ -68,13 +59,14 @@ class GPS extends Component {
   }
 
   componentWillUnmount() {
-    console.log('unmounted');
     clearInterval(this.state.interval);
   }
 
   render() {
     if (this.props.isDispatcher) {
-      return <MapContainer show={false}/>;
+      return (
+        <MapContainer show={false}/>
+      );
     }
     else {
       return (
