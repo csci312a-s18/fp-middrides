@@ -225,15 +225,15 @@ class ContentArea extends Component {
       }
 
       return (
-          <DivContainer>
-            <GPS isDispatcher={false}/>
-            <QueueContainer>
-              {buttons}
-              {queueview}
-              <br />
-            </QueueContainer>
-          </DivContainer>
-        );
+        <DivContainer>
+          <GPS isDispatcher={false} />
+          <QueueContainer>
+            {buttons}
+            {queueview}
+            <br />
+          </QueueContainer>
+        </DivContainer>
+      );
 
     // view dispatcher mode
     } else if (this.state.viewmode === 'DispatcherMode') {
@@ -260,7 +260,7 @@ class ContentArea extends Component {
 
       return (
         <DivContainer>
-          <GPS isDispatcher={true}/>
+          <GPS isDispatcher />
           <CenteredContainer>
           Dispatcher Mode
           </CenteredContainer>

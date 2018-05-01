@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 /* eslint-disable import/no-named-as-default */
+import PropTypes from 'prop-types';
 import MapContainer from './Map';
+
 // import geolocation from 'geolocation';
 
 const options = {
@@ -48,13 +50,18 @@ class GPS extends Component {
     super(props);
     this.state = {
       interval: null,
-    }
+    };
   }
 
   componentDidMount() {
     // change true to boolean for whether dispatcher account is open or not
     if (this.props.isDispatcher) {
-      this.setState({ interval: setInterval(function(){ navigator.geolocation.getCurrentPosition(success, error, options); }, 1000)})
+      this.setState({ // eslint-disable-line react/no-did-mount-set-state
+        interval: setInterval(() => {
+          navigator.geolocation
+            .getCurrentPosition(success, error, options);
+        }, 1000),
+      });
     }
   }
 
@@ -65,14 +72,17 @@ class GPS extends Component {
   render() {
     if (this.props.isDispatcher) {
       return (
-        <MapContainer show={false}/>
+        <MapContainer show={false} />
       );
     }
-    else {
-      return (
-        <MapContainer show={true}/>
-      );
-    }
+
+    return (
+      <MapContainer show />
+    );
   }
 }
+
+GPS.propTypes = {
+  isDispatcher: PropTypes.boolean.isRequired, // eslint-disable-line react/no-typos
+};
 export default GPS;

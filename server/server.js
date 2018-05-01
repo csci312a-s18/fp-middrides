@@ -12,7 +12,6 @@ const corsOptions = {
   allowedHeaders: ['Content-Type', 'Accept', 'X-Requested-With', 'Origin'],
 };
 
-const latLngID = '5ae396ed734d1d133182d27a';
 
 server.use(cors(corsOptions));
 server.use(bodyParser.json());

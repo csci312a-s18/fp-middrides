@@ -5,7 +5,7 @@ import { Map, Marker, GoogleApiWrapper } from 'google-maps-react';
 const style = {
   width: '80%',
   height: '400px',
-  position: 'contained'
+  position: 'contained',
 };
 
 const middleburyLatLong = { lat: 44.0153, lng: -73.1673 };
@@ -57,9 +57,8 @@ export class MapContainer extends Component {
         </Map>
       );
     }
-    else {
-      return null;
-    }
+
+    return null;
   }
 }
 
@@ -68,5 +67,6 @@ export default GoogleApiWrapper({
 })(MapContainer);
 
 MapContainer.propTypes = {
+  show: PropTypes.boolean.isRequired, // eslint-disable-line react/no-typos
   google: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
 };
