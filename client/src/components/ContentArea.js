@@ -134,55 +134,53 @@ class ContentArea extends Component {
     if (this.state.password === '12345') { // temporary password
       this.setState({ viewmode: 'DispatcherMode' });
     } else {
-      alert('Wrong password. Try again!');
+      alert('Wrong password. Try again!'); // eslint-disable-line no-alert
     }
   }
   makeInactive(id) {
-  const findInactiveRequest =  this.state.requests.find(request => request.id === id)
-  console.log(findInactiveRequest);
-  const inactiveRequest = Object.assign({}, findInactiveRequest, { active: false });
-  console.log(inactiveRequest);
-  fetch(`/requests/${id}`, {
-    method: 'PUT',
-    body: JSON.stringify(inactiveRequest),
-    headers: new Headers({
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
-    }),
-  }).then((response) => {
-    if (!response.ok) {
-      throw new Error(response.status_text);
-    }
-    return response.json();
-  }).catch(err => console.log(err)); // eslint-disable-line no-console
-  const updatedRequests = this.state.requests
-    .filter(request => request._id !== id);
-  this.setState({ requests: updatedRequests });
+    const findInactiveRequest = this.state.requests.find(request => request.id === id);
+    const inactiveRequest = Object.assign({}, findInactiveRequest, { active: false });
+    fetch(`/requests/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(inactiveRequest),
+      headers: new Headers({
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      }),
+    }).then((response) => {
+      if (!response.ok) {
+        throw new Error(response.status_text);
+      }
+      return response.json();
+    }).catch(err => console.log(err)); // eslint-disable-line no-console
+    const updatedRequests = this.state.requests
+      .filter(request => request._id !== id);
+    this.setState({ requests: updatedRequests });
   }
   makePickedUp(id) {
-  const findPickedUpRequest =  this.state.requests.find(request => request.id === id)
-  const pickedUpRequest = Object.assign({}, findPickedUpRequest, { isPickedUp: true });
-  fetch(`/requests/${id}`, {
-    method: 'PUT',
-    body: JSON.stringify(pickedUpRequest),
-    headers: new Headers({
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
-    }),
-  }).then((response) => {
-    if (!response.ok) {
-      throw new Error(response.status_text);
-    }
-    return response.json();
-  }).catch(err => console.log(err)); // eslint-disable-line no-console
+    const findPickedUpRequest = this.state.requests.find(request => request.id === id);
+    const pickedUpRequest = Object.assign({}, findPickedUpRequest, { isPickedUp: true });
+    fetch(`/requests/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(pickedUpRequest),
+      headers: new Headers({
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      }),
+    }).then((response) => {
+      if (!response.ok) {
+        throw new Error(response.status_text);
+      }
+      return response.json();
+    }).catch(err => console.log(err)); // eslint-disable-line no-console
   }
 
   sortRequests(a, b) { // eslint-disable-line class-methods-use-this
     if (a.timestamp < b.timestamp) {
-      return -1;
+      return 1;
     }
     if (a.timestamp > b.timestamp) {
-      return 1;
+      return -1;
     }
     return 0;
   }
@@ -278,17 +276,16 @@ class ContentArea extends Component {
         />
       );
     // view to login to dispatchermode
-    } else if (this.state.viewmode === 'DispatcherLogin') {
-      return (
-        <CenteredContainer>
-          Password:
-          <input type="password" onChange={this.handlePassword} />
-          <br />
-          <input type="button" value="Login" onClick={this.handleLogin} />
-          <input type="button" value="Cancel" onClick={this.handleCancelLogin} />
-        </CenteredContainer>
-      );
     }
+    return (
+      <CenteredContainer>
+          Password:
+        <input type="password" onChange={this.handlePassword} />
+        <br />
+        <input type="button" value="Login" onClick={this.handleLogin} />
+        <input type="button" value="Cancel" onClick={this.handleCancelLogin} />
+      </CenteredContainer>
+    );
   }
 }
 
