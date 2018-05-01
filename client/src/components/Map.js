@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
+// import PropTypes from 'prop-types';
+/* eslint-disable react/prop-types */
+
 import { Map, Marker, GoogleApiWrapper } from 'google-maps-react';
 
 const style = {
@@ -66,7 +68,7 @@ export default GoogleApiWrapper({
   apiKey: 'AIzaSyAvOrHV6khC62g8fEuiExotGDSVBBGxPOA', // migrate hardcode to => process.env.GOOGLEAPI_KEY when done with project
 })(MapContainer);
 
-MapContainer.propTypes = {
-  show: PropTypes.boolean.isRequired, // eslint-disable-line react/no-typos
-  google: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
-};
+// MapContainer.propTypes = {
+//   show: PropTypes.boolean.isRequired, // eslint-disable-line react/no-typos
+//   google: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+// };

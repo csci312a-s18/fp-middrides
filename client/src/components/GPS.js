@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 /* eslint-disable import/no-named-as-default */
-import PropTypes from 'prop-types';
+/* eslint-disable react/prop-types */
+// import PropTypes from 'prop-types';
 import MapContainer from './Map';
 
 // import geolocation from 'geolocation';
@@ -82,7 +83,7 @@ class GPS extends Component {
   }
 }
 
-GPS.propTypes = {
-  isDispatcher: PropTypes.boolean.isRequired, // eslint-disable-line react/no-typos
-};
+// GPS.propTypes = {
+//   isDispatcher: PropTypes.boolean.isRequired, // eslint-disable-line react/no-typos
+// };
 export default GPS;
