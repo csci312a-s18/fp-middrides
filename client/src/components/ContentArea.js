@@ -102,7 +102,7 @@ class ContentArea extends Component {
   }
 
   handleCancel() {
-    const cancelledRequest = Object.assign({}, this.state.currentRequest, { active: 'Inactive' });
+    const cancelledRequest = Object.assign({}, this.state.currentRequest, { active: false });
     fetch(`/requests/${this.state.currentRequest._id}`, {
       method: 'PUT',
       body: JSON.stringify(cancelledRequest),
@@ -137,6 +137,45 @@ class ContentArea extends Component {
       alert('Wrong password. Try again!');
     }
   }
+  makeInactive(id) {
+  const findInactiveRequest =  this.state.requests.find(request => request.id === id)
+  console.log(findInactiveRequest);
+  const inactiveRequest = Object.assign({}, findInactiveRequest, { active: false });
+  console.log(inactiveRequest);
+  fetch(`/requests/${id}`, {
+    method: 'PUT',
+    body: JSON.stringify(inactiveRequest),
+    headers: new Headers({
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    }),
+  }).then((response) => {
+    if (!response.ok) {
+      throw new Error(response.status_text);
+    }
+    return response.json();
+  }).catch(err => console.log(err)); // eslint-disable-line no-console
+  const updatedRequests = this.state.requests
+    .filter(request => request._id !== id);
+  this.setState({ requests: updatedRequests });
+  }
+  makePickedUp(id) {
+  const findPickedUpRequest =  this.state.requests.find(request => request.id === id)
+  const pickedUpRequest = Object.assign({}, findPickedUpRequest, { isPickedUp: true });
+  fetch(`/requests/${id}`, {
+    method: 'PUT',
+    body: JSON.stringify(pickedUpRequest),
+    headers: new Headers({
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    }),
+  }).then((response) => {
+    if (!response.ok) {
+      throw new Error(response.status_text);
+    }
+    return response.json();
+  }).catch(err => console.log(err)); // eslint-disable-line no-console
+  }
 
   sortRequests(a, b) { // eslint-disable-line class-methods-use-this
     if (a.timestamp < b.timestamp) {
@@ -158,8 +197,6 @@ class ContentArea extends Component {
       const queueview = (<QueueView
         requests={this.state.requests}
         mode={this.state.viewmode}
-        complete={(inactiveRequest) => { this.handleFormReturn(inactiveRequest); }}
-        currentRequest={this.state.currentRequest}
       />);
 
       const requestRideButton = (<input
@@ -203,8 +240,8 @@ class ContentArea extends Component {
       const queueview = (<QueueView
         requests={this.state.requests}
         mode={this.state.viewmode}
-        complete={(inactiveRequest) => { this.handleFormReturn(inactiveRequest); }}
-        currentRequest={this.state.currentRequest}
+        completeInactive={(id) => { this.makeInactive(id); }}
+        completePickedUp={(id) => { this.makePickedUp(id); }}
       />);
 
       const addRideButton = (<input
@@ -229,7 +266,6 @@ class ContentArea extends Component {
           {buttons}
           <br />
           {queueview}
-          complete={(newRequest) => { this.handleFormReturn(newRequest); }}
           <br />
         </DivContainer>
       );
@@ -237,7 +273,7 @@ class ContentArea extends Component {
     } else if (this.state.viewmode === 'RequestRide') {
       return (
         <RequestForm
-          request={this.state.currentRequest}
+          requests={this.state.currentRequest}
           complete={(newRequest) => { this.handleFormReturn(newRequest); }}
         />
       );
