@@ -97,7 +97,7 @@ QueueView.propTypes = {
     passengers: PropTypes.string,
     currentLocation: PropTypes.string,
     destination: PropTypes.string,
-    active: PropTypes.string,
+    active: PropTypes.boolean,
   })).isRequired,
   mode: PropTypes.string.isRequired,
 };

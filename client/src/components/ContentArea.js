@@ -5,12 +5,17 @@ import styled from 'styled-components';
 
 import QueueView from './QueueView';
 import RequestForm from './RequestForm';
+import GPS from './GPS';
 
 const DivContainer = styled.div`
   width: 80%;
   margin-left: auto;
   margin-right: auto;
   margin: auto;
+`;
+const QueueContainer = styled.div`
+  position: absolute;
+  top: 510px;
 `;
 
 const ButtonBar = styled.div`
@@ -188,10 +193,6 @@ class ContentArea extends Component {
   render() {
     // view for user
     if (this.state.viewmode === 'UserStart') {
-      const gps = (
-        <p>
-          GPS
-        </p>);
       const queueview = (<QueueView
         requests={this.state.requests}
         mode={this.state.viewmode}
@@ -225,11 +226,12 @@ class ContentArea extends Component {
 
       return (
         <DivContainer>
-          {gps}
-          {buttons}
-          <br />
-          {queueview}
-          <br />
+          <GPS isDispatcher={false} />
+          <QueueContainer>
+            {buttons}
+            {queueview}
+            <br />
+          </QueueContainer>
         </DivContainer>
       );
 
@@ -258,6 +260,7 @@ class ContentArea extends Component {
 
       return (
         <DivContainer>
+          <GPS isDispatcher />
           <CenteredContainer>
           Dispatcher Mode
           </CenteredContainer>
