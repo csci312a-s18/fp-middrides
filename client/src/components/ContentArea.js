@@ -1,4 +1,5 @@
 /* eslint-disable no-underscore-dangle */
+/* eslint no-plusplus: ["error", { "allowForLoopAfterthoughts": true }] */
 
 import React, { Component } from 'react';
 import styled from 'styled-components';
@@ -6,6 +7,10 @@ import styled from 'styled-components';
 import QueueView from './QueueView';
 import RequestForm from './RequestForm';
 import GPS from './GPS';
+
+import { calculateETA, totalRunningTime } from './Algorithm';
+// import calculateETA from './Algorithm';
+// import totalRunningTime from './Algorithm';
 
 const DivContainer = styled.div`
   width: 80%;
@@ -25,6 +30,8 @@ const CenteredContainer = styled.div`
   text-align: center;
 `;
 
+const paths = [];
+
 class ContentArea extends Component {
   constructor(props) {
     super(props);
@@ -33,6 +40,9 @@ class ContentArea extends Component {
       requests: [],
       currentRequest: null,
       password: '',
+      currentStop: 'Adirondack Circle',
+      seatsLeft: 14,
+      nextStop: '',
     };
 
     this.handleCancel = this.handleCancel.bind(this);
@@ -58,7 +68,7 @@ class ContentArea extends Component {
 
   handleFormReturn(newRequest) {
     if (newRequest) { // Not a cancel
-      if (this.state.currentArticle) { // Update existing request
+      if (this.state.currentRequest) { // Update existing request
         fetch(`/requests/${this.state.currentRequest._id}`, {
           method: 'PUT',
           body: JSON.stringify(newRequest),
@@ -120,11 +130,12 @@ class ContentArea extends Component {
         throw new Error(response.status_text);
       }
       return response.json();
+    }).then(() => {
+      const updatedRequests = this.state.requests
+        .filter(request => request._id !== this.state.currentRequest._id);
+      this.setState({ requests: updatedRequests });
+      this.setState({ currentRequest: null });
     }).catch(err => console.log(err)); // eslint-disable-line no-console
-    const updatedRequests = this.state.requests
-      .filter(request => request._id !== this.state.currentRequest._id);
-    this.setState({ requests: updatedRequests });
-    this.setState({ currentRequest: null });
   }
 
   handlePassword(event) {
@@ -142,6 +153,87 @@ class ContentArea extends Component {
       alert('Wrong password. Try again!'); // eslint-disable-line no-alert
     }
   }
+
+  recursiveAlgorithm(currentStop, requests, path, seatsLeft) {
+    const updatedRequests = [];
+    const id = [];
+    requests.forEach(request => updatedRequests.push(Object.assign({}, request)));
+
+    // when multiple requests are made from the same stop so that the bus is full,
+    // this algorithm gives priority to the requests that were made earlier
+
+    // either set request to "picked up" or remove from list
+    updatedRequests.forEach((request) => {
+      if (!request.isPickedUp && request.currentLocation === currentStop && (
+        request.passengers <= seatsLeft)) {
+        seatsLeft -= request.passengers; // eslint-disable-line no-param-reassign
+        request.isPickedUp = true;
+        id.push(request._id);
+      } else if (request.isPickedUp && request.destination === currentStop) {
+        seatsLeft += request.passengers; // eslint-disable-line no-param-reassign
+        id.push(request._id);
+        updatedRequests.splice(updatedRequests.indexOf(request), 1);
+      }
+    });
+
+
+    path.push({ currentStop, id });
+
+    // create list of available stops
+    const available = [];
+    for (let i = 0; i < updatedRequests.length; i++) {
+      if (!updatedRequests[i].isPickedUp) {
+        if (seatsLeft - updatedRequests[i].passengers >= 0) {
+          available.push(updatedRequests[i].currentLocation);
+        }
+      } else {
+        available.push(updatedRequests[i].destination);
+      }
+    }
+    // base case
+    if (available.length === 0) {
+      paths.push(path);
+    } else {
+      for (let i = 0; i < available.length; i++) {
+        // double check if we need to copy seatsLeft before passing to the next funciton
+        this.recursiveAlgorithm(available[i], updatedRequests, path.slice(), seatsLeft);
+      }
+    }
+  }
+
+  runAlgorithm() {
+    this.recursiveAlgorithm(this.state.currentStop, this.state.requests, [], this.state.seatsLeft);
+    const optimalPath = totalRunningTime(paths, this.state.requests);
+    let updatedRequests = [];
+    this.state.requests.forEach(request => updatedRequests.push(Object.assign({}, request)));
+    const newRequests = calculateETA(updatedRequests, optimalPath);
+
+    for (let i = 0; i < newRequests.length; i++) {
+      fetch(`/requests/${newRequests[i]._id}`, {
+        method: 'PUT',
+        body: JSON.stringify(newRequests[i]),
+        headers: new Headers({
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        }),
+      }).then((response) => {
+        if (!response.ok) {
+          throw new Error(response.status_text);
+        }
+        return response.json();
+      }).then((updatedRequest) => { // eslint-disable-line no-loop-func
+        updatedRequests = this.state.requests.map((request) => {
+          if (request._id === updatedRequest._id) {
+            return updatedRequest;
+          }
+          return request;
+        });
+        this.setState({ requests: updatedRequests });
+        this.setState({ nextStop: optimalPath[0].currentStop });
+      }).catch(err => console.log(err)); // eslint-disable-line no-console
+    }
+  }
+
   makeInactive(id) {
     const findInactiveRequest = this.state.requests.find(request => request.id === id);
     const inactiveRequest = Object.assign({}, findInactiveRequest, { active: false });
@@ -157,11 +249,14 @@ class ContentArea extends Component {
         throw new Error(response.status_text);
       }
       return response.json();
+    }).then(() => {
+      const updatedRequests = this.state.requests
+        .filter(request => request._id !== id);
+      this.setState({ requests: updatedRequests });
+      this.runAlgorithm();
     }).catch(err => console.log(err)); // eslint-disable-line no-console
-    const updatedRequests = this.state.requests
-      .filter(request => request._id !== id);
-    this.setState({ requests: updatedRequests });
   }
+
   makePickedUp(id) {
     const findPickedUpRequest = this.state.requests.find(request => request.id === id);
     const pickedUpRequest = Object.assign({}, findPickedUpRequest, { isPickedUp: true });
@@ -177,6 +272,11 @@ class ContentArea extends Component {
         throw new Error(response.status_text);
       }
       return response.json();
+    }).then(() => {
+      const updatedRequests = this.state.requests
+        .filter(request => request._id !== id);
+      this.setState({ requests: updatedRequests });
+      this.runAlgorithm();
     }).catch(err => console.log(err)); // eslint-disable-line no-console
   }
 
@@ -193,10 +293,10 @@ class ContentArea extends Component {
   render() {
     // view for user
     if (this.state.viewmode === 'UserStart') {
-      const queueview = (<QueueView
-        requests={this.state.requests}
-        mode={this.state.viewmode}
-      />);
+      // const queueview = (<QueueView
+      //   requests={this.state.requests}
+      //   mode={this.state.viewmode}
+      // />);
 
       const requestRideButton = (<input
         type="button"
@@ -224,13 +324,15 @@ class ContentArea extends Component {
         buttons = (<ButtonBar>{requestRideButton}{enterDispatcherView}</ButtonBar>);
       }
 
+      // {queueview}
       return (
         <DivContainer>
           <GPS isDispatcher={false} />
           <QueueContainer>
             {buttons}
-            {queueview}
+
             <br />
+            Next Stop: {this.state.nextStop}
           </QueueContainer>
         </DivContainer>
       );
