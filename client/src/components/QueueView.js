@@ -3,7 +3,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
-const headers = ['Name', 'Passengers', 'Current Location', 'Destination', 'Status'];
+const headers = ['Name', 'Passengers', 'Current Location', 'Destination', 'Status', 'ETA (mins)'];
 
 const Table = styled.table`
     border: 1px solid black;
@@ -51,6 +51,7 @@ function QueueView(props) {
               <Td>{request.currentLocation}</Td>
               <Td>{request.destination}</Td>
               <Td>{request.active}</Td>
+              <Td>{request.ETA}</Td>
             </tr>))}
         </tbody>
       </Table>
@@ -73,6 +74,7 @@ function QueueView(props) {
             <Td>{request.currentLocation}</Td>
             <Td>{request.destination}</Td>
             <Td>{request.active}</Td>
+            <Td>{request.ETA}</Td>
             <Td><input
               type="button"
               onClick={() => props.completeInactive(request._id)}
