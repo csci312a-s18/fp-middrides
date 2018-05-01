@@ -5,6 +5,7 @@ import { Map, Marker, GoogleApiWrapper } from 'google-maps-react';
 const style = {
   width: '80%',
   height: '400px',
+  position: 'contained'
 };
 
 const middleburyLatLong = { lat: 44.0153, lng: -73.1673 };
@@ -39,21 +40,26 @@ export class MapContainer extends Component {
   }
 
   render() {
-    return (
-      <Map
-        google={this.props.google}
-        initialCenter={{
-            lat: middleburyLatLong.lat, lng: middleburyLatLong.lng,
-          }}
-        style={style}
-        zoom={14}
-      >
-        <Marker
-          name="Current location"
-          position={{ lat: this.state.lat, lng: this.state.lng }}
-        />
-      </Map>
-    );
+    if (this.props.show) {
+      return (
+        <Map
+          google={this.props.google}
+          initialCenter={{
+              lat: middleburyLatLong.lat, lng: middleburyLatLong.lng,
+            }}
+          style={style}
+          zoom={14}
+        >
+          <Marker
+            name="Current location"
+            position={{ lat: this.state.lat, lng: this.state.lng }}
+          />
+        </Map>
+      );
+    }
+    else {
+      return null;
+    }
   }
 }
 

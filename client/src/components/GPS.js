@@ -39,28 +39,48 @@ function error(err) {
   console.warn(`ERROR(${err.code}): ${err.message}`);
 }
 
+// function interval() {
+//   setInterval(function() {
+//
+//     }, 1000);
+// }
+
+
 function success(points) {
+  console.log(points.coords.latitude, points.coords.longitude);
   updateLocation(points.coords.latitude, points.coords.longitude);
 }
 
 class GPS extends Component {
   constructor(props) {
     super(props);
-  }
-
-  componentDidMount() {
-    // change true to boolean for whether dispatcher account is open or not
-    if (true) {
-      setInterval(() => {
-        navigator.geolocation.getCurrentPosition(success, error, options);
-      }, 1000);
+    this.state = {
+      interval: null,
     }
   }
 
+  componentDidMount() {
+    console.log('mounted');
+    // change true to boolean for whether dispatcher account is open or not
+    if (this.props.isDispatcher) {
+      this.setState({ interval: setInterval(function(){ navigator.geolocation.getCurrentPosition(success, error, options); }, 1000)})
+    }
+  }
+
+  componentWillUnmount() {
+    console.log('unmounted');
+    clearInterval(this.state.interval);
+  }
+
   render() {
-    return (
-      <MapContainer />
-    );
+    if (this.props.isDispatcher) {
+      return <MapContainer show={false}/>;
+    }
+    else {
+      return (
+        <MapContainer show={true}/>
+      );
+    }
   }
 }
 export default GPS;

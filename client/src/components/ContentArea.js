@@ -13,6 +13,10 @@ const DivContainer = styled.div`
   margin-right: auto;
   margin: auto;
 `;
+const QueueContainer = styled.div`
+  position: absolute;
+  top: 510px;
+`;
 
 const ButtonBar = styled.div`
 `;
@@ -221,12 +225,15 @@ class ContentArea extends Component {
       }
 
       return (
-        <DivContainer>
-          <GPS />
-          {queueview}
-          <br />
-        </DivContainer>
-      );
+          <DivContainer>
+            <GPS isDispatcher={false}/>
+            <QueueContainer>
+              {buttons}
+              {queueview}
+              <br />
+            </QueueContainer>
+          </DivContainer>
+        );
 
     // view dispatcher mode
     } else if (this.state.viewmode === 'DispatcherMode') {
@@ -253,6 +260,7 @@ class ContentArea extends Component {
 
       return (
         <DivContainer>
+          <GPS isDispatcher={true}/>
           <CenteredContainer>
           Dispatcher Mode
           </CenteredContainer>
