@@ -12,6 +12,7 @@ const corsOptions = {
   allowedHeaders: ['Content-Type', 'Accept', 'X-Requested-With', 'Origin'],
 };
 
+
 server.use(cors(corsOptions));
 server.use(bodyParser.json());
 
@@ -53,6 +54,31 @@ server.delete('/requests/:id', (request, response, next) => {
       response.sendStatus(200);
     }, next);
 });
+
+
+server.put('/shuttleLocation/:id', (request, response, next) => {
+  const updatedLocation = Object.assign(
+    { extract: '' },
+    request.body,
+    { _id: ObjectID.createFromHexString(request.params.id) },
+  );
+  db.collection('shuttleLocation') // eslint-disable-line no-undef
+    .findOneAndUpdate(
+      { _id: updatedLocation._id },
+      { $set: updatedLocation },
+      { returnOriginal: false },
+    )
+    .then((result) => {
+      response.send(result.value);
+    }, next);
+});
+
+server.get('/shuttleLocation', (request, response, next) => {
+  db.collection('shuttleLocation').find().toArray().then((documents) => { // eslint-disable-line no-undef
+    response.send(documents);
+  }, next);
+});
+
 
 // express only serves static assets in production
 if (process.env.NODE_ENV === 'production') {

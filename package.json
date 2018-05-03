@@ -34,10 +34,7 @@
   ],
   "license": "Apache-2.0",
   "devDependencies": {
-    "concurrently": "^3.5.1",
-    "eslint": "^4.19.1",
-    "eslint-config-airbnb-base": "^12.1.0",
-    "eslint-plugin-import": "^2.11.0"
+    "concurrently": "^3.5.1"
   },
   "bugs": {
     "url": "https://github.com/csci312a-s18/fp-middrides/issues"

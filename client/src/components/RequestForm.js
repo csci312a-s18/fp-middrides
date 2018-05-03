@@ -69,7 +69,9 @@ class RequestForm extends Component {
       currentLocation: this.state.currentLocation,
       destination: this.state.destination,
       active: true,
+      isPickedUp: false,
       timestamp: now.toISOString(),
+      ETA: '',
     };
 
     this.props.complete(newRequest);
