@@ -3,7 +3,7 @@
 
 import React, { Component } from 'react';
 import styled from 'styled-components';
-
+import { Button } from 'react-bootstrap';
 import QueueView from './QueueView';
 import RequestForm from './RequestForm';
 import GPS from './GPS';
