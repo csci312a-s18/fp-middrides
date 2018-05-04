@@ -2,35 +2,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
+import { Table , Button } from 'react-bootstrap';
 
 const headers = ['Name', 'Passengers', 'Current Location', 'Destination', 'Status', 'ETA (mins)'];
-
-const Table = styled.table`
-    border: 1px solid black;
-    border-collapse: collapse;
-    width: 100%;
-    margin: align-left;
-  `;
-
-const Td = styled.td`
-    border: 1px solid black;
-    height: 20px;
-    vertical-align: bottom;
-    padding: 10px;
-    text-align: left;
-    border-bottom: 1px solid #ddd;
-  `;
-
-const Th = styled.th`
-    border: 1px solid black;
-    height: 20px;
-    padding: 15px;
-    text-align: left;
-    border-bottom: 1px solid #ddd;
-    background-color: #4CAF50;
-    color: white;
-  `;
-
 
 function QueueView(props) {
   // we are in user mode
@@ -40,18 +14,18 @@ function QueueView(props) {
         <thead>
           <tr>
             {headers.map(title =>
-              <Th key={title}>{title}</Th>)}
+              <th key={title}>{title}</th>)}
           </tr>
         </thead>
         <tbody>
           {props.requests.map(request => (
             <tr key={request._id}>
-              <Td>{request.name}</Td>
-              <Td>{request.passengers}</Td>
-              <Td>{request.currentLocation}</Td>
-              <Td>{request.destination}</Td>
-              <Td>{request.active}</Td>
-              <Td>{request.ETA}</Td>
+              <td>{request.name}</td>
+              <td>{request.passengers}</td>
+              <td>{request.currentLocation}</td>
+              <td>{request.destination}</td>
+              <td>{request.active}</td>
+              <td>{request.ETA}</td>
             </tr>))}
         </tbody>
       </Table>
@@ -59,33 +33,36 @@ function QueueView(props) {
     // we are in dispatcher mode
   }
   return (
-    <Table>
+    <Table striped bordered condensed hover responsive>
       <thead>
         <tr>
           {headers.map(title =>
-            <Th key={title}>{title}</Th>)}
+            <th key={title}>{title}</th>)}
         </tr>
       </thead>
       <tbody>
         {props.requests.map(request => (
           <tr key={request._id}>
-            <Td>{request.name}</Td>
-            <Td>{request.passengers}</Td>
-            <Td>{request.currentLocation}</Td>
-            <Td>{request.destination}</Td>
-            <Td>{request.active}</Td>
-            <Td>{request.ETA}</Td>
-            <Td><input
-              type="button"
-              onClick={() => props.completeInactive(request._id)}
-              value="Inactive"
-            />
-              <input
-                type="button"
-                onClick={() => props.completePickedUp(request._id)}
-                value="Picked Up"
-              />
-            </Td>
+            <td>{request.name}</td>
+            <td>{request.passengers}</td>
+            <td>{request.currentLocation}</td>
+            <td>{request.destination}</td>
+            <td>{request.active}</td>
+            <td>{request.ETA}</td>
+            <td>
+            <Button
+              bsStyle="link"
+              bsSize="small"
+              onClick={() => props.completeInactive(request._id)}>
+              Inactive
+            </Button>
+            <Button
+              bsStyle="link"
+              bsSize="small"
+              onClick={() => props.completePickedUp(request._id)}>
+              Picked Up
+            </Button>
+            </td>
           </tr>))}
       </tbody>
     </Table>

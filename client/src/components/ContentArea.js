@@ -3,7 +3,9 @@
 
 import React, { Component } from 'react';
 import styled from 'styled-components';
-import { Button } from 'react-bootstrap';
+
+import { Button , ButtonToolbar,  Alert, FromGroup, FormControl } from 'react-bootstrap';
+
 import QueueView from './QueueView';
 import RequestForm from './RequestForm';
 import GPS from './GPS';
@@ -23,8 +25,6 @@ const QueueContainer = styled.div`
   top: 510px;
 `;
 
-const ButtonBar = styled.div`
-`;
 
 const CenteredContainer = styled.div`
   text-align: center;
@@ -303,30 +303,33 @@ class ContentArea extends Component {
       //   mode={this.state.viewmode}
       // />);
 
-      const requestRideButton = (<input
-        type="button"
-        value="Request Ride"
-        onClick={() => this.setState({ viewmode: 'RequestRideUser' })}
-      />);
+      const requestRideButton = (<Button
+        bsStyle="primary"
+        bsSize="small"
+        onClick={() => this.setState({ viewmode: 'RequestRideUser' })}>
+        Request Ride
+      </Button>);
 
-      const cancelRideButton = (<input
-        type="button"
-        value="Cancel Ride"
-        onClick={this.handleCancel}
-      />);
+      const cancelRideButton = (<Button
+        bsStyle="primary"
+        bsSize="small"
+        onClick={this.handleCancel}>
+        Cancel Ride
+      </Button>);
 
-      const enterDispatcherView = (<input
-        type="button"
-        value="Dispatcher Log-In"
-        onClick={() => this.setState({ viewmode: 'DispatcherLogin' })}
-      />);
+      const enterDispatcherView = (<Button
+        bsStyle="primary"
+        bsSize="small"
+        onClick={() => this.setState({ viewmode: 'DispatcherLogin' })}>
+        Dispatcher Log-In
+      </Button>);
 
       let buttons;
 
       if (this.state.currentRequest) {
-        buttons = (<ButtonBar>{cancelRideButton}{enterDispatcherView}</ButtonBar>);
+        buttons = (<ButtonToolbar>{cancelRideButton}{enterDispatcherView}</ButtonToolbar>);
       } else {
-        buttons = (<ButtonBar>{requestRideButton}{enterDispatcherView}</ButtonBar>);
+        buttons = (<ButtonToolbar>{requestRideButton}{enterDispatcherView}</ButtonToolbar>);
       }
 
       // {queueview}
@@ -335,7 +338,6 @@ class ContentArea extends Component {
           <GPS isDispatcher={false} />
           <QueueContainer>
             {buttons}
-
             <br />
             Next Stop: {this.state.nextStop}
           </QueueContainer>
@@ -351,19 +353,22 @@ class ContentArea extends Component {
         completePickedUp={(id) => { this.makePickedUp(id); }}
       />);
 
-      const addRideButton = (<input
-        type="button"
-        value="Add a Ride"
-        onClick={() => this.setState({ viewmode: 'RequestRideDispatcher' })}
-      />);
+      const addRideButton = <Button
+        bsStyle="primary"
+        bsSize="small"
+        onClick={() => this.setState({ viewmode: 'RequestRideDispatcher' })}>
+        Add a Ride
+      </Button>
 
-      const enterDispatcherView = (<input
-        type="button"
-        value="Dispatcher Log-out"
-        onClick={() => this.setState({ viewmode: 'UserStart' })}
-      />);
 
-      const buttons = (<ButtonBar>{addRideButton}{enterDispatcherView}</ButtonBar>);
+      const enterDispatcherView = <Button
+        bsStyle="primary"
+        bsSize="small"
+        onClick={() => this.setState({ viewmode: 'UserStart' })}>
+        Dispatcher Log-out
+      </Button>
+
+      const buttons = (<ButtonToolbar>{addRideButton}{enterDispatcherView}</ButtonToolbar>);
 
       return (
         <DivContainer>
@@ -395,14 +400,33 @@ class ContentArea extends Component {
       );
     }
     // view to login to dispatchermode
+
     return (
-      <CenteredContainer>
+      <form>
           Password:
-        <input type="password" onChange={this.handlePassword} />
+        <FieldGroup
+          id="formControlsText"
+          type="password"
+          label="Text"
+          placeholder="Enter Password"
+          onChange={this.handlePassword}
+        >
+        </FieldGroup>
+        /*<input type="password" onChange={this.handlePassword} />*/
         <br />
-        <input type="button" value="Login" onClick={this.handleLogin} />
-        <input type="button" value="Cancel" onClick={this.handleCancelLogin} />
-      </CenteredContainer>
+        <Button
+          bsStyle="primary"
+          bsSize="small"
+          onClick={this.handleLogin}>
+          Login
+        </Button>
+        <Button
+          bsStyle="primary"
+          bsSize="small"
+          onClick={this.handleCancelLogin}>
+          Cancel
+        </Button>
+      </form>
     );
   }
 }
