@@ -1,10 +1,9 @@
 /* eslint-disable no-underscore-dangle */
 import React from 'react';
 import PropTypes from 'prop-types';
-import styled from 'styled-components';
-import { Table , Button } from 'react-bootstrap';
+import { Table, Button } from 'react-bootstrap';
 
-const headers = ['Name', 'Passengers', 'Current Location', 'Destination', 'Status', 'ETA (mins)'];
+const headers = ['Name', 'Passengers', 'Current Location', 'Destination', 'Status', 'ETA (mins)', 'Set Status'];
 
 function QueueView(props) {
   // we are in user mode
@@ -50,18 +49,20 @@ function QueueView(props) {
             <td>{request.active}</td>
             <td>{request.ETA}</td>
             <td>
-            <Button
-              bsStyle="link"
-              bsSize="small"
-              onClick={() => props.completeInactive(request._id)}>
+              <Button
+                bsStyle="link"
+                bsSize="small"
+                onClick={() => props.completeInactive(request._id)}
+              >
               Inactive
-            </Button>
-            <Button
-              bsStyle="link"
-              bsSize="small"
-              onClick={() => props.completePickedUp(request._id)}>
+              </Button>
+              <Button
+                bsStyle="link"
+                bsSize="small"
+                onClick={() => props.completePickedUp(request._id)}
+              >
               Picked Up
-            </Button>
+              </Button>
             </td>
           </tr>))}
       </tbody>

@@ -4,7 +4,7 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
 
-import { Button , ButtonToolbar,  Alert, FromGroup, FormControl } from 'react-bootstrap';
+import { Button, ButtonToolbar, Form, FormGroup, FormControl, ControlLabel, Col } from 'react-bootstrap';
 
 import QueueView from './QueueView';
 import RequestForm from './RequestForm';
@@ -23,11 +23,6 @@ const DivContainer = styled.div`
 const QueueContainer = styled.div`
   position: absolute;
   top: 510px;
-`;
-
-
-const CenteredContainer = styled.div`
-  text-align: center;
 `;
 
 const paths = [];
@@ -306,21 +301,24 @@ class ContentArea extends Component {
       const requestRideButton = (<Button
         bsStyle="primary"
         bsSize="small"
-        onClick={() => this.setState({ viewmode: 'RequestRideUser' })}>
+        onClick={() => this.setState({ viewmode: 'RequestRideUser' })}
+      >
         Request Ride
       </Button>);
 
       const cancelRideButton = (<Button
         bsStyle="primary"
         bsSize="small"
-        onClick={this.handleCancel}>
+        onClick={this.handleCancel}
+      >
         Cancel Ride
       </Button>);
 
       const enterDispatcherView = (<Button
         bsStyle="primary"
         bsSize="small"
-        onClick={() => this.setState({ viewmode: 'DispatcherLogin' })}>
+        onClick={() => this.setState({ viewmode: 'DispatcherLogin' })}
+      >
         Dispatcher Log-In
       </Button>);
 
@@ -353,29 +351,28 @@ class ContentArea extends Component {
         completePickedUp={(id) => { this.makePickedUp(id); }}
       />);
 
-      const addRideButton = <Button
+      const addRideButton = (<Button
         bsStyle="primary"
         bsSize="small"
-        onClick={() => this.setState({ viewmode: 'RequestRideDispatcher' })}>
+        onClick={() => this.setState({ viewmode: 'RequestRideDispatcher' })}
+      >
         Add a Ride
-      </Button>
+                             </Button>);
 
-
-      const enterDispatcherView = <Button
+      const enterDispatcherView = (<Button
         bsStyle="primary"
         bsSize="small"
-        onClick={() => this.setState({ viewmode: 'UserStart' })}>
+        onClick={() => this.setState({ viewmode: 'UserStart' })}
+      >
         Dispatcher Log-out
-      </Button>
+                                   </Button>);
 
       const buttons = (<ButtonToolbar>{addRideButton}{enterDispatcherView}</ButtonToolbar>);
 
       return (
         <DivContainer>
           <GPS isDispatcher />
-          <CenteredContainer>
           Dispatcher Mode
-          </CenteredContainer>
           {buttons}
           <br />
           {queueview}
@@ -400,33 +397,39 @@ class ContentArea extends Component {
       );
     }
     // view to login to dispatchermode
-
     return (
-      <form>
+      <DivContainer>
+        <Form horizontal>
+          <FormGroup controlId="formHorizontalEmail">
+            <Col componentClass={ControlLabel} sm={2}>
           Password:
-        <FieldGroup
-          id="formControlsText"
-          type="password"
-          label="Text"
-          placeholder="Enter Password"
-          onChange={this.handlePassword}
-        >
-        </FieldGroup>
-        /*<input type="password" onChange={this.handlePassword} />*/
-        <br />
-        <Button
-          bsStyle="primary"
-          bsSize="small"
-          onClick={this.handleLogin}>
+            </Col>
+            <Col sm={9}>
+              <FormControl
+                id="formControlsText"
+                type="password"
+                label="Text"
+                placeholder="Enter Password"
+                onChange={this.handlePassword}
+              />
+            </Col>
+          </FormGroup>
+          <Button
+            bsStyle="primary"
+            bsSize="small"
+            onClick={this.handleLogin}
+          >
           Login
-        </Button>
-        <Button
-          bsStyle="primary"
-          bsSize="small"
-          onClick={this.handleCancelLogin}>
+          </Button>
+          <Button
+            bsSize="small"
+            onClick={this.handleCancelLogin}
+            active
+          >
           Cancel
-        </Button>
-      </form>
+          </Button>
+        </Form>
+      </DivContainer>
     );
   }
 }
