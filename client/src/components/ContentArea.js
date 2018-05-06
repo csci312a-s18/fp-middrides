@@ -14,12 +14,7 @@ import { calculateETA, totalRunningTime } from './Algorithm';
 // import calculateETA from './Algorithm';
 // import totalRunningTime from './Algorithm';
 
-const DivContainer = styled.div`
-  width: 80%;
-  margin-left: auto;
-  margin-right: auto;
-  margin: auto;
-`;
+
 const QueueContainer = styled.div`
   position: absolute;
   top: 510px;
@@ -298,29 +293,32 @@ class ContentArea extends Component {
       //   mode={this.state.viewmode}
       // />);
 
-      const requestRideButton = (<Button
-        bsStyle="primary"
-        bsSize="small"
-        onClick={() => this.setState({ viewmode: 'RequestRideUser' })}
-      >
+      const requestRideButton = (
+        <Button
+          bsStyle="primary"
+          bsSize="small"
+          onClick={() => this.setState({ viewmode: 'RequestRideUser' })}
+        >
         Request Ride
-      </Button>);
+        </Button>);
 
-      const cancelRideButton = (<Button
-        bsStyle="primary"
-        bsSize="small"
-        onClick={this.handleCancel}
-      >
+      const cancelRideButton = (
+        <Button
+          bsStyle="primary"
+          bsSize="small"
+          onClick={this.handleCancel}
+        >
         Cancel Ride
-      </Button>);
+        </Button>);
 
-      const enterDispatcherView = (<Button
-        bsStyle="primary"
-        bsSize="small"
-        onClick={() => this.setState({ viewmode: 'DispatcherLogin' })}
-      >
+      const enterDispatcherView = (
+        <Button
+          bsStyle="primary"
+          bsSize="small"
+          onClick={() => this.setState({ viewmode: 'DispatcherLogin' })}
+        >
         Dispatcher Log-In
-      </Button>);
+        </Button>);
 
       let buttons;
 
@@ -332,14 +330,14 @@ class ContentArea extends Component {
 
       // {queueview}
       return (
-        <DivContainer>
+        <div>
           <GPS isDispatcher={false} />
           <QueueContainer>
             {buttons}
             <br />
             Next Stop: {this.state.nextStop}
           </QueueContainer>
-        </DivContainer>
+        </div>
       );
 
     // view dispatcher mode
@@ -351,33 +349,33 @@ class ContentArea extends Component {
         completePickedUp={(id) => { this.makePickedUp(id); }}
       />);
 
-      const addRideButton = (<Button
-        bsStyle="primary"
-        bsSize="small"
-        onClick={() => this.setState({ viewmode: 'RequestRideDispatcher' })}
-      >
+      const addRideButton = (
+        <Button
+          bsStyle="primary"
+          bsSize="small"
+          onClick={() => this.setState({ viewmode: 'RequestRideDispatcher' })}
+        >
         Add a Ride
-                             </Button>);
+        </Button>);
 
-      const enterDispatcherView = (<Button
-        bsStyle="primary"
-        bsSize="small"
-        onClick={() => this.setState({ viewmode: 'UserStart' })}
-      >
+      const enterDispatcherView = (
+        <Button
+          bsStyle="primary"
+          bsSize="small"
+          onClick={() => this.setState({ viewmode: 'UserStart' })}
+        >
         Dispatcher Log-out
-                                   </Button>);
+        </Button>);
 
       const buttons = (<ButtonToolbar>{addRideButton}{enterDispatcherView}</ButtonToolbar>);
 
       return (
-        <DivContainer>
+        <div>
           <GPS isDispatcher />
-          Dispatcher Mode
           {buttons}
           <br />
           {queueview}
-          <br />
-        </DivContainer>
+        </div>
       );
       // view to request a ride for User
     } else if (this.state.viewmode === 'RequestRideUser') {
@@ -398,11 +396,13 @@ class ContentArea extends Component {
     }
     // view to login to dispatchermode
     return (
-      <DivContainer>
+      <div id="dispatcherform">
+        <h5>Dispatcher Log-In</h5>
+        <br />
         <Form horizontal>
-          <FormGroup controlId="formHorizontalEmail">
+          <FormGroup>
             <Col componentClass={ControlLabel} sm={2}>
-          Password:
+              Password:
             </Col>
             <Col sm={9}>
               <FormControl
@@ -416,20 +416,20 @@ class ContentArea extends Component {
           </FormGroup>
           <Button
             bsStyle="primary"
-            bsSize="small"
+            bsSize="medium"
             onClick={this.handleLogin}
           >
-          Login
+            Login
           </Button>
           <Button
-            bsSize="small"
+            bsSize="medium"
             onClick={this.handleCancelLogin}
             active
           >
-          Cancel
+            Cancel
           </Button>
         </Form>
-      </DivContainer>
+      </div>
     );
   }
 }

@@ -1,5 +1,13 @@
 body {
-  margin: 0;
-  padding: 0;
-  font-family: sans-serif;
+  padding-left: 8em;
+  padding-right: 8em;
+  padding-top: 3em;
+  padding-bottom: 3em;
+  font-family: system-ui;
+  background: #eef2ff;
+}
+
+#dispatcherform {
+  padding: 5em;
+  text-align: center;
 }

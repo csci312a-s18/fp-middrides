@@ -32,7 +32,7 @@ function QueueView(props) {
     // we are in dispatcher mode
   }
   return (
-    <Table striped bordered condensed hover responsive>
+    <Table striped bordered hover responsive>
       <thead>
         <tr>
           {headers.map(title =>
