@@ -17,7 +17,7 @@ import { calculateETA, totalRunningTime } from './Algorithm';
 
 const QueueContainer = styled.div`
   position: absolute;
-  top: 510px;
+  top: 530px;
 `;
 
 const paths = [];
@@ -417,15 +417,12 @@ class ContentArea extends Component {
           <Button
             bsStyle="primary"
             bsSize="medium"
-            onClick={this.handleLogin}
-          >
+            onClick={this.handleLogin}>
             Login
           </Button>
           <Button
             bsSize="medium"
-            onClick={this.handleCancelLogin}
-            active
-          >
+            onClick={this.handleCancelLogin}>
             Cancel
           </Button>
         </Form>
