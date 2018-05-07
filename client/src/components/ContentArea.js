@@ -4,7 +4,7 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
 
-import { Button, ButtonToolbar, Form, FormGroup, FormControl, ControlLabel, Col } from 'react-bootstrap';
+import { Button, ButtonToolbar, Form, FormGroup, FormControl, ControlLabel, Col, Well } from 'react-bootstrap';
 
 import QueueView from './QueueView';
 import RequestForm from './RequestForm';
@@ -145,7 +145,7 @@ class ContentArea extends Component {
     if (this.state.password === '12345') { // temporary password
       this.setState({ viewmode: 'DispatcherMode' });
     } else {
-      alert('Wrong password. Try again!'); // eslint-disable-line no-alert
+      alert('Incorrect password. Try again!'); // eslint-disable-line no-alert
     }
   }
 
@@ -317,7 +317,7 @@ class ContentArea extends Component {
           bsSize="small"
           onClick={() => this.setState({ viewmode: 'DispatcherLogin' })}
         >
-        Dispatcher Log-In
+        Log-In
         </Button>);
 
       let buttons;
@@ -364,7 +364,7 @@ class ContentArea extends Component {
           bsSize="small"
           onClick={() => this.setState({ viewmode: 'UserStart' })}
         >
-        Dispatcher Log-out
+        Log-out
         </Button>);
 
       const buttons = (<ButtonToolbar>{addRideButton}{enterDispatcherView}</ButtonToolbar>);
@@ -397,35 +397,39 @@ class ContentArea extends Component {
     // view to login to dispatchermode
     return (
       <div id="dispatcherform">
-        <h5>Dispatcher Log-In</h5>
-        <br />
-        <Form horizontal>
-          <FormGroup>
-            <Col componentClass={ControlLabel} sm={2}>
+        <Well bsSize="large">
+          <h5>Dispatcher Log-In</h5>
+          <br />
+          <Form horizontal>
+            <FormGroup>
+              <Col componentClass={ControlLabel} sm={2}>
               Password:
-            </Col>
-            <Col sm={9}>
-              <FormControl
-                id="formControlsText"
-                type="password"
-                label="Text"
-                placeholder="Enter Password"
-                onChange={this.handlePassword}
-              />
-            </Col>
-          </FormGroup>
-          <Button
-            bsStyle="primary"
-            bsSize="medium"
-            onClick={this.handleLogin}>
+              </Col>
+              <Col sm={9}>
+                <FormControl
+                  id="formControlsText"
+                  type="password"
+                  label="Text"
+                  placeholder="Enter Password"
+                  onChange={this.handlePassword}
+                />
+              </Col>
+            </FormGroup>
+            <Button
+              bsStyle="primary"
+              bsSize="medium"
+              onClick={this.handleLogin}
+            >
             Login
-          </Button>
-          <Button
-            bsSize="medium"
-            onClick={this.handleCancelLogin}>
+            </Button>
+            <Button
+              bsSize="medium"
+              onClick={this.handleCancelLogin}
+            >
             Cancel
-          </Button>
-        </Form>
+            </Button>
+          </Form>
+        </Well>
       </div>
     );
   }
