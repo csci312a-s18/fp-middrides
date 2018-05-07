@@ -103,7 +103,6 @@ class RequestForm extends Component {
       </Option>
     ));
 
-    // always parse value to int from string (parseInt())
     const passengers = (
       <PassengersSelect value={this.state.passengers} onChange={this.handlePassengers}>
         <option value="" disabled hidden>0</option>
