@@ -396,14 +396,8 @@ class ContentArea extends Component {
     }
     // view to login to dispatchermode
     return (
-<<<<<<< Updated upstream
       <div id="dispatcherform">
         <h5>Dispatcher Log-In</h5>
-=======
-      <form>
-          Password:
-        /*<input type="password" onChange={this.handlePassword} />*/
->>>>>>> Stashed changes
         <br />
         <Form horizontal>
           <FormGroup>
@@ -423,12 +417,14 @@ class ContentArea extends Component {
           <Button
             bsStyle="primary"
             bsSize="medium"
-            onClick={this.handleLogin}>
+            onClick={this.handleLogin}
+          >
             Login
           </Button>
           <Button
             bsSize="medium"
-            onClick={this.handleCancelLogin}>
+            onClick={this.handleCancelLogin}
+          >
             Cancel
           </Button>
         </Form>
