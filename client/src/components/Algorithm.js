@@ -17,6 +17,59 @@ function getTime(source, destination) {
   return 0;
 }
 
+function enumeratePaths(currStop, reqs, remainingSeats) {
+  const paths = [];
+
+  function recursiveAlgorithm(currentStop, requests, path, seatsLeft) {
+    const updatedRequests = [];
+    const id = [];
+    requests.forEach(request => updatedRequests.push(Object.assign({}, request)));
+
+    // when multiple requests are made from the same stop so that the bus is full,
+    // this algorithm gives priority to the requests that were made earlier
+
+    // either set request to "picked up" or remove from list
+    updatedRequests.forEach((request) => {
+      if (!request.isPickedUp && request.currentLocation === currentStop && (
+        request.passengers <= seatsLeft)) { // Do we need to check this?
+        seatsLeft -= request.passengers; // eslint-disable-line no-param-reassign
+        request.isPickedUp = true;
+        id.push(request._id);
+      } else if (request.isPickedUp && request.destination === currentStop) {
+        seatsLeft += request.passengers; // eslint-disable-line no-param-reassign
+        id.push(request._id);
+        updatedRequests.splice(updatedRequests.indexOf(request), 1);
+      }
+    });
+
+    path.push({ currentStop, id });
+
+    // create list of available stops
+    const available = [];
+    for (let i = 0; i < updatedRequests.length; i++) {
+      if (!updatedRequests[i].isPickedUp) {
+        if (seatsLeft - updatedRequests[i].passengers >= 0) {
+          available.push(updatedRequests[i].currentLocation);
+        }
+      } else {
+        available.push(updatedRequests[i].destination);
+      }
+    }
+    // base case
+    if (available.length === 0) {
+      paths.push(path);
+    } else {
+      for (let i = 0; i < available.length; i++) {
+        // double check if we need to copy seatsLeft before passing to the next funciton
+        recursiveAlgorithm(available[i], updatedRequests, path.slice(), seatsLeft);
+      }
+    }
+  }
+
+  recursiveAlgorithm(currStop, reqs, [], remainingSeats);
+  return paths;
+}
+
 function totalRunningTime(paths) {
   let totalTime = Number.POSITIVE_INFINITY;
   let optimalPath = paths[0];
@@ -60,6 +113,4 @@ function calculateETA(requests, optimalPath) {
 }
 
 
-export { calculateETA, totalRunningTime };
-// export default calculateETA;
-// export default totalRunningTime;
+export { enumeratePaths, calculateETA, totalRunningTime };
