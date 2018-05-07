@@ -8,9 +8,9 @@ import QueueView from './QueueView';
 import RequestForm from './RequestForm';
 import GPS from './GPS';
 
-import { enumeratePaths, calculateETA, totalRunningTime } from './Algorithm';
+import { enumeratePaths, calculateETA, findOptimumPath } from './Algorithm';
 // import calculateETA from './Algorithm';
-// import totalRunningTime from './Algorithm';
+// import findOptimumPath from './Algorithm';
 
 const DivContainer = styled.div`
   width: 80%;
@@ -114,13 +114,8 @@ class ContentArea extends Component {
         }).catch(err => console.log(err)); // eslint-disable-line no-console
       }
     }
-    if (this.state.viewmode === 'RequestRideUser') {
-      // Switch to the user main view
-      this.setState({ viewmode: 'UserStart' });
-    } else {
-      // Switch to the dispatcher view
-      this.setState({ viewmode: 'DispatcherMode' });
-    }
+    // Switch to the user main view
+    this.setState({ viewmode: 'UserStart' });
   }
 
   handleCancel() {
@@ -163,7 +158,7 @@ class ContentArea extends Component {
 
   runAlgorithm() {
     const paths = enumeratePaths(this.state.currentStop, this.state.requests, this.state.seatsLeft);
-    const optimalPath = totalRunningTime(paths, this.state.requests);
+    const optimalPath = findOptimumPath(paths, this.state.requests);
     let updatedRequests = [];
     this.state.requests.forEach(request => updatedRequests.push(Object.assign({}, request)));
     const newRequests = calculateETA(updatedRequests, optimalPath);
@@ -261,7 +256,7 @@ class ContentArea extends Component {
       const requestRideButton = (<input
         type="button"
         value="Request Ride"
-        onClick={() => this.setState({ viewmode: 'RequestRideUser' })}
+        onClick={() => this.setState({ viewmode: 'RequestRide' })}
       />);
 
       const editRideButton = (<input
@@ -315,7 +310,7 @@ class ContentArea extends Component {
       const addRideButton = (<input
         type="button"
         value="Add a Ride"
-        onClick={() => this.setState({ viewmode: 'RequestRideDispatcher' })}
+        onClick={() => this.setState({ viewmode: 'RequestRide' })}
       />);
 
       const enterDispatcherView = (<input
@@ -338,24 +333,16 @@ class ContentArea extends Component {
           <br />
         </DivContainer>
       );
-      // view to request a ride for User
-    } else if (this.state.viewmode === 'RequestRideUser') {
+      // view to request a ride
+    } else if (this.state.viewmode === 'RequestRide') {
       return (
         <RequestForm
           requests={this.state.currentRequest}
           complete={(newRequest) => { this.handleFormReturn(newRequest); }}
         />
       );
-    // view to request a ride for Dispatcher
-    } else if (this.state.viewmode === 'RequestRideDispatcher') {
-      return (
-        <RequestForm
-          requests={this.state.currentRequest}
-          complete={(newRequest) => { this.handleFormReturn(newRequest); }}
-        />
-      );
-    }
     // view to login to dispatchermode
+    }
     return (
       <CenteredContainer>
           Password:
