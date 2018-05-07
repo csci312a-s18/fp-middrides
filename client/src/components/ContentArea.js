@@ -404,7 +404,6 @@ class ContentArea extends Component {
             <FormGroup>
               <Col componentClass={ControlLabel} sm={2}>
               Password:
-<<<<<<< HEAD
               </Col>
               <Col sm={9}>
                 <FormControl
@@ -427,30 +426,6 @@ class ContentArea extends Component {
               bsSize="medium"
               onClick={this.handleCancelLogin}
             >
-=======
-            </Col>
-            <Col sm={9}>
-              <FormControl
-                id="formControlsText"
-                type="password"
-                label="Text"
-                placeholder="Enter Password"
-                onChange={this.handlePassword}
-              />
-            </Col>
-          </FormGroup>
-          <Button
-            bsStyle="primary"
-            bsSize="medium"
-            onClick={this.handleLogin}
-          >
-            Login
-          </Button>
-          <Button
-            bsSize="medium"
-            onClick={this.handleCancelLogin}
-          >
->>>>>>> b408060e9a96e631c670e174a70bce28e5b354bb
             Cancel
             </Button>
           </Form>
