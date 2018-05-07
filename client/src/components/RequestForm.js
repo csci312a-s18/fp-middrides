@@ -6,8 +6,10 @@
     request: The request to be edited [optional]
     complete: A callback to submit a new or edited request
 */
-
+//import the right group on react bootstrap webpage
+//all containers are going to be replaced by grids
 import React, { Component } from 'react';
+import { FormControl } from 'react-bootstrap';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
