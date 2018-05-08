@@ -17,7 +17,74 @@ function getTime(source, destination) {
   return 0;
 }
 
-function totalRunningTime(paths) {
+function enumeratePaths(currStop, reqs, remainingSeats) {
+  const paths = [];
+
+  // base case when there are no active requests
+  if (reqs.length === 0) {
+    return paths;
+  }
+
+  function recursiveAlgorithm(currentStop, requests, path, seatsLeft) {
+    let updatedRequests = [];
+    const id = [];
+    requests.forEach(request => updatedRequests.push(Object.assign({}, request)));
+
+    // when multiple requests are made from the same stop so that the bus is full,
+    // this algorithm gives priority to the requests that were made earlier
+
+    // either set request to "picked up" or remove from list
+    const requestsToDelete = [];
+    updatedRequests.forEach((request) => {
+      if (!request.isPickedUp && request.currentLocation === currentStop && (
+        request.passengers <= seatsLeft)) { // Do we need to check this?
+        seatsLeft -= request.passengers; // eslint-disable-line no-param-reassign
+        request.isPickedUp = true;
+        id.push(request._id);
+      } else if (request.isPickedUp && request.destination === currentStop) {
+        seatsLeft += request.passengers; // eslint-disable-line no-param-reassign
+        id.push(request._id);
+        requestsToDelete.push(request._id);
+        // console.log("splice: " + updatedRequests.indexOf(request));
+        // updatedRequests.splice(updatedRequests.indexOf(request), 1);
+      }
+    });
+
+    requestsToDelete.forEach((deleteId) => {
+      updatedRequests = updatedRequests.filter(request => request._id !== deleteId);
+    });
+
+    path.push({ currentStop, id });
+
+    // create list of available stops
+    const available = [];
+    for (let i = 0; i < updatedRequests.length; i++) {
+      if (!updatedRequests[i].isPickedUp) {
+        if (seatsLeft - updatedRequests[i].passengers >= 0
+          && !available.includes(updatedRequests[i].currentLocation)) {
+          available.push(updatedRequests[i].currentLocation);
+        }
+      } else if (!available.includes(updatedRequests[i].destination)) {
+        available.push(updatedRequests[i].destination);
+      }
+    }
+
+    // base case
+    if (available.length === 0) {
+      paths.push(path);
+    } else {
+      for (let i = 0; i < available.length; i++) {
+        // double check if we need to copy seatsLeft before passing to the next funciton
+        recursiveAlgorithm(available[i], updatedRequests, path.slice(), seatsLeft);
+      }
+    }
+  }
+
+  recursiveAlgorithm(currStop, reqs, [], remainingSeats);
+  return paths;
+}
+
+function findOptimumPath(paths) {
   let totalTime = Number.POSITIVE_INFINITY;
   let optimalPath = paths[0];
   for (let path = 0; path < paths.length; path++) {
@@ -60,6 +127,4 @@ function calculateETA(requests, optimalPath) {
 }
 
 
-export { calculateETA, totalRunningTime };
-// export default calculateETA;
-// export default totalRunningTime;
+export { enumeratePaths, calculateETA, findOptimumPath };

@@ -89,6 +89,7 @@ class RequestForm extends Component {
   }
 
   render() {
+ bootstrap
     // const name = (<NameInput
     //   type="text"
     //   value={this.state.name}
@@ -145,6 +146,55 @@ class RequestForm extends Component {
     // value="Submit" />;
 
     // const cancelButton = <input type="button" onClick={this.handleCancel} value="Cancel" />;
+
+    const name = (<NameInput
+      type="text"
+      value={this.state.name}
+      placeholder="Name"
+      onChange={this.handleName}
+    />);
+
+    const numbers = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14'];
+
+    const passengerOptions = numbers.map(number => (
+      <Option key={number} value={number}>
+        {number}
+      </Option>
+    ));
+
+    const passengers = (
+      <PassengersSelect value={this.state.passengers} onChange={this.handlePassengers}>
+        <option value="" disabled hidden>0</option>
+        {passengerOptions}
+      </PassengersSelect>);
+
+    const stops = ['Adirondack Circle', 'Track Lot/KDR', 'E Lot', 'R Lot', 'T Lot', 'Q Lot', 'Robert A Jones \'59 House', 'McCullough Student Center', 'Frog Hollow'];
+
+    const stopOptions = stops.map(stop => (
+      <Option key={stop} value={stop}>
+        {stop}
+      </Option>
+    ));
+
+    const currentLocation = (
+      <CurrentLocationSelect
+        value={this.state.currentLocation}
+        onChange={this.handleCurrentLocation}
+      >
+        <option value="" disabled hidden>Select a current location</option>
+        {stopOptions}
+      </CurrentLocationSelect>);
+
+    const destination = (
+      <DestinationSelect value={this.state.destination} onChange={this.handleDestination}>
+        <option value="" disabled hidden>Select a destination</option>
+        {stopOptions}
+      </DestinationSelect>);
+
+    const submitButton = <input type="button" disabled={this.state.name === '' || this.state.passengers === '' || this.state.currentLocation === '' || this.state.destination === '' || this.state.currentLocation === this.state.destination} onClick={this.handleSubmit} value="Submit" />;
+
+    const cancelButton = <input type="button" onClick={this.handleCancel} value="Cancel" />;
+ master
 
     return (
       <form>
