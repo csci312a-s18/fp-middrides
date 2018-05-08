@@ -4,6 +4,8 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
 
+import { Button, ButtonToolbar, Form, FormGroup, FormControl, ControlLabel, Col, Well } from 'react-bootstrap';
+
 import QueueView from './QueueView';
 import RequestForm from './RequestForm';
 import GPS from './GPS';
@@ -12,22 +14,10 @@ import { enumeratePaths, calculateETA, findOptimumPath } from './Algorithm';
 // import calculateETA from './Algorithm';
 // import findOptimumPath from './Algorithm';
 
-const DivContainer = styled.div`
-  width: 80%;
-  margin-left: auto;
-  margin-right: auto;
-  margin: auto;
-`;
+
 const QueueContainer = styled.div`
   position: absolute;
-  top: 510px;
-`;
-
-const ButtonBar = styled.div`
-`;
-
-const CenteredContainer = styled.div`
-  text-align: center;
+  top: 530px;
 `;
 
 class ContentArea extends Component {
@@ -152,7 +142,7 @@ class ContentArea extends Component {
     if (this.state.password === '12345') { // temporary password
       this.setState({ viewmode: 'DispatcherMode' });
     } else {
-      alert('Wrong password. Try again!'); // eslint-disable-line no-alert
+      alert('Incorrect password. Try again!'); // eslint-disable-line no-alert
     }
   }
 
@@ -253,6 +243,34 @@ class ContentArea extends Component {
       //   mode={this.state.viewmode}
       // />);
 
+bootstrap
+      const requestRideButton = (
+        <Button
+          bsStyle="primary"
+          bsSize="small"
+          onClick={() => this.setState({ viewmode: 'RequestRideUser' })}
+        >
+        Request Ride
+        </Button>);
+
+      const cancelRideButton = (
+        <Button
+          bsStyle="primary"
+          bsSize="small"
+          onClick={this.handleCancel}
+        >
+        Cancel Ride
+        </Button>);
+
+      const enterDispatcherView = (
+        <Button
+          bsStyle="primary"
+          bsSize="small"
+          onClick={() => this.setState({ viewmode: 'DispatcherLogin' })}
+        >
+        Log-In
+        </Button>);
+
       const requestRideButton = (<input
         type="button"
         value="Request Ride"
@@ -276,26 +294,30 @@ class ContentArea extends Component {
         value="Dispatcher Log-In"
         onClick={() => this.setState({ viewmode: 'DispatcherLogin' })}
       />);
+ master
 
       let buttons;
 
       if (this.state.currentRequest) {
+ bootstrap
+        buttons = (<ButtonToolbar>{cancelRideButton}{enterDispatcherView}</ButtonToolbar>);
+
         buttons = (<ButtonBar>{editRideButton}{cancelRideButton}{enterDispatcherView}</ButtonBar>);
+master
       } else {
-        buttons = (<ButtonBar>{requestRideButton}{enterDispatcherView}</ButtonBar>);
+        buttons = (<ButtonToolbar>{requestRideButton}{enterDispatcherView}</ButtonToolbar>);
       }
 
       // {queueview}
       return (
-        <DivContainer>
+        <div>
           <GPS isDispatcher={false} />
           <QueueContainer>
             {buttons}
-
             <br />
             Next Stop: {this.state.nextStop}
           </QueueContainer>
-        </DivContainer>
+        </div>
       );
 
     // view dispatcher mode
@@ -306,6 +328,27 @@ class ContentArea extends Component {
         completeInactive={(id) => { this.makeInactive(id); }}
         completePickedUp={(id) => { this.makePickedUp(id); }}
       />);
+
+ bootstrap
+      const addRideButton = (
+        <Button
+          bsStyle="primary"
+          bsSize="small"
+          onClick={() => this.setState({ viewmode: 'RequestRideDispatcher' })}
+        >
+        Add a Ride
+        </Button>);
+
+      const enterDispatcherView = (
+        <Button
+          bsStyle="primary"
+          bsSize="small"
+          onClick={() => this.setState({ viewmode: 'UserStart' })}
+        >
+        Log-out
+        </Button>);
+
+      const buttons = (<ButtonToolbar>{addRideButton}{enterDispatcherView}</ButtonToolbar>);
 
       const addRideButton = (<input
         type="button"
@@ -320,18 +363,15 @@ class ContentArea extends Component {
       />);
 
       const buttons = (<ButtonBar>{addRideButton}{enterDispatcherView}</ButtonBar>);
+ master
 
       return (
-        <DivContainer>
+        <div>
           <GPS isDispatcher />
-          <CenteredContainer>
-          Dispatcher Mode
-          </CenteredContainer>
           {buttons}
           <br />
           {queueview}
-          <br />
-        </DivContainer>
+        </div>
       );
       // view to request a ride
     } else if (this.state.viewmode === 'RequestRide') {
@@ -344,13 +384,41 @@ class ContentArea extends Component {
     // view to login to dispatchermode
     }
     return (
-      <CenteredContainer>
-          Password:
-        <input type="password" onChange={this.handlePassword} />
-        <br />
-        <input type="button" value="Login" onClick={this.handleLogin} />
-        <input type="button" value="Cancel" onClick={this.handleCancelLogin} />
-      </CenteredContainer>
+      <div id="dispatcherform">
+        <Well bsSize="large">
+          <h5>Dispatcher Log-In</h5>
+          <br />
+          <Form horizontal>
+            <FormGroup>
+              <Col componentClass={ControlLabel} sm={2}>
+              Password:
+              </Col>
+              <Col sm={9}>
+                <FormControl
+                  id="formControlsText"
+                  type="password"
+                  label="Text"
+                  placeholder="Enter Password"
+                  onChange={this.handlePassword}
+                />
+              </Col>
+            </FormGroup>
+            <Button
+              bsStyle="primary"
+              bsSize="medium"
+              onClick={this.handleLogin}
+            >
+            Login
+            </Button>
+            <Button
+              bsSize="medium"
+              onClick={this.handleCancelLogin}
+            >
+            Cancel
+            </Button>
+          </Form>
+        </Well>
+      </div>
     );
   }
 }
