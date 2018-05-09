@@ -45,8 +45,6 @@ function enumeratePaths(currStop, reqs, remainingSeats) {
         seatsLeft += request.passengers; // eslint-disable-line no-param-reassign
         id.push(request._id);
         requestsToDelete.push(request._id);
-        // console.log("splice: " + updatedRequests.indexOf(request));
-        // updatedRequests.splice(updatedRequests.indexOf(request), 1);
       }
     });
 

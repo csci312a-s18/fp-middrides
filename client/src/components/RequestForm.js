@@ -65,7 +65,7 @@ class RequestForm extends Component {
     const now = new Date();
     const newRequest = {
       name: this.state.name,
-      passengers: this.state.passengers,
+      passengers: parseInt(this.state.passengers, 10),
       currentLocation: this.state.currentLocation,
       destination: this.state.destination,
       active: true,
