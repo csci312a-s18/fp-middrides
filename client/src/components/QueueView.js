@@ -96,7 +96,7 @@ QueueView.propTypes = {
   requests: PropTypes.arrayOf(PropTypes.shape({
     _id: PropTypes.string,
     name: PropTypes.string,
-    passengers: PropTypes.string,
+    passengers: PropTypes.integer,
     currentLocation: PropTypes.string,
     destination: PropTypes.string,
     active: PropTypes.boolean,
