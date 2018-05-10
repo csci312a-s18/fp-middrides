@@ -159,9 +159,11 @@ class ContentArea extends Component {
   runAlgorithm() {
     const paths = enumeratePaths(this.state.currentStop, this.state.requests, this.state.seatsLeft);
     const optimalPath = findOptimumPath(paths, this.state.requests);
+    console.log(optimalPath);
     let updatedRequests = [];
     this.state.requests.forEach(request => updatedRequests.push(Object.assign({}, request)));
-    const newRequests = calculateETA(updatedRequests, optimalPath);
+    const newRequests = calculateETA(updatedRequests, optimalPath, 0);
+    console.log(newRequests);
 
     for (let i = 0; i < newRequests.length; i++) {
       fetch(`/requests/${newRequests[i]._id}`, {
