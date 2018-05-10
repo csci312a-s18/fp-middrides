@@ -18,8 +18,8 @@ function enumeratePaths(currStop, reqs, remainingSeats) {
   function recursiveAlgorithm(currentStop, requests, path, seatsLeft) {
     let updatedRequests = [];
     const id = [];
-    requests.forEach(request => {
-      updatedRequests.push(Object.assign({}, request))
+    requests.forEach((request) => {
+      updatedRequests.push(Object.assign({}, request));
     });
 
     // when multiple requests are made from the same stop so that the bus is full,
@@ -93,28 +93,27 @@ function findOptimumPath(paths) {
 
 function calculateETA(requests, optimalPath, runningTime) {
   if (optimalPath.length === 1) {
-    const ids = optimalPath[0]['id'];
+    const ids = optimalPath[0].id;
     ids.forEach((id) => {
       const req = requests.find(item => item._id === id);
-      if (req.currentLocation === optimalPath[0]['currentStop']) {
-        req['ETA'] = runningTime;
+      if (req.currentLocation === optimalPath[0].currentStop) {
+        req.ETA = runningTime;
       }
     });
     return requests;
   }
-  else {
-    const ids = optimalPath[0]['id'];
-    ids.forEach((id) => {
-      const req = requests.find(item => item._id === id);
-      if (req.currentLocation === optimalPath[0]['currentStop']) {
-        req['ETA'] = runningTime;
-      }
-    });
 
-    const eta = getTime(optimalPath[0]['currentStop'], optimalPath[1]['currentStop']);
-    runningTime += eta;
-    return calculateETA(requests, optimalPath.slice(1), runningTime);
-  }
+  const ids = optimalPath[0].id;
+  ids.forEach((id) => {
+    const req = requests.find(item => item._id === id);
+    if (req.currentLocation === optimalPath[0].currentStop) {
+      req.ETA = runningTime;
+    }
+  });
+
+  const eta = getTime(optimalPath[0].currentStop, optimalPath[1].currentStop);
+  const newRunningTime = runningTime + eta;
+  return calculateETA(requests, optimalPath.slice(1), newRunningTime);
 }
 
 

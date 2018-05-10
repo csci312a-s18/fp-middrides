@@ -158,9 +158,7 @@ class ContentArea extends Component {
 
   runAlgorithm() {
     const paths = enumeratePaths(this.state.currentStop, this.state.requests, this.state.seatsLeft);
-    //console.log(paths);
     const optimalPath = findOptimumPath(paths, this.state.requests);
-    console.log(optimalPath);
     let updatedRequests = [];
     this.state.requests.forEach(request => updatedRequests.push(Object.assign({}, request)));
     const newRequests = calculateETA(updatedRequests, optimalPath, 0);
@@ -234,14 +232,11 @@ class ContentArea extends Component {
       //   .filter(request => request._id !== id);
       // this.setState({ requests: updatedRequests });
       const updatedRequests = this.state.requests.map((request) => {
-        console.log(request._id, id);
         if (request._id === id) {
-          console.log('here');
           return pickedUpRequest;
         }
         return request;
       });
-      console.log(updatedRequests);
       this.setState({ requests: updatedRequests, currentStop: pickedUpRequest.currentLocation });
       this.runAlgorithm();
     }).catch(err => console.log(err)); // eslint-disable-line no-console

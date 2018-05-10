@@ -1,3 +1,5 @@
+/* eslint-disable no-underscore-dangle */
+
 import { enumeratePaths, getTime, calculateETA, findOptimumPath } from './Algorithm';
 
 const requests = [
@@ -18,7 +20,7 @@ const requests = [
     ETA: -1,
   },
   {
-    _id:  '3',
+    _id: '3',
     passengers: 3,
     currentLocation: 'R Lot',
     destination: 'E Lot',
@@ -37,101 +39,101 @@ const requests = [
 
 const requests2 = [
   {
-    _id: "5af3a8ef4546118140ea984d",
-    "extract": "",
-    name: "reid",
+    _id: '5af3a8ef4546118140ea984d',
+    extract: '',
+    name: 'reid',
     passengers: 5,
-    currentLocation: "R Lot",
-    destination: "Q Lot",
+    currentLocation: 'R Lot',
+    destination: 'Q Lot',
     active: true,
     isPickedUp: false,
-    timestamp: "2018-05-10T02:05:35.957Z",
-    ETA: -1
+    timestamp: '2018-05-10T02:05:35.957Z',
+    ETA: -1,
   },
   {
-    "_id": "5af3a8c34546118140ea984c",
-    "extract": "",
-    "name": "new2",
-    "passengers": 5,
-    "currentLocation": "T Lot",
-    "destination": "Q Lot",
-    "active": true,
-    "isPickedUp": true,
-    "timestamp": "2018-05-10T02:05:12.868Z",
-    "ETA": -1
-  }
+    _id: '5af3a8c34546118140ea984c',
+    extract: '',
+    name: 'new2',
+    passengers: 5,
+    currentLocation: 'T Lot',
+    destination: 'Q Lot',
+    active: true,
+    isPickedUp: true,
+    timestamp: '2018-05-10T02:05:12.868Z',
+    ETA: -1,
+  },
 ];
 
 const requests3 = [
   {
-    "_id": "5af4a7e5e156fcbb33112ce1",
-    "extract": "",
-    "name": "Reid",
-    "passengers": 4,
-    "currentLocation": "E Lot",
-    "destination": "T Lot",
-    "active": true,
-    "isPickedUp": false,
-    "timestamp": "2018-05-10T20:13:25.704Z",
-    "ETA": 3
+    _id: '5af4a7e5e156fcbb33112ce1',
+    extract: '',
+    name: 'Reid',
+    passengers: 4,
+    currentLocation: 'E Lot',
+    destination: 'T Lot',
+    active: true,
+    isPickedUp: false,
+    timestamp: '2018-05-10T20:13:25.704Z',
+    ETA: 3,
   },
   {
-      "_id": "5af4a7f0e156fcbb33112ce2",
-      "extract": "",
-      "name": "Crystal",
-      "passengers": 5,
-      "currentLocation": "T Lot",
-      "destination": "Track Lot/KDR",
-      "active": true,
-      "isPickedUp": false,
-      "timestamp": "2018-05-10T20:13:36.552Z",
-      "ETA": -1
+    _id: '5af4a7f0e156fcbb33112ce2',
+    extract: '',
+    name: 'Crystal',
+    passengers: 5,
+    currentLocation: 'T Lot',
+    destination: 'Track Lot/KDR',
+    active: true,
+    isPickedUp: false,
+    timestamp: '2018-05-10T20:13:36.552Z',
+    ETA: -1,
   },
   {
-      "_id": "5af4a7fae156fcbb33112ce3",
-      "extract": "",
-      "name": "Woojin",
-      "passengers": 3,
-      "currentLocation": "R Lot",
-      "destination": "Q Lot",
-      "active": true,
-      "isPickedUp": false,
-      "timestamp": "2018-05-10T20:13:46.192Z",
-      "ETA": -1
-  }
+    _id: '5af4a7fae156fcbb33112ce3',
+    extract: '',
+    name: 'Woojin',
+    passengers: 3,
+    currentLocation: 'R Lot',
+    destination: 'Q Lot',
+    active: true,
+    isPickedUp: false,
+    timestamp: '2018-05-10T20:13:46.192Z',
+    ETA: -1,
+  },
 ];
 
 const optimalPath1 = [
   {
-    currentStop: 'Adirondack Circle', id: ['1', '4']
+    currentStop: 'Adirondack Circle', id: ['1', '4'],
   },
   {
-    currentStop: 'E Lot', id: []
+    currentStop: 'E Lot', id: [],
   },
   {
-    currentStop: 'CFA', id: ['2']
+    currentStop: 'CFA', id: ['2'],
   },
   {
-    currentStop: 'R Lot', id: ['3']
+    currentStop: 'R Lot', id: ['3'],
   },
   {
-    currentStop: 'E Lot', id: []
-  }
+    currentStop: 'E Lot', id: [],
+  },
 ];
 
 const optimalPath2 = [
   {
-    currentStop: 'Adirondack Circle', id: []
+    currentStop: 'Adirondack Circle', id: [],
   },
   {
-    currentStop: 'R Lot', id: ["5af3a8ef4546118140ea984d"]
+    currentStop: 'R Lot', id: ['5af3a8ef4546118140ea984d'],
   },
   {
-    currentStop: 'T Lot', id: ["5af3a8c34546118140ea984c"]
+    currentStop: 'T Lot', id: ['5af3a8c34546118140ea984c'],
   },
   {
-    currentStop: 'Q Lot', id: ["5af3a8c34546118140ea984c", "5af3a8ef4546118140ea984d"]
-  }
+    currentStop: 'Q Lot', id: ['5af3a8c34546118140ea984c', '5af3a8ef4546118140ea984d'],
+  },
 ];
 
 describe('recursiveAlgorithm tests', () => {
@@ -173,26 +175,26 @@ describe('getTime tests', () => {
 describe('calculateETA tests', () => {
   test('calculates correct ETA for a path of length 2', () => {
     const path = optimalPath1.slice(1, 3);
-    const updatedRequests = calculateETA(requests, path, 0);
-    const request = requests.find(item => item._id === path[1]['id'][0]);
-    expect(request['ETA']).toEqual(3.6);
+    calculateETA(requests, path, 0);
+    const request = requests.find(item => item._id === path[1].id[0]);
+    expect(request.ETA).toEqual(3.6);
   });
 
   test('calculates correct ETAs for path of arbitrary length for all stops', () => {
     const ids = ['1', '2', '3', '4'];
-    const updatedRequests = calculateETA(requests, optimalPath1, 0);
+    calculateETA(requests, optimalPath1, 0);
     const expectedETA = [0, 6.6, 13.2, 0];
 
     ids.forEach((id) => {
       const request = requests.find(item => item._id === id);
-      expect(request['ETA']).toEqual(expectedETA[id - 1]);
-    })
+      expect(request.ETA).toEqual(expectedETA[id - 1]);
+    });
   });
 
   test('calculates correct ETA if initial stop is the same as current stop', () => {
     const updatedRequests = calculateETA(requests, optimalPath1.slice(0, 1), 0);
     const request = updatedRequests.find(item => item._id === '1');
-    expect(request['ETA']).toEqual(0);
+    expect(request.ETA).toEqual(0);
   });
 
   test('bug', () => {
@@ -203,9 +205,9 @@ describe('calculateETA tests', () => {
     let count = 0;
     ids.forEach((id) => {
       const request = updatedRequests.find(item => item._id === id);
-      expect(request['ETA']).toEqual(expectedETA[count]);
+      expect(request.ETA).toEqual(expectedETA[count]);
       count += 1;
-    })
+    });
   });
 
   test('bug2', () => {
@@ -218,9 +220,8 @@ describe('calculateETA tests', () => {
     let count = 0;
     ids.forEach((id) => {
       const request = updatedRequests.find(item => item._id === id);
-      expect(request['ETA']).toEqual(expectedETA[count]);
+      expect(request.ETA).toEqual(expectedETA[count]);
       count += 1;
-    })
+    });
   });
-
 });
