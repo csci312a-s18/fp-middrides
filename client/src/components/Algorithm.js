@@ -18,7 +18,9 @@ function enumeratePaths(currStop, reqs, remainingSeats) {
   function recursiveAlgorithm(currentStop, requests, path, seatsLeft) {
     let updatedRequests = [];
     const id = [];
-    requests.forEach(request => updatedRequests.push(Object.assign({}, request)));
+    requests.forEach(request => {
+      updatedRequests.push(Object.assign({}, request))
+    });
 
     // when multiple requests are made from the same stop so that the bus is full,
     // this algorithm gives priority to the requests that were made earlier
@@ -88,76 +90,26 @@ function findOptimumPath(paths) {
   }
   return optimalPath;
 }
-//
-// function calculateETA(requests, optimalPath) {
-//   let source = optimalPath[0].currentStop;
-//   let addedTime = 0;
-//   for (let i = 0; i < optimalPath[0].id.length; i++) {
-//     const req = requests.find(item => item._id === optimalPath[0].id[i]);
-//     if (req.currentLocation === source) {
-//       const ETA = (addedTime); // add systemTime and timeStamp
-//       req.ETA = ETA;
-//     }
-//   }
-//   for (let i = 1; i < optimalPath.length; i++) {
-//     const destination = optimalPath[i].currentStop;
-//     addedTime += getTime(source, destination);
-//     for (let j = 0; j < optimalPath[i].id.length; j++) {
-//       const req = requests.find(item => item._id === optimalPath[i].id[j]);
-//       if (req.currentLocation === destination) {
-//         const ETA = (addedTime); // add systemTime and timeStamp
-//         req.ETA = ETA;
-//       }
-//     }
-//     source = destination;
-//   }
-//   return requests;
-// }
 
 function calculateETA(requests, optimalPath, runningTime) {
   if (optimalPath.length === 1) {
     const ids = optimalPath[0]['id'];
     ids.forEach((id) => {
-      const req = requests.find(item => item._id.$oid === id);
-      req['ETA'] = runningTime;
+      const req = requests.find(item => item._id === id);
+      if (req.currentLocation === optimalPath[0]['currentStop']) {
+        req['ETA'] = runningTime;
+      }
     });
     return requests;
   }
   else {
     const ids = optimalPath[0]['id'];
-
-    // ids.forEach((id) => {
-    //   var found = false;
-    //   var count = 0;
-    //   var updatedReq = '';
-    //   while(!found) {
-    //     if (requests[count]._id.$oid === id) {
-    //       console.log('found');
-    //       //console.log(req);
-    //       updatedReq = requests[count];
-    //       //console.log(req);
-    //       found = true;
-    //     }
-    //     count += 1;
-    //   }
-    //   //console.log(req);
-    //   updatedReq['ETA'] = runningTime;
-    // });
-
-    console.log('length: ' + ids.length);
-    for (let i = 0; i < ids.length; i += 1) {
-      console.log(ids.length);
-      const req = requests.find((item) => {
-        item._id.$oid === ids[i];
-        console.log(item._id.$oid === ids[i]);
-      });
-      req['ETA'] = runningTime;
-    }
-
-    // ids.forEach((id) => {
-    //   const req = requests.find(item => item._id.$oid === id);
-    //   req['ETA'] = runningTime;
-    // });
+    ids.forEach((id) => {
+      const req = requests.find(item => item._id === id);
+      if (req.currentLocation === optimalPath[0]['currentStop']) {
+        req['ETA'] = runningTime;
+      }
+    });
 
     const eta = getTime(optimalPath[0]['currentStop'], optimalPath[1]['currentStop']);
     runningTime += eta;
