@@ -10,17 +10,15 @@ import QueueView from './QueueView';
 import RequestForm from './RequestForm';
 import GPS from './GPS';
 
-import { calculateETA, totalRunningTime } from './Algorithm';
+import { enumeratePaths, calculateETA, findOptimumPath } from './Algorithm';
 // import calculateETA from './Algorithm';
-// import totalRunningTime from './Algorithm';
+// import findOptimumPath from './Algorithm';
 
 
 const QueueContainer = styled.div`
   position: absolute;
   top: 530px;
 `;
-
-const paths = [];
 
 class ContentArea extends Component {
   constructor(props) {
@@ -78,8 +76,10 @@ class ContentArea extends Component {
             }
             return request;
           });
-          this.setState({ requests: updatedRequests });
-          this.setState({ currentRequest: updatedRequest });
+          this.setState({
+            requests: updatedRequests,
+            currentRequest: updatedRequest,
+          });
         }).catch(err => console.log(err)); // eslint-disable-line no-console
       } else { // Create new request
         fetch('/requests', {
@@ -95,18 +95,19 @@ class ContentArea extends Component {
           }
           return response.json();
         }).then((createdRequest) => {
-          const updatedRequests = this.state.requests;
+          const updatedRequests = this.state.requests.slice();
           updatedRequests.push(createdRequest);
-          this.setState({ requests: updatedRequests });
-          this.setState({ currentRequest: createdRequest });
+          this.setState({
+            requests: updatedRequests,
+            currentRequest: createdRequest,
+          });
         }).catch(err => console.log(err)); // eslint-disable-line no-console
       }
     }
+    // Switch to the user main view
     if (this.state.viewmode === 'RequestRideUser') {
-      // Switch to the user main view
       this.setState({ viewmode: 'UserStart' });
     } else {
-      // Switch to the dispatcher view
       this.setState({ viewmode: 'DispatcherMode' });
     }
   }
@@ -149,56 +150,9 @@ class ContentArea extends Component {
     }
   }
 
-  recursiveAlgorithm(currentStop, requests, path, seatsLeft) {
-    const updatedRequests = [];
-    const id = [];
-    requests.forEach(request => updatedRequests.push(Object.assign({}, request)));
-
-    // when multiple requests are made from the same stop so that the bus is full,
-    // this algorithm gives priority to the requests that were made earlier
-
-    // either set request to "picked up" or remove from list
-    updatedRequests.forEach((request) => {
-      if (!request.isPickedUp && request.currentLocation === currentStop && (
-        request.passengers <= seatsLeft)) {
-        seatsLeft -= request.passengers; // eslint-disable-line no-param-reassign
-        request.isPickedUp = true;
-        id.push(request._id);
-      } else if (request.isPickedUp && request.destination === currentStop) {
-        seatsLeft += request.passengers; // eslint-disable-line no-param-reassign
-        id.push(request._id);
-        updatedRequests.splice(updatedRequests.indexOf(request), 1);
-      }
-    });
-
-
-    path.push({ currentStop, id });
-
-    // create list of available stops
-    const available = [];
-    for (let i = 0; i < updatedRequests.length; i++) {
-      if (!updatedRequests[i].isPickedUp) {
-        if (seatsLeft - updatedRequests[i].passengers >= 0) {
-          available.push(updatedRequests[i].currentLocation);
-        }
-      } else {
-        available.push(updatedRequests[i].destination);
-      }
-    }
-    // base case
-    if (available.length === 0) {
-      paths.push(path);
-    } else {
-      for (let i = 0; i < available.length; i++) {
-        // double check if we need to copy seatsLeft before passing to the next funciton
-        this.recursiveAlgorithm(available[i], updatedRequests, path.slice(), seatsLeft);
-      }
-    }
-  }
-
   runAlgorithm() {
-    this.recursiveAlgorithm(this.state.currentStop, this.state.requests, [], this.state.seatsLeft);
-    const optimalPath = totalRunningTime(paths, this.state.requests);
+    const paths = enumeratePaths(this.state.currentStop, this.state.requests, this.state.seatsLeft);
+    const optimalPath = findOptimumPath(paths, this.state.requests);
     let updatedRequests = [];
     this.state.requests.forEach(request => updatedRequests.push(Object.assign({}, request)));
     const newRequests = calculateETA(updatedRequests, optimalPath);
@@ -288,11 +242,6 @@ class ContentArea extends Component {
   render() {
     // view for user
     if (this.state.viewmode === 'UserStart') {
-      // const queueview = (<QueueView
-      //   requests={this.state.requests}
-      //   mode={this.state.viewmode}
-      // />);
-
       const requestRideButton = (
         <Button
           bsStyle="primary"
@@ -313,7 +262,7 @@ class ContentArea extends Component {
 
       const enterDispatcherView = (
         <Button
-          bsStyle="primary"
+          bsStyle="link"
           bsSize="small"
           onClick={() => this.setState({ viewmode: 'DispatcherLogin' })}
         >
@@ -360,7 +309,7 @@ class ContentArea extends Component {
 
       const enterDispatcherView = (
         <Button
-          bsStyle="primary"
+          bsStyle="link"
           bsSize="small"
           onClick={() => this.setState({ viewmode: 'UserStart' })}
         >
@@ -380,18 +329,22 @@ class ContentArea extends Component {
       // view to request a ride for User
     } else if (this.state.viewmode === 'RequestRideUser') {
       return (
-        <RequestForm
-          requests={this.state.currentRequest}
-          complete={(newRequest) => { this.handleFormReturn(newRequest); }}
-        />
+        <Well>
+          <RequestForm
+            requests={this.state.currentRequest}
+            complete={(newRequest) => { this.handleFormReturn(newRequest); }}
+          />
+        </Well>
       );
-    // view to request a ride for Dispatcher
+      // view to request a ride for Dispatcher
     } else if (this.state.viewmode === 'RequestRideDispatcher') {
       return (
-        <RequestForm
-          requests={this.state.currentRequest}
-          complete={(newRequest) => { this.handleFormReturn(newRequest); }}
-        />
+        <Well>
+          <RequestForm
+            requests={this.state.currentRequest}
+            complete={(newRequest) => { this.handleFormReturn(newRequest); }}
+          />
+        </Well>
       );
     }
     // view to login to dispatchermode
