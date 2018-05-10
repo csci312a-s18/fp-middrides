@@ -3,9 +3,9 @@ import React, { Component } from 'react';
 /* eslint-disable react/prop-types */
 
 import { Map, Marker, GoogleApiWrapper } from 'google-maps-react';
+import { Grid, Col } from 'react-bootstrap';
 
 const style = {
-  width: '80%',
   height: '400px',
   position: 'contained',
 };
@@ -44,19 +44,23 @@ export class MapContainer extends Component {
   render() {
     if (this.props.show) {
       return (
-        <Map
-          google={this.props.google}
-          initialCenter={{
-              lat: middleburyLatLong.lat, lng: middleburyLatLong.lng,
-            }}
-          style={style}
-          zoom={14}
-        >
-          <Marker
-            name="Current location"
-            position={{ lat: this.state.lat, lng: this.state.lng }}
-          />
-        </Map>
+        <Grid>
+          <Col xs={11} md={10}>
+            <Map
+              google={this.props.google}
+              initialCenter={{
+                lat: middleburyLatLong.lat, lng: middleburyLatLong.lng,
+              }}
+              style={style}
+              zoom={14}
+            >
+              <Marker
+                name="Current location"
+                position={{ lat: this.state.lat, lng: this.state.lng }}
+              />
+            </Map>
+          </Col>
+        </Grid>
       );
     }
 
