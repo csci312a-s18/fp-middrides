@@ -155,7 +155,7 @@ class ContentArea extends Component {
     const optimalPath = findOptimumPath(paths, this.state.requests);
     let updatedRequests = [];
     this.state.requests.forEach(request => updatedRequests.push(Object.assign({}, request)));
-    const newRequests = calculateETA(updatedRequests, optimalPath);
+    const newRequests = calculateETA(updatedRequests, optimalPath, 0);
 
     for (let i = 0; i < newRequests.length; i++) {
       fetch(`/requests/${newRequests[i]._id}`, {
@@ -207,7 +207,7 @@ class ContentArea extends Component {
   }
 
   makePickedUp(id) {
-    const findPickedUpRequest = this.state.requests.find(request => request.id === id);
+    const findPickedUpRequest = this.state.requests.find(request => request._id === id);
     const pickedUpRequest = Object.assign({}, findPickedUpRequest, { isPickedUp: true });
     fetch(`/requests/${id}`, {
       method: 'PUT',
@@ -222,9 +222,16 @@ class ContentArea extends Component {
       }
       return response.json();
     }).then(() => {
-      const updatedRequests = this.state.requests
-        .filter(request => request._id !== id);
-      this.setState({ requests: updatedRequests });
+      // const updatedRequests = this.state.requests
+      //   .filter(request => request._id !== id);
+      // this.setState({ requests: updatedRequests });
+      const updatedRequests = this.state.requests.map((request) => {
+        if (request._id === id) {
+          return pickedUpRequest;
+        }
+        return request;
+      });
+      this.setState({ requests: updatedRequests, currentStop: pickedUpRequest.currentLocation });
       this.runAlgorithm();
     }).catch(err => console.log(err)); // eslint-disable-line no-console
   }
@@ -292,7 +299,7 @@ class ContentArea extends Component {
     // view dispatcher mode
     } else if (this.state.viewmode === 'DispatcherMode') {
       const queueview = (<QueueView
-        requests={this.state.requests}
+        requests={this.state.requests.filter(request => request.isPickedUp === false)}
         mode={this.state.viewmode}
         completeInactive={(id) => { this.makeInactive(id); }}
         completePickedUp={(id) => { this.makePickedUp(id); }}
