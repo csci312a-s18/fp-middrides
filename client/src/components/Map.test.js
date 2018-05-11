@@ -9,5 +9,6 @@ describe('MapContainer', () => {
   test('Component renders', () => {
     const wrapper = shallow(<MapContainer complete={jest.fn} />);
     expect(wrapper.exists()).toBe(true);
+    // expect(wrapper.find('Marker').extists()).toBe(true);
   });
 });

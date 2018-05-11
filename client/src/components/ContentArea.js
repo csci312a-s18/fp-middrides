@@ -40,74 +40,100 @@ class ContentArea extends Component {
   }
 
   componentDidMount() {
-    fetch('/requests', { headers: new Headers({ Accept: 'application/json' }) })
-      .then((response) => {
+    this.setState({ // eslint-disable-line react/no-did-mount-set-state
+      interval: setInterval(() => { // eslint-disable-line react/no-unused-state
+        fetch('/requests', { headers: new Headers({ Accept: 'application/json' }) })
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error(response.status_text);
+            }
+            return response.json();
+          })
+          .then((data) => {
+            const sortedData = data.sort(this.sortRequests);
+            this.setState({ requests: sortedData });
+          })
+          .catch(err => console.log(err)); // eslint-disable-line no-console
+      }, 1000),
+    });
+  }
+
+
+  handleFormReturn(newRequest) {
+    if (this.state.viewmode === 'RequestRideUser') {
+      if (newRequest) { // Not a cancel
+        if (this.state.currentRequest) { // Update existing request
+          fetch(`/requests/${this.state.currentRequest._id}`, {
+            method: 'PUT',
+            body: JSON.stringify(newRequest),
+            headers: new Headers({
+              Accept: 'application/json',
+              'Content-Type': 'application/json',
+            }),
+          }).then((response) => {
+            if (!response.ok) {
+              throw new Error(response.status_text);
+            }
+            return response.json();
+          }).then((updatedRequest) => {
+            const updatedRequests = this.state.requests.map((request) => {
+              if (request._id === updatedRequest._id) {
+                return updatedRequest;
+              }
+              return request;
+            });
+            this.setState({
+              requests: updatedRequests,
+              currentRequest: updatedRequest,
+            });
+          }).catch(err => console.log(err)); // eslint-disable-line no-console
+        } else { // Create new request
+          fetch('/requests', {
+            method: 'POST',
+            body: JSON.stringify(newRequest),
+            headers: new Headers({
+              Accept: 'application/json',
+              'Content-Type': 'application/json',
+            }),
+          }).then((response) => {
+            if (!response.ok) {
+              throw new Error(response.status_text);
+            }
+            return response.json();
+          }).then((createdRequest) => {
+            const updatedRequests = this.state.requests.slice();
+            updatedRequests.push(createdRequest);
+            this.setState({
+              requests: updatedRequests,
+              currentRequest: createdRequest,
+            });
+          }).catch(err => console.log(err)); // eslint-disable-line no-console
+        }
+        this.setState({ viewmode: 'UserStart' });
+      }
+    } else { // If requestor is the Dispatcher
+      fetch('/requests', {
+        method: 'POST',
+        body: JSON.stringify(newRequest),
+        headers: new Headers({
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        }),
+      }).then((response) => {
         if (!response.ok) {
           throw new Error(response.status_text);
         }
         return response.json();
-      })
-      .then((data) => {
-        const sortedData = data.sort(this.sortRequests);
-        this.setState({ requests: sortedData });
-      })
-      .catch(err => console.log(err)); // eslint-disable-line no-console
-  }
+      }).then((createdRequest) => {
+        const updatedRequests = this.state.requests.slice();
+        updatedRequests.push(createdRequest);
+        this.setState({
+          requests: updatedRequests,
+          currentRequest: null, // allows for multiple requests by Dispatcher
+        });
+      }).catch(err => console.log(err)); // eslint-disable-line no-console
 
-  handleFormReturn(newRequest) {
-    if (newRequest) { // Not a cancel
-      if (this.state.currentRequest) { // Update existing request
-        fetch(`/requests/${this.state.currentRequest._id}`, {
-          method: 'PUT',
-          body: JSON.stringify(newRequest),
-          headers: new Headers({
-            Accept: 'application/json',
-            'Content-Type': 'application/json',
-          }),
-        }).then((response) => {
-          if (!response.ok) {
-            throw new Error(response.status_text);
-          }
-          return response.json();
-        }).then((updatedRequest) => {
-          const updatedRequests = this.state.requests.map((request) => {
-            if (request._id === updatedRequest._id) {
-              return updatedRequest;
-            }
-            return request;
-          });
-          this.setState({
-            requests: updatedRequests,
-            currentRequest: updatedRequest,
-          });
-        }).catch(err => console.log(err)); // eslint-disable-line no-console
-      } else { // Create new request
-        fetch('/requests', {
-          method: 'POST',
-          body: JSON.stringify(newRequest),
-          headers: new Headers({
-            Accept: 'application/json',
-            'Content-Type': 'application/json',
-          }),
-        }).then((response) => {
-          if (!response.ok) {
-            throw new Error(response.status_text);
-          }
-          return response.json();
-        }).then((createdRequest) => {
-          const updatedRequests = this.state.requests.slice();
-          updatedRequests.push(createdRequest);
-          this.setState({
-            requests: updatedRequests,
-            currentRequest: createdRequest,
-          });
-        }).catch(err => console.log(err)); // eslint-disable-line no-console
-      }
-    }
-    // Switch to the user main view
-    if (this.state.viewmode === 'RequestRideUser') {
-      this.setState({ viewmode: 'UserStart' });
-    } else {
+
       this.setState({ viewmode: 'DispatcherMode' });
     }
   }
@@ -304,6 +330,12 @@ class ContentArea extends Component {
         completeInactive={(id) => { this.makeInactive(id); }}
         completePickedUp={(id) => { this.makePickedUp(id); }}
       />);
+      const queueview2 = (<QueueView
+        requests={this.state.requests.filter(request => request.isPickedUp === true)}
+        mode={this.state.viewmode}
+        completeInactive={(id) => { this.makeInactive(id); }}
+        completePickedUp={(id) => { this.makePickedUp(id); }}
+      />);
 
       const addRideButton = (
         <Button
@@ -329,8 +361,13 @@ class ContentArea extends Component {
         <div>
           <GPS isDispatcher />
           {buttons}
-          <br />
+          <p />
+          Passengers to be picked up
           {queueview}
+          <p />
+          Passengers inside of van
+
+          {queueview2}
         </div>
       );
       // view to request a ride for User
