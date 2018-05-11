@@ -40,19 +40,24 @@ class ContentArea extends Component {
   }
 
   componentDidMount() {
-    fetch('/requests', { headers: new Headers({ Accept: 'application/json' }) })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error(response.status_text);
-        }
-        return response.json();
-      })
-      .then((data) => {
-        const sortedData = data.sort(this.sortRequests);
-        this.setState({ requests: sortedData });
-      })
-      .catch(err => console.log(err)); // eslint-disable-line no-console
+    this.setState({ // eslint-disable-line react/no-did-mount-set-state
+      interval: setInterval(() => { // eslint-disable-line react/no-unused-state
+        fetch('/requests', { headers: new Headers({ Accept: 'application/json' }) })
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error(response.status_text);
+            }
+            return response.json();
+          })
+          .then((data) => {
+            const sortedData = data.sort(this.sortRequests);
+            this.setState({ requests: sortedData });
+          })
+          .catch(err => console.log(err)); // eslint-disable-line no-console
+      }, 1000),
+    });
   }
+
 
   handleFormReturn(newRequest) {
     if (this.state.viewmode === 'RequestRideUser') {
