@@ -1,15 +1,15 @@
-// import React from 'react';
-// import { shallow } from 'enzyme';
-//
-// import RequestForm from './RequestForm';
-//
-//
-// describe('RequestForm', () => {
-//   test('Component renders', () => {
-//     const wrapper = shallow(<RequestForm complete={jest.fn} />);
-//     expect(wrapper.exists()).toBe(true);
-//   });
-// });
+import React from 'react';
+import { shallow } from 'enzyme';
+
+import RequestForm from './RequestForm';
+
+
+describe('RequestForm', () => {
+  test('Component renders', () => {
+    const wrapper = shallow(<RequestForm complete={jest.fn} />);
+    expect(wrapper.exists()).toBe(true);
+  });
+});
 //
 //
 // var textConfirmButtonNode =
