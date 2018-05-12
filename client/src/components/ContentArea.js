@@ -17,7 +17,7 @@ import { enumeratePaths, calculateETA, findOptimumPath } from './Algorithm';
 
 const QueueContainer = styled.div`
   position: absolute;
-  top: 530px;
+  top: 560px;
 `;
 
 class ContentArea extends Component {
@@ -279,7 +279,7 @@ class ContentArea extends Component {
         <Button
           id="btnRequestRide"
           bsStyle="primary"
-          bsSize="small"
+          bsSize="medium"
           onClick={() => this.setState({ viewmode: 'RequestRideUser' })}
         >
         Request Ride
@@ -289,7 +289,7 @@ class ContentArea extends Component {
         <Button
           id="btnCancleRide"
           bsStyle="primary"
-          bsSize="small"
+          bsSize="medium"
           onClick={this.handleCancel}
         >
         Cancel Ride
@@ -299,7 +299,7 @@ class ContentArea extends Component {
         <Button
           id="btnDispatcherLogin"
           bsStyle="link"
-          bsSize="small"
+          bsSize="medium"
           onClick={() => this.setState({ viewmode: 'DispatcherLogin' })}
         >
         Log-In
@@ -308,14 +308,15 @@ class ContentArea extends Component {
       let buttons;
 
       if (this.state.currentRequest) {
-        buttons = (<ButtonToolbar>{cancelRideButton}{enterDispatcherView}</ButtonToolbar>);
+        buttons = (<ButtonToolbar>{cancelRideButton}</ButtonToolbar>);
       } else {
-        buttons = (<ButtonToolbar>{requestRideButton}{enterDispatcherView}</ButtonToolbar>);
+        buttons = (<ButtonToolbar>{requestRideButton}</ButtonToolbar>);
       }
 
       // {queueview}
       return (
         <div>
+          <div className="login"> {enterDispatcherView} </div>
           <GPS isDispatcher={false} />
           <QueueContainer>
             {buttons}
@@ -352,7 +353,7 @@ class ContentArea extends Component {
       const enterDispatcherView = (
         <Button
           bsStyle="link"
-          bsSize="small"
+          bsSize="medium"
           onClick={() => this.setState({ viewmode: 'UserStart' })}
           onClick={() =>// eslint-disable-line react/jsx-no-duplicate-props
             window.location.reload()}
@@ -360,7 +361,8 @@ class ContentArea extends Component {
         Log-out
         </Button>);
 
-      const buttons = (<ButtonToolbar>{addRideButton}{enterDispatcherView}</ButtonToolbar>);
+      const buttons = (<ButtonToolbar>{addRideButton}<div className="login"> {enterDispatcherView} </div></ButtonToolbar>
+       );
 
       return (
         <div>
@@ -371,7 +373,6 @@ class ContentArea extends Component {
           {queueview}
           <p />
           Passengers inside of van
-
           {queueview2}
         </div>
       );
