@@ -10,18 +10,14 @@ describe('RequestForm', () => {
     expect(wrapper.exists()).toBe(true);
   });
 });
-//
-//
-// var textConfirmButtonNode =
-// TestUtils.findRenderedDOMComponentWithTag(textConfirmButton, 'button');
-// expect(textConfirmButtonNode.disabled).toEqual(true);
-//
-//   test('Submit button disabled after one field is entered', () => {
-//     let comp = shallow(<RequestForm complete={jest.fn} />);
-//     comp.setState({ name: 'Andrew' });
-//     const submitButton = comp.find('button').at(0);
-//     expect(comp.getElement().disabled).toBe(true);
-//   });
+
+  test('Submit button disabled after one field is entered', () => {
+    let comp = shallow(<RequestForm complete={jest.fn} />);
+    comp.setState({ name: 'Andrew' });
+    const submitButton = comp.find('btnSubmitRide');
+    expect(submitButton.disabled).toBe(true);
+  });
+
 //
 //   test('Submit button enabled when all four fields are entered', () => {
 //     let comp = shallow(<RequestForm complete={jest.fn} />);
