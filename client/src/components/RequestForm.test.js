@@ -15,7 +15,7 @@ describe('RequestForm', () => {
     let comp = shallow(<RequestForm complete={jest.fn} />);
     comp.setState({ name: 'Andrew' });
     const submitButton = comp.find('btnSubmitRide');
-    expect(submitButton.exists).toBe(true);
+    expect(submitButton.exists()).toBe(true);
     expect(submitButton.disabled).toBe(true);
   });
 });
