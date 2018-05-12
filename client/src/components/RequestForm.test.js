@@ -12,7 +12,7 @@ describe('RequestForm', () => {
 
   test('Submit button find works', () => {
     const comp = shallow(<RequestForm complete={jest.fn} />);
-    const submitButton = comp.find('btnSubmitRide');
+    const submitButton = comp.find('#btnSubmitRide');
     expect(submitButton.exists()).toBe(true);
   });
 
