@@ -66,17 +66,6 @@ class RequestForm extends Component {
 
 
   render() {
-    const submitButton = (
-      <Button
-        id="btnSubmitRide"
-        bsStyle="primary"
-        disabled={this.state.name === ''
-    || this.state.passengers === '' || this.state.currentLocation === '' || this.state.destination === ''
-    || this.state.currentLocation === this.state.destination}
-        onClick={this.handleSubmit}
-      > Submit
-      </Button>);
-
     return (
       <form>
         <FormGroup controlId="name">
@@ -156,7 +145,15 @@ class RequestForm extends Component {
             <option value="Frog Hollow"> Frog Hollow </option>
           </FormControl>
         </FormGroup>
-        {submitButton}
+        <Button
+          id="btnSubmitRide"
+          bsStyle="primary"
+          disabled={this.state.name === ''
+          || this.state.passengers === '' || this.state.currentLocation === '' || this.state.destination === ''
+          || this.state.currentLocation === this.state.destination}
+          onClick={this.handleSubmit}
+        > Submit
+        </Button>
         <Button id="btnCancel" onClick={this.handleCancel}> Cancel </Button>
       </form>
 

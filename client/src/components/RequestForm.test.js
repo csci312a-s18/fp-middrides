@@ -19,7 +19,7 @@ describe('RequestForm', () => {
   test('Submit button disabled after one field is entered', () => {
     const comp = shallow(<RequestForm complete={jest.fn} />);
     comp.setState({ name: 'Andrew' });
-    const submitButton = comp.find('btnSubmitRide');
+    const submitButton = comp.find('#btnSubmitRide');
     expect(submitButton.exists()).toBe(true);
     expect(submitButton.prop('disabled')).toBe(true);
   });
