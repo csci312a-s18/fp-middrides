@@ -55,6 +55,7 @@ export class MapContainer extends Component {
               zoom={14}
             >
               <Marker
+                id="Marker"
                 name="Current location"
                 position={{ lat: this.state.lat, lng: this.state.lng }}
               />
