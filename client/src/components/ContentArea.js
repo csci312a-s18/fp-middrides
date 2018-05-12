@@ -277,6 +277,7 @@ class ContentArea extends Component {
     if (this.state.viewmode === 'UserStart') {
       const requestRideButton = (
         <Button
+          id="btnRequestRide"
           bsStyle="primary"
           bsSize="small"
           onClick={() => this.setState({ viewmode: 'RequestRideUser' })}
@@ -286,6 +287,7 @@ class ContentArea extends Component {
 
       const cancelRideButton = (
         <Button
+          id="btnCancleRide"
           bsStyle="primary"
           bsSize="small"
           onClick={this.handleCancel}
@@ -295,6 +297,7 @@ class ContentArea extends Component {
 
       const enterDispatcherView = (
         <Button
+          id="btnDispatcherLogin"
           bsStyle="link"
           bsSize="small"
           onClick={() => this.setState({ viewmode: 'DispatcherLogin' })}
@@ -351,6 +354,8 @@ class ContentArea extends Component {
           bsStyle="link"
           bsSize="small"
           onClick={() => this.setState({ viewmode: 'UserStart' })}
+          onClick={() =>// eslint-disable-line react/jsx-no-duplicate-props
+            window.location.reload()}
         >
         Log-out
         </Button>);
