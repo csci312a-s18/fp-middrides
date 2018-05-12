@@ -9,7 +9,6 @@ describe('RequestForm', () => {
     const wrapper = shallow(<RequestForm complete={jest.fn} />);
     expect(wrapper.exists()).toBe(true);
   });
-});
 
   test('Submit button disabled after one field is entered', () => {
     let comp = shallow(<RequestForm complete={jest.fn} />);
@@ -17,6 +16,7 @@ describe('RequestForm', () => {
     const submitButton = comp.find('btnSubmitRide');
     expect(submitButton.disabled).toBe(true);
   });
+});
 
 //
 //   test('Submit button enabled when all four fields are entered', () => {
