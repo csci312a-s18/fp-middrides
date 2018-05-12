@@ -29,16 +29,13 @@
     "google-maps": "^3.3.0",
     "google-maps-react": "^2.0.0",
     "prop-types": "^15.6.1",
-    "react": "^16.2.0",
+    "react": "^16.3.2",
     "react-bootstrap": "^0.32.1",
-    "react-dom": "^16.2.0",
+    "react-dom": "^16.3.2",
     "react-scripts": "1.1.1",
     "styled-components": "^3.2.5",
     "bootstrap": "^4.1.1",
-    "eslint": "^4.19.1",
-    "react": "^16.3.2",
-    "react-bootstrap": "^0.32.1",
-    "react-dom": "^16.3.2"
+    "eslint": "^4.19.1"
   },
   "devDependencies": {
     "enzyme": "^3.3.0",

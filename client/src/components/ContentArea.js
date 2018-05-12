@@ -100,8 +100,8 @@ class ContentArea extends Component {
             });
           }).catch(err => console.log(err)); // eslint-disable-line no-console
         }
-        this.setState({ viewmode: 'UserStart' });
       }
+      this.setState({ viewmode: 'UserStart' });
     } else { // If requestor is the Dispatcher
       fetch('/requests', {
         method: 'POST',

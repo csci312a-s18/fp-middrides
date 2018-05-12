@@ -61,6 +61,7 @@ function QueueView(props) {
                 <Button
                   bsStyle="primary"
                   bsSize="small"
+                  disabled={request.isPickedUp === true}
                   onClick={() => props.completePickedUp(request._id)}
                 >
               Picked Up
