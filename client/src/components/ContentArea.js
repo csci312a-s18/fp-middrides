@@ -358,17 +358,17 @@ class ContentArea extends Component {
           {buttons}
           <br />
           <Panel bsStyle="info">
-          <Panel.Heading>
-          <Panel.Title componentClass="h3">To be Picked Up</Panel.Title>
-          </Panel.Heading>
-          {queueview}
+            <Panel.Heading>
+              <Panel.Title componentClass="h3">To be Picked Up</Panel.Title>
+            </Panel.Heading>
+            {queueview}
           </Panel>
 
           <Panel bsStyle="success">
-          <Panel.Heading>
-          <Panel.Title componentClass="h3">Currently In Van</Panel.Title>
-          </Panel.Heading>
-          {queueview2}
+            <Panel.Heading>
+              <Panel.Title componentClass="h3">Currently In Van</Panel.Title>
+            </Panel.Heading>
+            {queueview2}
           </Panel>
         </div>
       );
