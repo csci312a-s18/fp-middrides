@@ -87,6 +87,7 @@ class ContentArea extends Component {
               currentRequest: updatedRequest,
             });
           }).catch(err => console.log(err)); // eslint-disable-line no-console
+
         } else { // Create new request
           fetch('/requests', {
             method: 'POST',
@@ -110,7 +111,7 @@ class ContentArea extends Component {
           }).catch(err => console.log(err)); // eslint-disable-line no-console
         }
         this.setState({ viewmode: 'UserStart' });
-      }
+      }        this.setState({ viewmode: 'UserStart' });
     } else { // If requestor is the Dispatcher
       fetch('/requests', {
         method: 'POST',

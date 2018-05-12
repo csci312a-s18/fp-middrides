@@ -8,12 +8,14 @@ describe('RequestForm', () => {
   test('Component renders', () => {
     const wrapper = shallow(<RequestForm complete={jest.fn} />);
     expect(wrapper.exists()).toBe(true);
+
   });
 
   test('Submit button disabled after one field is entered', () => {
     let comp = shallow(<RequestForm complete={jest.fn} />);
     comp.setState({ name: 'Andrew' });
     const submitButton = comp.find('btnSubmitRide');
+    expect(submitButton.exists).toBe(true);
     expect(submitButton.disabled).toBe(true);
   });
 });
