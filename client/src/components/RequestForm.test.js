@@ -10,12 +10,6 @@ describe('RequestForm', () => {
     expect(wrapper.exists()).toBe(true);
   });
 
-  test('Submit button find works', () => {
-    const comp = shallow(<RequestForm complete={jest.fn} />);
-    const submitButton = comp.find('#btnSubmitRide');
-    expect(submitButton.exists()).toBe(true);
-  });
-
   test('Submit button disabled after one field is entered', () => {
     const comp = shallow(<RequestForm complete={jest.fn} />);
     comp.setState({ name: 'Andrew' });
