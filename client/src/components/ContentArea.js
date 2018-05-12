@@ -2,23 +2,14 @@
 /* eslint no-plusplus: ["error", { "allowForLoopAfterthoughts": true }] */
 
 import React, { Component } from 'react';
-import styled from 'styled-components';
-
 import { Button, ButtonToolbar, Form, FormGroup, FormControl, ControlLabel, Col, Well } from 'react-bootstrap';
-
 import QueueView from './QueueView';
 import RequestForm from './RequestForm';
 import GPS from './GPS';
-
 import { enumeratePaths, calculateETA, findOptimumPath } from './Algorithm';
 // import calculateETA from './Algorithm';
 // import findOptimumPath from './Algorithm';
 
-
-const QueueContainer = styled.div`
-  position: absolute;
-  top: 560px;
-`;
 
 class ContentArea extends Component {
   constructor(props) {
@@ -317,12 +308,12 @@ class ContentArea extends Component {
       return (
         <div>
           <div className="login"> {enterDispatcherView} </div>
-          <GPS isDispatcher={false} />
-          <QueueContainer>
-            {buttons}
-            <br />
-            Next Stop: {this.state.nextStop}
-          </QueueContainer>
+          <br />
+          <div className="gps"> <GPS isDispatcher={false} /> </div>
+          {buttons}
+          <br />
+          Next Stop: {this.state.nextStop}
+
         </div>
       );
 
@@ -366,7 +357,6 @@ class ContentArea extends Component {
 
       return (
         <div>
-          <GPS isDispatcher />
           {buttons}
           <p />
           Passengers to be picked up
