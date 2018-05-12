@@ -353,7 +353,7 @@ class ContentArea extends Component {
         </Button>);
 
       const buttons = (<ButtonToolbar>{addRideButton}<div className="login"> {enterDispatcherView} </div></ButtonToolbar>
-       );
+      );
 
       return (
         <div>

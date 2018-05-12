@@ -49,22 +49,22 @@ function QueueView(props) {
             <td>{request.active}</td>
             <td>{request.ETA}</td>
             <td>
-            <ButtonToolbar>
-              <Button
-                bsStyle="primary"
-                bsSize="small"
-                onClick={() => props.completeInactive(request._id)}
-              >
+              <ButtonToolbar>
+                <Button
+                  bsStyle="primary"
+                  bsSize="small"
+                  onClick={() => props.completeInactive(request._id)}
+                >
               Inactive
-              </Button>
+                </Button>
 
-              <Button
-                bsStyle="primary"
-                bsSize="small"
-                onClick={() => props.completePickedUp(request._id)}
-              >
+                <Button
+                  bsStyle="primary"
+                  bsSize="small"
+                  onClick={() => props.completePickedUp(request._id)}
+                >
               Picked Up
-              </Button>
+                </Button>
               </ButtonToolbar>
             </td>
           </tr>))}
