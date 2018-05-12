@@ -15,7 +15,19 @@ body {
 }
 
 .center {
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.login {
+  position: relative;
+  float: right;
+}
+
+.gps {
+  height: 430px;
+  padding-top: 25px;
+  position: relative;
+
 }
