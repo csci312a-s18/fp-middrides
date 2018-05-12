@@ -6,7 +6,7 @@ import { Map, Marker, GoogleApiWrapper } from 'google-maps-react';
 import { Grid, Col } from 'react-bootstrap';
 
 const style = {
-  height: '400px',
+  height: '380px',
   position: 'contained',
 };
 
@@ -45,7 +45,7 @@ export class MapContainer extends Component {
     if (this.props.show) {
       return (
         <Grid>
-          <Col xs={11} md={10}>
+          <Col>
             <Map
               google={this.props.google}
               initialCenter={{
@@ -55,7 +55,6 @@ export class MapContainer extends Component {
               zoom={14}
             >
               <Marker
-                id="Marker"
                 name="Current location"
                 position={{ lat: this.state.lat, lng: this.state.lng }}
               />
