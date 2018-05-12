@@ -9,52 +9,136 @@ describe('RequestForm', () => {
     const wrapper = shallow(<RequestForm complete={jest.fn} />);
     expect(wrapper.exists()).toBe(true);
   });
+
+  test('Submit button disabled after name field is entered', () => {
+    const comp = shallow(<RequestForm complete={jest.fn} />);
+    comp.setState({ name: 'Andrew' });
+    const submitButton = comp.find('#btnSubmitRide');
+    expect(submitButton.prop('disabled')).toBe(true);
+  });
+
+  test('Submit button disabled after passengers field is entered', () => {
+    const comp = shallow(<RequestForm complete={jest.fn} />);
+    comp.setState({ passengers: '10' });
+    const submitButton = comp.find('#btnSubmitRide');
+    expect(submitButton.prop('disabled')).toBe(true);
+  });
+
+  test('Submit button disabled after destination field is entered', () => {
+    const comp = shallow(<RequestForm complete={jest.fn} />);
+    comp.setState({ destination: 'E Lot' });
+    const submitButton = comp.find('#btnSubmitRide');
+    expect(submitButton.prop('disabled')).toBe(true);
+  });
+
+  test('Submit button disabled after currentLocation field is entered', () => {
+    const comp = shallow(<RequestForm complete={jest.fn} />);
+    comp.setState({ currentLocation: 'Adirondack Circle' });
+    const submitButton = comp.find('#btnSubmitRide');
+    expect(submitButton.prop('disabled')).toBe(true);
+  });
+
+  test('Submit button disabled  and passengers are entered', () => {
+    const comp = shallow(<RequestForm complete={jest.fn} />);
+    comp.setState({ name: 'Andrew' });
+    comp.setState({ passengers: '4' });
+    const submitButton = comp.find('#btnSubmitRide');
+    expect(submitButton.prop('disabled')).toBe(true);
+  });
+
+  test('Submit button disabled when name and currentLocation are entered', () => {
+    const comp = shallow(<RequestForm complete={jest.fn} />);
+    comp.setState({ name: 'Andrew' });
+    comp.setState({ currentLocation: 'Adirondack Circle' });
+    const submitButton = comp.find('#btnSubmitRide');
+    expect(submitButton.prop('disabled')).toBe(true);
+  });
+
+  test('Submit button disabled when all name and destination are entered', () => {
+    const comp = shallow(<RequestForm complete={jest.fn} />);
+    comp.setState({ name: 'Andrew' });
+    comp.setState({ destination: 'Adirondack Circle' });
+    const submitButton = comp.find('#btnSubmitRide');
+    expect(submitButton.prop('disabled')).toBe(true);
+  });
+
+  test('Submit button disabled when passengers and currentLocation are entered', () => {
+    const comp = shallow(<RequestForm complete={jest.fn} />);
+    comp.setState({ passengers: '3' });
+    comp.setState({ currentLocation: 'Adirondack Circle' });
+    const submitButton = comp.find('#btnSubmitRide');
+    expect(submitButton.prop('disabled')).toBe(true);
+  });
+
+  test('Submit button disabled when passengers and destination are entered', () => {
+    const comp = shallow(<RequestForm complete={jest.fn} />);
+    comp.setState({ passengers: '5' });
+    comp.setState({ destination: 'Adirondack Circle' });
+    const submitButton = comp.find('#btnSubmitRide');
+    expect(submitButton.prop('disabled')).toBe(true);
+  });
+
+  test('Submit button disabled when currentLocation and destination are entered', () => {
+    const comp = shallow(<RequestForm complete={jest.fn} />);
+    comp.setState({ currentLocation: 'E Lot' });
+    comp.setState({ destination: 'Adirondack Circle' });
+    const submitButton = comp.find('#btnSubmitRide');
+    expect(submitButton.prop('disabled')).toBe(true);
+  });
+
+  test('Submit button disabled when name, passengers and currentLocation are entered', () => {
+    const comp = shallow(<RequestForm complete={jest.fn} />);
+    comp.setState({ name: 'Andrew' });
+    comp.setState({ passengers: '6' });
+    comp.setState({ currentLocation: 'Adirondack Circle' });
+    const submitButton = comp.find('#btnSubmitRide');
+    expect(submitButton.prop('disabled')).toBe(true);
+  });
+
+  test('Submit button disabled when name, passengers and destination are entered', () => {
+    const comp = shallow(<RequestForm complete={jest.fn} />);
+    comp.setState({ name: 'Andrew' });
+    comp.setState({ passengers: '6' });
+    comp.setState({ destination: 'Adirondack Circle' });
+    const submitButton = comp.find('#btnSubmitRide');
+    expect(submitButton.prop('disabled')).toBe(true);
+  });
+
+  test('Submit button disabled when name, currentLocation and destination are entered', () => {
+    const comp = shallow(<RequestForm complete={jest.fn} />);
+    comp.setState({ name: 'Andrew' });
+    comp.setState({ currentLocation: 'Adirondack Circle' });
+    comp.setState({ destination: 'E Lot' });
+    const submitButton = comp.find('#btnSubmitRide');
+    expect(submitButton.prop('disabled')).toBe(true);
+  });
+
+  test('Submit button disabled when passengers, currentLocation and destination are entered', () => {
+    const comp = shallow(<RequestForm complete={jest.fn} />);
+    comp.setState({ passengers: '3' });
+    comp.setState({ currentLocation: 'Adirondack Circle' });
+    comp.setState({ destination: 'E Lot' });
+    const submitButton = comp.find('#btnSubmitRide');
+    expect(submitButton.prop('disabled')).toBe(true);
+  });
+
+  test('Submit button enabled when all fields set and currentLocation does not equal destination', () => {
+    const comp = shallow(<RequestForm complete={jest.fn} />);
+    comp.setState({ name: 'ya mam' });
+    comp.setState({ passengers: '7' });
+    comp.setState({ currentLocation: 'E Lot' });
+    comp.setState({ destination: 'T Lot' });
+    const submitButton = comp.find('#btnSubmitRide');
+    expect(submitButton.prop('disabled')).toBe(false);
+  });
+
+  test('Submit button disabled when all fields set and currentLocation does equal destination', () => {
+    const comp = shallow(<RequestForm complete={jest.fn} />);
+    comp.setState({ name: 'ya mam' });
+    comp.setState({ passengers: '7' });
+    comp.setState({ currentLocation: 'E Lot' });
+    comp.setState({ destination: 'E Lot' });
+    const submitButton = comp.find('#btnSubmitRide');
+    expect(submitButton.prop('disabled')).toBe(true);
+  });
 });
-//
-//
-// var textConfirmButtonNode =
-// TestUtils.findRenderedDOMComponentWithTag(textConfirmButton, 'button');
-// expect(textConfirmButtonNode.disabled).toEqual(true);
-//
-//   test('Submit button disabled after one field is entered', () => {
-//     let comp = shallow(<RequestForm complete={jest.fn} />);
-//     comp.setState({ name: 'Andrew' });
-//     const submitButton = comp.find('button').at(0);
-//     expect(comp.getElement().disabled).toBe(true);
-//   });
-//
-//   test('Submit button enabled when all four fields are entered', () => {
-//     let comp = shallow(<RequestForm complete={jest.fn} />);
-//     comp.setState({ name: 'Andrew' });
-//     comp.setState({ passengers: '4' });
-//     comp.setState({ currentLocation: 'Adirondack Circle' });
-//     comp.setState({ destination: 'Track Lot/KDR' });
-//     // const submitButton = comp.find('button').at(0);
-//     expect(comp.getElement().disabled).toBe(false);
-//   });
-//
-//   test('Submit button disabled when current location and destination are the same', () => {
-//       let comp = shallow(<RequestForm complete={jest.fn} />);
-//       comp.setState({ name: 'Andrew' });
-//       comp.setState({ passengers: '4' });
-//       comp.setState({ currentLocation: 'Adirondack Circle' });
-//       comp.setState({ destination: 'Adirondack Circle' });
-//       // const submitButton = comp.find('button').at(0);
-//       expect(comp.getElement().disabled).toBe(true);
-//     });
-//
-//   test('Submit button disabled when one of the four entered fields is cleared', () => {
-//     let comp;
-//     comp = shallow(<RequestForm
-//       name="Andrew"
-//       passengers="4"
-//       currentLocation="Adirondack Circle"
-//       destination="Track Lot/KDR"
-//       complete={jest.fn}
-//     />);
-//     // const submitButton = comp.find('button').at(0);
-//     expect(comp.getElement().disabled).toBe(false);
-//     comp.setState({ name: '' });
-//     expect(comp.getElement().disabled).toBe(true);
-//   });
-// });
