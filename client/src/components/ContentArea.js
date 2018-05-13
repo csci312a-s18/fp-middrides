@@ -66,7 +66,7 @@ class ContentArea extends Component {
   }
 
   updateNextStop() {
-    const nextStop = this.state.nextStop; // eslint-disable-line prefer-destructing
+    const nextStop = this.state.nextStop; // eslint-disable-line prefer-destructuring
     const newStop = Object.assign({}, {
       _id: {
         $oid: this.nextStopID,
