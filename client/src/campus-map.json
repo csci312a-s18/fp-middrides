@@ -15,7 +15,7 @@
 
       "McCullough Student Center" : 2.4,
 
-      "Robert A Jones '59 House" : 1.2,
+      "Robert A. Jones House" : 1.2,
 
       "Frog Hollow" : 4.2
     }
@@ -43,7 +43,7 @@
       "McCullough Student Center" : 1.2
     ,
 
-      "Robert A Jones '59 House" : 1.8
+      "Robert A. Jones House" : 1.8
     ,
 
       "Frog Hollow" : 3.6
@@ -72,7 +72,7 @@
       "McCullough Student Center" : 2.4
     ,
 
-      "Robert A Jones '59 House" : 4.2
+      "Robert A. Jones House" : 4.2
     ,
 
       "Frog Hollow" : 3.6
@@ -101,13 +101,13 @@
       "McCullough Student Center" : 2.4
     ,
 
-      "Robert A Jones '59 House" : 3
+      "Robert A. Jones House" : 3
     ,
 
       "Frog Hollow" : 3.6
 
   },
-  "Robert A Jones '59 House" : {
+  "Robert A. Jones House" : {
 
       "Q Lot" : 3
     ,
@@ -159,7 +159,7 @@
       "R Lot" : 4.2
     ,
 
-      "Robert A Jones '59 House" : 3
+      "Robert A. Jones House" : 3
     ,
 
       "Frog Hollow" : 4.2
@@ -188,7 +188,7 @@
       "McCullough Student Center" : 4.2
     ,
 
-      "Robert A Jones '59 House" : 4.8
+      "Robert A. Jones House" : 4.8
     ,
 
       "Frog Hollow" : 3.6
@@ -217,7 +217,7 @@
       "McCullough Student Center" : 4.2
     ,
 
-      "Robert A Jones '59 House" : 4.8
+      "Robert A. Jones House" : 4.8
     ,
 
       "Track Lot/KDR" : 3.6
@@ -246,7 +246,7 @@
       "McCullough Student Center" : 4.2
     ,
 
-      "Robert A Jones '59 House" : 2.4
+      "Robert A. Jones House" : 2.4
     ,
 
       "Frog Hollow" : 5.4
@@ -275,7 +275,7 @@
       "McCullough Student Center" : 2.4
     ,
 
-      "Robert A Jones '59 House" : 3.6
+      "Robert A. Jones House" : 3.6
     ,
 
       "Frog Hollow" : 4.8

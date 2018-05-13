@@ -48,7 +48,7 @@ class RequestForm extends Component {
       active: true,
       isPickedUp: false,
       timestamp: now.toISOString(),
-      ETA: -1,
+      ETA: 'Calculating...',
     };
 
     this.props.complete(newRequest);

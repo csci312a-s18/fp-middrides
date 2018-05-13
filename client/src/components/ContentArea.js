@@ -225,7 +225,7 @@ class ContentArea extends Component {
 
   makePickedUp(id) {
     const findPickedUpRequest = this.state.requests.find(request => request._id === id);
-    const pickedUpRequest = Object.assign({}, findPickedUpRequest, { isPickedUp: true });
+    const pickedUpRequest = Object.assign({}, findPickedUpRequest, { isPickedUp: true, ETA: 'Picked Up' });
     fetch(`/requests/${id}`, {
       method: 'PUT',
       body: JSON.stringify(pickedUpRequest),
@@ -290,7 +290,7 @@ class ContentArea extends Component {
         <Button
           id="btnDispatcherLogin"
           bsStyle="link"
-          bsSize="medium"
+          bsSize="large"
           onClick={() => this.setState({ viewmode: 'DispatcherLogin' })}
         >
         Log-In
