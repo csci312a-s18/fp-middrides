@@ -10,7 +10,6 @@ import { enumeratePaths, calculateETA, findOptimumPath } from './Algorithm';
 // import calculateETA from './Algorithm';
 // import findOptimumPath from './Algorithm';
 
-
 class ContentArea extends Component {
   constructor(props) {
     super(props);
@@ -24,10 +23,13 @@ class ContentArea extends Component {
       nextStop: '',
     };
 
+    this.nextStopID = '5af88680f36d280cecd235bc';
+
     this.handleCancel = this.handleCancel.bind(this);
     this.handlePassword = this.handlePassword.bind(this);
     this.handleLogin = this.handleLogin.bind(this);
     this.handleCancelLogin = this.handleCancelLogin.bind(this);
+    this.getNextStop();
   }
 
   componentDidMount() {
@@ -49,6 +51,116 @@ class ContentArea extends Component {
     });
   }
 
+  getNextStop() {
+    fetch('/nextStop', { headers: new Headers({ Accept: 'application/json' }) })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(response.status_text);
+        }
+        return response.json();
+      })
+      .then((data) => {
+        this.setState({ nextStop: data[0].nextStop });
+      })
+      .catch(err => console.log(err)); // eslint-disable-line no-console
+  }
+
+  updateNextStop() {
+    const nextStop = this.state.nextStop; // eslint-disable-line prefer-destructing
+    const newStop = Object.assign({}, {
+      _id: {
+        $oid: this.nextStopID,
+      },
+      nextStop: null,
+    }, { nextStop });
+
+    fetch(`/nextStop/${this.nextStopID}`, {
+      method: 'PUT',
+      body: JSON.stringify(newStop),
+      headers: new Headers({
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      }),
+    }).then((response) => {
+      if (!response.ok) {
+        throw new Error(response.status_text);
+      }
+      return response.json();
+    }).catch(err => console.log(err)); // eslint-disable-line no-console
+  }
+
+  runAlgorithm() {
+    const paths = enumeratePaths(this.state.currentStop, this.state.requests, this.state.seatsLeft);
+    const optimalPath = findOptimumPath(paths, this.state.requests);
+    let updatedRequests = [];
+    this.state.requests.forEach(request => updatedRequests.push(Object.assign({}, request)));
+    const newRequests = calculateETA(updatedRequests, optimalPath, 0);
+
+    for (let i = 0; i < newRequests.length; i++) {
+      fetch(`/requests/${newRequests[i]._id}`, {
+        method: 'PUT',
+        body: JSON.stringify(newRequests[i]),
+        headers: new Headers({
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        }),
+      }).then((response) => {
+        if (!response.ok) {
+          throw new Error(response.status_text);
+        }
+        return response.json();
+      }).then((updatedRequest) => { // eslint-disable-line no-loop-func
+        updatedRequests = this.state.requests.map((request) => {
+          if (request._id === updatedRequest._id) {
+            return updatedRequest;
+          }
+          return request;
+        });
+        this.setState({ requests: updatedRequests });
+        this.setState({ nextStop: optimalPath[0].currentStop });
+        this.updateNextStop();
+        this.getNextStop();
+      }).catch(err => console.log(err)); // eslint-disable-line no-console
+    }
+  }
+
+  handlePassword(event) {
+    this.setState({ password: event.target.value });
+  }
+
+  handleCancelLogin() {
+    this.setState({ password: '', viewmode: 'UserStart' });
+  }
+
+  handleLogin() {
+    if (this.state.password === '12345') { // temporary password
+      this.setState({ viewmode: 'DispatcherMode' });
+    } else {
+      alert('Incorrect password. Try again!'); // eslint-disable-line no-alert
+    }
+  }
+
+  handleCancel() {
+    const cancelledRequest = Object.assign({}, this.state.currentRequest, { active: false });
+    fetch(`/requests/${this.state.currentRequest._id}`, {
+      method: 'PUT',
+      body: JSON.stringify(cancelledRequest),
+      headers: new Headers({
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      }),
+    }).then((response) => {
+      if (!response.ok) {
+        throw new Error(response.status_text);
+      }
+      return response.json();
+    }).then(() => {
+      const updatedRequests = this.state.requests
+        .filter(request => request._id !== this.state.currentRequest._id);
+      this.setState({ requests: updatedRequests });
+      this.setState({ currentRequest: null });
+    }).catch(err => console.log(err)); // eslint-disable-line no-console
+  }
 
   handleFormReturn(newRequest) {
     if (this.state.viewmode === 'RequestRideUser') {
@@ -126,77 +238,6 @@ class ContentArea extends Component {
 
 
       this.setState({ viewmode: 'DispatcherMode' });
-    }
-  }
-
-  handleCancel() {
-    const cancelledRequest = Object.assign({}, this.state.currentRequest, { active: false });
-    fetch(`/requests/${this.state.currentRequest._id}`, {
-      method: 'PUT',
-      body: JSON.stringify(cancelledRequest),
-      headers: new Headers({
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      }),
-    }).then((response) => {
-      if (!response.ok) {
-        throw new Error(response.status_text);
-      }
-      return response.json();
-    }).then(() => {
-      const updatedRequests = this.state.requests
-        .filter(request => request._id !== this.state.currentRequest._id);
-      this.setState({ requests: updatedRequests });
-      this.setState({ currentRequest: null });
-    }).catch(err => console.log(err)); // eslint-disable-line no-console
-  }
-
-  handlePassword(event) {
-    this.setState({ password: event.target.value });
-  }
-
-  handleCancelLogin() {
-    this.setState({ password: '', viewmode: 'UserStart' });
-  }
-
-  handleLogin() {
-    if (this.state.password === '12345') { // temporary password
-      this.setState({ viewmode: 'DispatcherMode' });
-    } else {
-      alert('Incorrect password. Try again!'); // eslint-disable-line no-alert
-    }
-  }
-
-  runAlgorithm() {
-    const paths = enumeratePaths(this.state.currentStop, this.state.requests, this.state.seatsLeft);
-    const optimalPath = findOptimumPath(paths, this.state.requests);
-    let updatedRequests = [];
-    this.state.requests.forEach(request => updatedRequests.push(Object.assign({}, request)));
-    const newRequests = calculateETA(updatedRequests, optimalPath, 0);
-
-    for (let i = 0; i < newRequests.length; i++) {
-      fetch(`/requests/${newRequests[i]._id}`, {
-        method: 'PUT',
-        body: JSON.stringify(newRequests[i]),
-        headers: new Headers({
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-        }),
-      }).then((response) => {
-        if (!response.ok) {
-          throw new Error(response.status_text);
-        }
-        return response.json();
-      }).then((updatedRequest) => { // eslint-disable-line no-loop-func
-        updatedRequests = this.state.requests.map((request) => {
-          if (request._id === updatedRequest._id) {
-            return updatedRequest;
-          }
-          return request;
-        });
-        this.setState({ requests: updatedRequests });
-        this.setState({ nextStop: optimalPath[0].currentStop });
-      }).catch(err => console.log(err)); // eslint-disable-line no-console
     }
   }
 

@@ -73,8 +73,31 @@ server.put('/shuttleLocation/:id', (request, response, next) => {
     }, next);
 });
 
+server.put('/nextStop/:id', (request, response, next) => {
+  const updatedStop = Object.assign(
+    { extract: '' },
+    request.body,
+    { _id: ObjectID.createFromHexString(request.params.id) },
+  );
+  db.collection('nextStop') // eslint-disable-line no-undef
+    .findOneAndUpdate(
+      { _id: updatedStop._id },
+      { $set: updatedStop },
+      { returnOriginal: false },
+    )
+    .then((result) => {
+      response.send(result.value);
+    }, next);
+});
+
 server.get('/shuttleLocation', (request, response, next) => {
   db.collection('shuttleLocation').find().toArray().then((documents) => { // eslint-disable-line no-undef
+    response.send(documents);
+  }, next);
+});
+
+server.get('/nextStop', (request, response, next) => {
+  db.collection('nextStop').find().toArray().then((documents) => { // eslint-disable-line no-undef
     response.send(documents);
   }, next);
 });
