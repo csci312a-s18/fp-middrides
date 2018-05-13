@@ -2,7 +2,7 @@
 /* eslint no-plusplus: ["error", { "allowForLoopAfterthoughts": true }] */
 
 import React, { Component } from 'react';
-import { Button, ButtonToolbar, Form, FormGroup, FormControl, ControlLabel, Col, Well } from 'react-bootstrap';
+import { Button, ButtonToolbar, Form, FormGroup, FormControl, ControlLabel, Col, Well, Panel, PageHeader } from 'react-bootstrap';
 import QueueView from './QueueView';
 import RequestForm from './RequestForm';
 import GPS from './GPS';
@@ -270,7 +270,7 @@ class ContentArea extends Component {
         <Button
           id="btnRequestRide"
           bsStyle="primary"
-          bsSize="medium"
+          bsSize="small"
           onClick={() => this.setState({ viewmode: 'RequestRideUser' })}
         >
         Request Ride
@@ -280,7 +280,7 @@ class ContentArea extends Component {
         <Button
           id="btnCancleRide"
           bsStyle="primary"
-          bsSize="medium"
+          bsSize="small"
           onClick={this.handleCancel}
         >
         Cancel Ride
@@ -299,21 +299,19 @@ class ContentArea extends Component {
       let buttons;
 
       if (this.state.currentRequest) {
-        buttons = (<ButtonToolbar>{cancelRideButton}</ButtonToolbar>);
+        buttons = (<ButtonToolbar>{cancelRideButton} <div className="login">  {enterDispatcherView} </div></ButtonToolbar>);
       } else {
-        buttons = (<ButtonToolbar>{requestRideButton}</ButtonToolbar>);
+        buttons = (<ButtonToolbar>{requestRideButton} <div className="login">  {enterDispatcherView} </div></ButtonToolbar>);
       }
 
       // {queueview}
       return (
         <div>
-          <div className="login"> {enterDispatcherView} </div>
-          <br />
-          <div className="gps"> <GPS isDispatcher={false} /> </div>
           {buttons}
-          <br />
-          Next Stop: {this.state.nextStop}
-
+          <div className="gps"> <GPS isDispatcher={false} /> </div>
+          <PageHeader>
+            <small>Next Stop: {this.state.nextStop}</small>
+          </PageHeader>
         </div>
       );
 
@@ -358,12 +356,20 @@ class ContentArea extends Component {
       return (
         <div>
           {buttons}
-          <p />
-          Passengers to be picked up
-          {queueview}
-          <p />
-          Passengers inside of van
-          {queueview2}
+          <br />
+          <Panel bsStyle="info">
+            <Panel.Heading>
+              <Panel.Title componentClass="h3">To be Picked Up</Panel.Title>
+            </Panel.Heading>
+            {queueview}
+          </Panel>
+
+          <Panel bsStyle="success">
+            <Panel.Heading>
+              <Panel.Title componentClass="h3">Currently In Van</Panel.Title>
+            </Panel.Heading>
+            {queueview2}
+          </Panel>
         </div>
       );
       // view to request a ride for User
