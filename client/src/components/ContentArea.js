@@ -418,6 +418,7 @@ class ContentArea extends Component {
             </Panel.Heading>
             {queueview2}
           </Panel>
+          <div className="gps"> <GPS isDispatcher /> </div>
         </div>
       );
       // view to request a ride for User
