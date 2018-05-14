@@ -345,6 +345,10 @@ class ContentArea extends Component {
         buttons = (<ButtonToolbar>{requestRideButton} <div className="login">  {enterDispatcherView} </div></ButtonToolbar>);
       }
 
+      const RideETA = () => (
+        <small>Ride ETA: {this.state.currentRequest.ETA}</small>
+      );
+
       // {queueview}
       return (
         <div>
@@ -352,6 +356,8 @@ class ContentArea extends Component {
           <div className="gps"> <GPS isDispatcher={false} /> </div>
           <PageHeader>
             <small>Next Stop: {this.state.nextStop}</small>
+            <br />
+            {this.state.currentRequest && <RideETA />}
           </PageHeader>
         </div>
       );
