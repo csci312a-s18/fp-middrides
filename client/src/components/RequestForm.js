@@ -64,6 +64,14 @@ class RequestForm extends Component {
     this.props.complete();
   }
 
+  isDisabled() {
+    return this.state.name === '' ||
+    this.state.passengers === '' ||
+    this.state.currentLocation === '' ||
+    this.state.destination === '' ||
+    this.state.currentLocation === this.state.destination;
+  }
+
   render() {
     return (
       <form>
@@ -145,7 +153,7 @@ class RequestForm extends Component {
           </FormControl>
         </FormGroup>
 
-        <Button id="btnSubmitRide" bsStyle="primary" disabled={this.state.name === '' || this.state.passengers === '' || this.state.currentLocation === '' || this.state.destination === '' || this.state.currentLocation === this.state.destination} onClick={this.handleSubmit}> Submit </Button>
+        <Button id="btnSubmitRide" bsStyle="primary" disabled={this.isDisabled()} onClick={this.handleSubmit}> Submit </Button>
         <Button id="btnCancel" onClick={this.handleCancel}> Cancel </Button>
       </form>
 
