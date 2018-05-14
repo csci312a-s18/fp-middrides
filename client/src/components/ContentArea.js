@@ -162,6 +162,7 @@ class ContentArea extends Component {
       this.setState({ requests: updatedRequests });
       this.setState({ currentRequest: null });
     }).catch(err => console.log(err)); // eslint-disable-line no-console
+    this.setState({ currentRequest: null }) //this is done for tests that do not use the fetch
   }
 
 
@@ -332,8 +333,6 @@ class ContentArea extends Component {
           bsStyle="primary"
           bsSize="small"
           onClick={this.handleCancel}
-          onClick={() => // eslint-disable-line react/jsx-no-duplicate-props
-            this.setState({ currentRequest: null })}
         >
         Cancel Ride
         </Button>);
@@ -448,7 +447,7 @@ class ContentArea extends Component {
         </Well>
       );
     }
-    // view to login to dispatchermode
+    // viewmode is DispatcherLogin
     return (
       <div id="dispatcherform">
         <Well bsSize="large">
@@ -476,6 +475,7 @@ class ContentArea extends Component {
               </Col>
             </FormGroup>
             <Button
+              id="btnDispatcherLoginFinal"
               bsStyle="primary"
               bsSize="medium"
               onClick={this.handleLogin}
@@ -483,6 +483,7 @@ class ContentArea extends Component {
             Login
             </Button>
             <Button
+              id="btnCancelLogin"
               bsSize="medium"
               onClick={this.handleCancelLogin}
             >
