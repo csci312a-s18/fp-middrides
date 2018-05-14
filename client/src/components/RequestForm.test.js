@@ -4,12 +4,16 @@ import { shallow } from 'enzyme';
 import RequestForm from './RequestForm';
 
 
-describe('RequestForm', () => {
+describe('RequestForm renders correctly', () => {
   test('Component renders', () => {
-    const wrapper = shallow(<RequestForm complete={jest.fn} />);
-    expect(wrapper.exists()).toBe(true);
+    const comp = shallow(<RequestForm complete={jest.fn} />);
+    expect(comp.exists()).toBe(true);
+    const submitButton = comp.find('#btnSubmitRide');
+    expect(submitButton.prop('disabled')).toBe(true);
   });
+});
 
+describe('Submit Button is disabled until all fields entered properly', () => {
   test('Submit button disabled after name field is entered', () => {
     const comp = shallow(<RequestForm complete={jest.fn} />);
     comp.setState({ name: 'Andrew' });

@@ -29,6 +29,7 @@ class ContentArea extends Component {
     this.handlePassword = this.handlePassword.bind(this);
     this.handleLogin = this.handleLogin.bind(this);
     this.handleCancelLogin = this.handleCancelLogin.bind(this);
+
     this.getNextStop();
   }
 
@@ -162,6 +163,7 @@ class ContentArea extends Component {
       this.setState({ currentRequest: null });
     }).catch(err => console.log(err)); // eslint-disable-line no-console
   }
+
 
   handleFormReturn(newRequest) {
     if (this.state.viewmode === 'RequestRideUser') {
@@ -326,10 +328,12 @@ class ContentArea extends Component {
 
       const cancelRideButton = (
         <Button
-          id="btnCancleRide"
+          id="btnCancelRide"
           bsStyle="primary"
           bsSize="small"
           onClick={this.handleCancel}
+          onClick={() => // eslint-disable-line react/jsx-no-duplicate-props
+            this.setState({ currentRequest: null })}
         >
         Cancel Ride
         </Button>);
@@ -356,7 +360,7 @@ class ContentArea extends Component {
       return (
         <div>
           {buttons}
-          <div className="gps"> <GPS isDispatcher={false} /> </div>
+          <div className="gps"> <GPS isDispatcher={false} id="gps" /> </div>
           <PageHeader>
             <small>Next Stop: {this.state.nextStop}</small>
           </PageHeader>
@@ -380,6 +384,7 @@ class ContentArea extends Component {
 
       const addRideButton = (
         <Button
+          id="btnAddRide"
           bsStyle="primary"
           bsSize="small"
           onClick={() => this.setState({ viewmode: 'RequestRideDispatcher' })}
@@ -389,6 +394,7 @@ class ContentArea extends Component {
 
       const enterDispatcherView = (
         <Button
+          id="btnLogout"
           bsStyle="link"
           bsSize="medium"
           onClick={() => this.setState({ viewmode: 'UserStart' })}
@@ -460,6 +466,12 @@ class ContentArea extends Component {
                   label="Text"
                   placeholder="Enter Password"
                   onChange={this.handlePassword}
+                  onKeyDown={(press) => {
+                    if (press.keyCode === 13) { // if key pressed is ENTER
+                      press.preventDefault();
+                      this.handleLogin();
+                    }
+                    }}
                 />
               </Col>
             </FormGroup>

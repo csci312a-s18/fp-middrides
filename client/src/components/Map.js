@@ -44,9 +44,10 @@ export class MapContainer extends Component {
   render() {
     if (this.props.show) {
       return (
-        <Grid>
+        <Grid id="grid">
           <Col>
             <Map
+              id="map"
               google={this.props.google}
               initialCenter={{
                 lat: middleburyLatLong.lat, lng: middleburyLatLong.lng,
@@ -55,7 +56,7 @@ export class MapContainer extends Component {
               zoom={14}
             >
               <Marker
-                id="Marker"
+                id="marker"
                 name="Current location"
                 position={{ lat: this.state.lat, lng: this.state.lng }}
               />
