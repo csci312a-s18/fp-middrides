@@ -29,6 +29,7 @@ class ContentArea extends Component {
     this.handlePassword = this.handlePassword.bind(this);
     this.handleLogin = this.handleLogin.bind(this);
     this.handleCancelLogin = this.handleCancelLogin.bind(this);
+    this.handleLogout = this.handleLogout.bind(this);
 
     this.getNextStop();
   }
@@ -162,7 +163,7 @@ class ContentArea extends Component {
       this.setState({ requests: updatedRequests });
       this.setState({ currentRequest: null });
     }).catch(err => console.log(err)); // eslint-disable-line no-console
-    this.setState({ currentRequest: null }) //this is done for tests that do not use the fetch
+    this.setState({ currentRequest: null }); // this is done for tests that do not use the fetch
   }
 
 
@@ -267,6 +268,10 @@ class ContentArea extends Component {
       this.runAlgorithm();
     }).catch(err => console.log(err)); // eslint-disable-line no-console
   }
+  handleLogout() {
+    this.setState({ viewmode: 'UserStart' });
+    window.location.reload();
+  }
 
   makePickedUp(id) {
     const findPickedUpRequest = this.state.requests.find(request => request._id === id);
@@ -369,12 +374,14 @@ class ContentArea extends Component {
     // view dispatcher mode
     } else if (this.state.viewmode === 'DispatcherMode') {
       const queueview = (<QueueView
+        id="qvActive"
         requests={this.state.requests.filter(request => request.isPickedUp === false)}
         mode={this.state.viewmode}
         completeInactive={(id) => { this.makeInactive(id); }}
         completePickedUp={(id) => { this.makePickedUp(id); }}
       />);
       const queueview2 = (<QueueView
+        id="qvPickedUp"
         requests={this.state.requests.filter(request => request.isPickedUp === true)}
         mode={this.state.viewmode}
         completeInactive={(id) => { this.makeInactive(id); }}
@@ -396,9 +403,7 @@ class ContentArea extends Component {
           id="btnLogout"
           bsStyle="link"
           bsSize="medium"
-          onClick={() => this.setState({ viewmode: 'UserStart' })}
-          onClick={() =>// eslint-disable-line react/jsx-no-duplicate-props
-            window.location.reload()}
+          onClick={this.handleLogout}
         >
         Log-out
         </Button>);

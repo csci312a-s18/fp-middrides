@@ -40,13 +40,11 @@ describe('Request button functionality', () => {
 
   test('<btnRequestRideUser> isn\'t present if there\'s a currentRequest', () => {
     const wrapper = shallow(<ContentArea complete={jest.fn} />);
-    const btnRequestRide = wrapper.find('#btnRequestRide');
     wrapper.setState({ currentRequest: request });
     expect(wrapper.state('currentRequest')).toEqual(request);
     const btnRequestRidePost = wrapper.find('#btnRequestRide');
     expect(btnRequestRidePost.exists()).toBe(false);
   });
-
 });
 
 describe('Cancel button functionality', () => {
@@ -68,8 +66,6 @@ describe('Cancel button functionality', () => {
 
     btncancelRide.simulate('click');
     wrapper.update();
-
-    const btncancelRideClicked = wrapper.find('#btnCancelRide');
     expect(wrapper.state('currentRequest')).toEqual(null);
   });
 
@@ -98,31 +94,30 @@ describe('Dispatcher login button functionality', () => {
 
   test('<btnDispatcherLogin> is present if viewmode is UserStart', () => {
     const wrapper = shallow(<ContentArea complete={jest.fn} />);
-    wrapper.setState({ viewmode: "UserStart" });
-    wrapper.update
+    wrapper.setState({ viewmode: 'UserStart' });
+    wrapper.update();
     const btnDispatcherLogin = wrapper.find('#btnDispatcherLogin');
     expect(btnDispatcherLogin.exists()).toBe(true);
   });
 
   test('<btnDispatcherLogin> is present if viewmode is UserStart', () => {
     const wrapper = shallow(<ContentArea complete={jest.fn} />);
-    wrapper.setState({ viewmode: "UserStart" });
-    wrapper.update
+    wrapper.setState({ viewmode: 'UserStart' });
+    wrapper.update();
     const btnDispatcherLogin = wrapper.find('#btnDispatcherLogin');
     expect(btnDispatcherLogin.exists()).toBe(true);
   });
 
   test('<btnDispatcherLogin> is present if viewmode is UserStart', () => {
     const wrapper = shallow(<ContentArea complete={jest.fn} />);
-    wrapper.setState({ viewmode: "UserStart" });
-    wrapper.update
+    wrapper.setState({ viewmode: 'UserStart' });
+    wrapper.update();
     const btnDispatcherLogin = wrapper.find('#btnDispatcherLogin');
     expect(btnDispatcherLogin.exists()).toBe(true);
   });
 });
 
 describe('Login View functionality', () => {
-
   test('Login view renders correctly', () => {
     const wrapper = shallow(<ContentArea complete={jest.fn} />);
     wrapper.setState({ viewmode: 'DispatcherLogin' });
@@ -140,7 +135,7 @@ describe('Login View functionality', () => {
     wrapper.setState({ viewmode: 'DispatcherLogin' });
 
     const formControlsText = wrapper.find('#formControlsText');
-    formControlsText.simulate('change', { target: { value: "abc123" } });
+    formControlsText.simulate('change', { target: { value: 'abc123' } });
 
     const btnDispatcherLoginFinal = wrapper.find('#btnDispatcherLoginFinal');
     btnDispatcherLoginFinal.simulate('click');
@@ -153,7 +148,7 @@ describe('Login View functionality', () => {
     wrapper.setState({ viewmode: 'DispatcherLogin' });
 
     const formControlsText = wrapper.find('#formControlsText');
-    formControlsText.simulate('change', { target: { value: "12345" } });
+    formControlsText.simulate('change', { target: { value: '12345' } });
 
     const btnDispatcherLoginFinal = wrapper.find('#btnDispatcherLoginFinal');
     btnDispatcherLoginFinal.simulate('click');
@@ -177,5 +172,38 @@ describe('Login View functionality', () => {
     btnCancelLogin.simulate('click');
     wrapper.update();
     expect(wrapper.state('password')).toEqual('');
+  });
+});
+
+describe('DispatcherMode functionality', () => {
+  test('DispatcherMode renders properly', () => {
+    const wrapper = shallow(<ContentArea complete={jest.fn} />);
+    wrapper.setState({ viewmode: 'DispatcherMode' });
+    const btnAddRide = wrapper.find('#btnAddRide');
+    const btnLogout = wrapper.find('#btnLogout');
+    const qvActive = wrapper.find('#qvActive');
+    const qvPickedUp = wrapper.find('#qvPickedUp');
+    expect(btnAddRide.exists()).toBe(true);
+    expect(btnLogout.exists()).toBe(true);
+    expect(qvActive.exists()).toBe(true);
+    expect(qvPickedUp.exists()).toBe(true);
+  });
+
+  test('<btnAddRide> changes viewmode to RequestRideDispatcher', () => {
+    const wrapper = shallow(<ContentArea complete={jest.fn} />);
+    wrapper.setState({ viewmode: 'DispatcherMode' });
+    const btnAddRide = wrapper.find('#btnAddRide');
+    btnAddRide.simulate('click');
+    wrapper.update();
+    expect(wrapper.state('viewmode')).toEqual('RequestRideDispatcher');
+  });
+
+  test('<btnLogout> changes viewmode to UserStart', () => {
+    const wrapper = shallow(<ContentArea complete={jest.fn} />);
+    wrapper.setState({ viewmode: 'DispatcherMode' });
+    const btnLogout = wrapper.find('#btnLogout');
+    btnLogout.simulate('click');
+    wrapper.update();
+    expect(wrapper.state('viewmode')).toEqual('UserStart');
   });
 });
