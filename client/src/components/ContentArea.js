@@ -7,14 +7,13 @@ import QueueView from './QueueView';
 import RequestForm from './RequestForm';
 import GPS from './GPS';
 import { enumeratePaths, calculateETA, findOptimumPath } from './Algorithm';
-// import calculateETA from './Algorithm';
-// import findOptimumPath from './Algorithm';
+import fetchHelper from './Helpers';
 
 class ContentArea extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      viewmode: 'UserStart',
+      viewmode: 'UserStart', // DispatcherMode, DispatcherLogin, RequestRideUser, RequestRideDispatcher
       requests: [],
       currentRequest: null,
       password: '',
@@ -192,19 +191,7 @@ class ContentArea extends Component {
             });
           }).catch(err => console.log(err)); // eslint-disable-line no-console
         } else { // Create new request
-          fetch('/requests', {
-            method: 'POST',
-            body: JSON.stringify(newRequest),
-            headers: new Headers({
-              Accept: 'application/json',
-              'Content-Type': 'application/json',
-            }),
-          }).then((response) => {
-            if (!response.ok) {
-              throw new Error(response.status_text);
-            }
-            return response.json();
-          }).then((createdRequest) => {
+          fetchHelper('/requests', 'POST', newRequest).then((createdRequest) => {
             const updatedRequests = this.state.requests.slice();
             updatedRequests.push(createdRequest);
             this.setState({
@@ -233,11 +220,9 @@ class ContentArea extends Component {
         updatedRequests.push(createdRequest);
         this.setState({
           requests: updatedRequests,
-          currentRequest: null, // allows for multiple requests by Dispatcher
+          currentRequest: null, // allows for multiple requests by Dispatcher // unnecessary
         });
       }).catch(err => console.log(err)); // eslint-disable-line no-console
-
-
       this.setState({ viewmode: 'DispatcherMode' });
     }
   }
@@ -281,16 +266,16 @@ class ContentArea extends Component {
       }
       return response.json();
     }).then(() => {
-      // const updatedRequests = this.state.requests
-      //   .filter(request => request._id !== id);
-      // this.setState({ requests: updatedRequests });
       const updatedRequests = this.state.requests.map((request) => {
         if (request._id === id) {
           return pickedUpRequest;
         }
         return request;
       });
-      this.setState({ requests: updatedRequests, currentStop: pickedUpRequest.currentLocation });
+      this.setState({
+        requests: updatedRequests,
+        currentStop: pickedUpRequest.currentLocation,
+      });
       this.runAlgorithm();
     }).catch(err => console.log(err)); // eslint-disable-line no-console
   }
@@ -352,7 +337,6 @@ class ContentArea extends Component {
         buttons = (<ButtonToolbar>{requestRideButton} <div className="login">  {enterDispatcherView} </div></ButtonToolbar>);
       }
 
-      // {queueview}
       return (
         <div>
           {buttons}
@@ -393,7 +377,7 @@ class ContentArea extends Component {
           bsSize="medium"
           onClick={() => this.setState({ viewmode: 'UserStart' })}
           onClick={() =>// eslint-disable-line react/jsx-no-duplicate-props
-            window.location.reload()}
+            window.location.reload()} // ?
         >
         Log-out
         </Button>);
