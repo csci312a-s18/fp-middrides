@@ -31,6 +31,7 @@ function QueueView(props) {
     );
     // we are in dispatcher mode
   }
+
   return (
     <Table striped bordered hover responsive>
       <thead>
@@ -47,7 +48,7 @@ function QueueView(props) {
             <td>{request.currentLocation}</td>
             <td>{request.destination}</td>
             <td>{request.active}</td>
-            <td>{request.ETA}</td>
+            <td>{request.ETA === 100000 ? 'Calculating...' : (request.ETA === -1 ? 'Picked Up' : request.ETA)}</td> {/* eslint-disable-line no-nested-ternary */}
             <td>
               <ButtonToolbar>
                 <Button

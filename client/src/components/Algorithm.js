@@ -29,7 +29,7 @@ function enumeratePaths(currStop, reqs, remainingSeats) {
     const requestsToDelete = [];
     updatedRequests.forEach((request) => {
       if (!request.isPickedUp && request.currentLocation === currentStop && (
-        request.passengers <= seatsLeft)) { // Do we need to check this?
+        request.passengers <= seatsLeft)) {
         seatsLeft -= request.passengers; // eslint-disable-line no-param-reassign
         request.isPickedUp = true;
         id.push(request._id);
@@ -74,17 +74,35 @@ function enumeratePaths(currStop, reqs, remainingSeats) {
   return paths;
 }
 
-function findOptimumPath(paths) {
-  let totalTime = Number.POSITIVE_INFINITY;
+function calculateMaxWaitTime(requests, path, now) {
+  let runningTime = 0;
+  let maxWaitTime = -1;
+  for (let i = 1; i < path.length; i += 1) {
+    const ids = path[i].id;
+    runningTime += getTime(path[i - 1].currentStop, path[i].currentStop);
+    ids.forEach((id) => { // eslint-disable-line no-loop-func
+      const req = requests.find(request => id === request._id);
+      if (req.destination === path[i].currentStop) {
+        const timeStamp = Date.parse(req.timestamp) / 60000;
+        const waitTime = now - timeStamp + runningTime; // eslint-disable-line no-mixed-operators
+        if (waitTime > maxWaitTime) {
+          maxWaitTime = waitTime;
+        }
+      }
+    });
+  }
+  return maxWaitTime;
+}
+
+function findOptimumPath(requests, paths, now) {
   let optimalPath = paths[0];
-  for (let path = 0; path < paths.length; path++) {
-    let runningTime = 0;
-    for (let node = 1; node < paths[path].length; node++) {
-      const currentNode = paths[path][node];
-      runningTime += getTime(paths[path][node - 1].currentStop, currentNode.currentStop);
-    }
-    if (runningTime < totalTime) {
-      totalTime = runningTime;
+  let optimalMetric = calculateMaxWaitTime(requests, optimalPath, now);
+
+  for (let path = 1; path < paths.length; path++) {
+    const metric = calculateMaxWaitTime(requests, paths[path], now);
+
+    if (metric < optimalMetric) {
+      optimalMetric = metric;
       optimalPath = paths[path];
     }
   }
@@ -117,4 +135,4 @@ function calculateETA(requests, optimalPath, runningTime) {
 }
 
 
-export { enumeratePaths, calculateETA, findOptimumPath, getTime };
+export { enumeratePaths, calculateETA, findOptimumPath, getTime, calculateMaxWaitTime };

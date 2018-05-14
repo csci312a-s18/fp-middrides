@@ -91,7 +91,8 @@ class ContentArea extends Component {
 
   runAlgorithm() {
     const paths = enumeratePaths(this.state.currentStop, this.state.requests, this.state.seatsLeft);
-    const optimalPath = findOptimumPath(paths, this.state.requests);
+    const now = (new Date()).toISOString;
+    const optimalPath = findOptimumPath(this.state.requests, paths, Date.parse(now) / 60000);
     let updatedRequests = [];
     this.state.requests.forEach(request => updatedRequests.push(Object.assign({}, request)));
     const newRequests = calculateETA(updatedRequests, optimalPath, 0);
@@ -266,7 +267,7 @@ class ContentArea extends Component {
 
   makePickedUp(id) {
     const findPickedUpRequest = this.state.requests.find(request => request._id === id);
-    const pickedUpRequest = Object.assign({}, findPickedUpRequest, { isPickedUp: true, ETA: 'Picked Up' });
+    const pickedUpRequest = Object.assign({}, findPickedUpRequest, { isPickedUp: true, ETA: -1 });
     fetch(`/requests/${id}`, {
       method: 'PUT',
       body: JSON.stringify(pickedUpRequest),
@@ -295,10 +296,16 @@ class ContentArea extends Component {
   }
 
   sortRequests(a, b) { // eslint-disable-line class-methods-use-this
-    if (a.timestamp < b.timestamp) {
+    // if (a.ETA === 'Calculating...' && b.ETA !== 'Calculating...') {
+    //   return 1;
+    // }
+    // if (a.ETA !== 'Calculating...' && b.ETA === 'Calculating...') {
+    //   return -1;
+    // }
+    if (a.ETA < b.ETA) {
       return -1;
     }
-    if (a.timestamp > b.timestamp) {
+    if (a.ETA > b.ETA) {
       return 1;
     }
     return 0;
