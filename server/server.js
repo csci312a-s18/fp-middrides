@@ -110,7 +110,7 @@ server.put('/dispatcherExists/:id', (request, response, next) => {
     request.body,
     { _id: ObjectID.createFromHexString(request.params.id) },
   );
-  db.collection('nextStop') // eslint-disable-line no-undef
+  db.collection('dispatcherExists') // eslint-disable-line no-undef
     .findOneAndUpdate(
       { _id: updatedState._id },
       { $set: updatedState },
