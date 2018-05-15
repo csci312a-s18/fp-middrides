@@ -315,7 +315,8 @@ class ContentArea extends Component {
           id="btnLogout"
           bsStyle="link"
           bsSize="medium"
-          onClick={this.handleLogout}>
+          onClick={this.handleLogout}
+        >
         Log-out
         </Button>
       );
