@@ -118,7 +118,9 @@ class ContentArea extends Component {
           return request;
         });
         this.setState({ requests: updatedRequests });
-        this.setState({ nextStop: optimalPath[0].currentStop });
+        if (optimalPath[1].currentStop) {
+          this.setState({ nextStop: optimalPath[1].currentStop });
+        }
         this.updateNextStop();
         this.getNextStop();
       }).catch(err => console.log(err)); // eslint-disable-line no-console
@@ -243,7 +245,7 @@ class ContentArea extends Component {
   }
 
   makeInactive(id) {
-    const findInactiveRequest = this.state.requests.find(request => request.id === id);
+    const findInactiveRequest = this.state.requests.find(request => request._id === id);
     const inactiveRequest = Object.assign({}, findInactiveRequest, { active: false });
     fetch(`/requests/${id}`, {
       method: 'PUT',
@@ -261,6 +263,30 @@ class ContentArea extends Component {
       const updatedRequests = this.state.requests
         .filter(request => request._id !== id);
       this.setState({ requests: updatedRequests });
+      this.runAlgorithm();
+    }).catch(err => console.log(err)); // eslint-disable-line no-console
+  }
+
+  makeDroppedOff(id) {
+    const findDroppedOffRequest = this.state.requests.find(request => request._id === id);
+    const droppedOffRequest = Object.assign({}, findDroppedOffRequest, { active: false });
+    fetch(`/requests/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(droppedOffRequest),
+      headers: new Headers({
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      }),
+    }).then((response) => {
+      if (!response.ok) {
+        throw new Error(response.status_text);
+      }
+      return response.json();
+    }).then(() => {
+      const updatedRequests = this.state.requests
+        .filter(request => request._id !== id);
+      this.setState({ requests: updatedRequests, currentStop: droppedOffRequest.destination });
+      console.log(this.state.requests);
       this.runAlgorithm();
     }).catch(err => console.log(err)); // eslint-disable-line no-console
   }
@@ -370,12 +396,14 @@ class ContentArea extends Component {
         mode={this.state.viewmode}
         completeInactive={(id) => { this.makeInactive(id); }}
         completePickedUp={(id) => { this.makePickedUp(id); }}
+        completeDroppedOff={(id) => { this.makeDroppedOff(id); }}
       />);
       const queueview2 = (<QueueView
         requests={this.state.requests.filter(request => request.isPickedUp === true)}
         mode={this.state.viewmode}
         completeInactive={(id) => { this.makeInactive(id); }}
         completePickedUp={(id) => { this.makePickedUp(id); }}
+        completeDroppedOff={(id) => { this.makeDroppedOff(id); }}
       />);
 
       const addRideButton = (
@@ -401,9 +429,12 @@ class ContentArea extends Component {
       const buttons = (<ButtonToolbar>{addRideButton}<div className="login"> {enterDispatcherView} </div></ButtonToolbar>
       );
 
+      const nextUpText = (<p>Next Stop: {this.state.nextStop}</p>);
+
       return (
         <div>
           {buttons}
+          {nextUpText}
           <br />
           <Panel bsStyle="info">
             <Panel.Heading>
