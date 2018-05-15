@@ -30,7 +30,6 @@ class ContentArea extends Component {
     this.handleLogin = this.handleLogin.bind(this);
     this.handleCancelLogin = this.handleCancelLogin.bind(this);
     this.handleLogout = this.handleLogout.bind(this);
-
     this.getNextStop();
   }
 
@@ -268,6 +267,7 @@ class ContentArea extends Component {
       this.runAlgorithm();
     }).catch(err => console.log(err)); // eslint-disable-line no-console
   }
+
   handleLogout() {
     this.setState({ viewmode: 'UserStart' });
     window.location.reload();

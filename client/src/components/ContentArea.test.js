@@ -13,7 +13,7 @@ const request = {
 };
 
 describe('ContentArea', () => {
-  test('Component renders Properly', () => {
+  test('Component renders Properly with interval', () => {
     const wrapper = shallow(<ContentArea complete={jest.fn} />);
     expect(wrapper.exists()).toBe(true);
   });
@@ -63,25 +63,21 @@ describe('Cancel button functionality', () => {
     const wrapper = shallow(<ContentArea complete={jest.fn} />);
     wrapper.setState({ currentRequest: request });
     const btncancelRide = wrapper.find('#btnCancelRide');
-
     btncancelRide.simulate('click');
     wrapper.update();
     expect(wrapper.state('currentRequest')).toEqual(null);
   });
 
-  test('Clicking <btnCancel> cancels reverts button', () => {
+  test('Clicking <btnCancel> cancels reverts to <btnRequestRide>', () => {
     const wrapper = shallow(<ContentArea complete={jest.fn} />);
     wrapper.setState({ currentRequest: request });
     const btncancelRide = wrapper.find('#btnCancelRide');
-
     btncancelRide.simulate('click');
     wrapper.update();
-
     const btncancelRideClicked = wrapper.find('#btnCancelRide');
     expect(btncancelRideClicked.exists()).toBe(false);
   });
 });
-
 
 describe('Dispatcher login button functionality', () => {
   test('<btnDispatcherLogin> changes viewmode to DispatcherLogin', () => {
@@ -90,22 +86,6 @@ describe('Dispatcher login button functionality', () => {
     btnDispatcherLogin.simulate('click');
     wrapper.update();
     expect(wrapper.state('viewmode')).toEqual('DispatcherLogin');
-  });
-
-  test('<btnDispatcherLogin> is present if viewmode is UserStart', () => {
-    const wrapper = shallow(<ContentArea complete={jest.fn} />);
-    wrapper.setState({ viewmode: 'UserStart' });
-    wrapper.update();
-    const btnDispatcherLogin = wrapper.find('#btnDispatcherLogin');
-    expect(btnDispatcherLogin.exists()).toBe(true);
-  });
-
-  test('<btnDispatcherLogin> is present if viewmode is UserStart', () => {
-    const wrapper = shallow(<ContentArea complete={jest.fn} />);
-    wrapper.setState({ viewmode: 'UserStart' });
-    wrapper.update();
-    const btnDispatcherLogin = wrapper.find('#btnDispatcherLogin');
-    expect(btnDispatcherLogin.exists()).toBe(true);
   });
 
   test('<btnDispatcherLogin> is present if viewmode is UserStart', () => {
@@ -205,5 +185,18 @@ describe('DispatcherMode functionality', () => {
     btnLogout.simulate('click');
     wrapper.update();
     expect(wrapper.state('viewmode')).toEqual('UserStart');
+  });
+});
+
+jest.useFakeTimers();
+describe('Interval functionality', () => {
+  test('interval occurs every second', () => {
+    const wrapper = shallow(<ContentArea // eslint-disable-line no-unused-vars
+      complete={jest.fn}
+    />);
+
+    // 18 was selected because of unseen calls to componentDidMount
+    expect(setInterval).toHaveBeenCalledTimes(18);
+    expect(setInterval).toHaveBeenLastCalledWith(expect.any(Function), 1000);
   });
 });
