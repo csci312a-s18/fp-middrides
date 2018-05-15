@@ -294,7 +294,6 @@ class ContentArea extends Component {
       const queueview = (<QueueView
         id="qvActive"
         requests={this.state.requests.filter(request => request.isPickedUp === false)}
-        mode={this.state.viewmode}
         completeInactive={(id) => { this.makeInactive(id); }}
         completePickedUp={(id) => { this.makePickedUp(id); }}
         completeDroppedOff={(id) => { this.makeDroppedOff(id); }}
@@ -303,7 +302,6 @@ class ContentArea extends Component {
       const queueview2 = (<QueueView
         id="qvPickedUp"
         requests={this.state.requests.filter(request => request.isPickedUp === true)}
-        mode={this.state.viewmode}
         completeInactive={(id) => { this.makeInactive(id); }}
         completePickedUp={(id) => { this.makePickedUp(id); }}
         completeDroppedOff={(id) => { this.makeDroppedOff(id); }}
