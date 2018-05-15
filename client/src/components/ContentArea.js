@@ -2,7 +2,7 @@
 /* eslint no-plusplus: ["error", { "allowForLoopAfterthoughts": true }] */
 
 import React, { Component } from 'react';
-import { Button, ButtonToolbar, Form, FormGroup, FormControl, ControlLabel, Col, Well, Panel, PageHeader } from 'react-bootstrap';
+import { Button, ButtonToolbar, Form, FormGroup, FormControl, ControlLabel, Col, Well, Panel } from 'react-bootstrap';
 import QueueView from './QueueView';
 import RequestForm from './RequestForm';
 import GPS from './GPS';
@@ -342,7 +342,7 @@ class ContentArea extends Component {
         <Button
           id="btnDispatcherLogin"
           bsStyle="link"
-          bsSize="large"
+          bsSize="medium"
           onClick={() => this.setState({ viewmode: 'DispatcherLogin' })}
         >
         Log-In
@@ -361,9 +361,9 @@ class ContentArea extends Component {
         <div>
           {buttons}
           <div className="gps"> <GPS isDispatcher={false} id="gps" /> </div>
-          <PageHeader>
-            <small>Next Stop: {this.state.nextStop}</small>
-          </PageHeader>
+          <br />
+          <h4>Next Stop: {this.state.nextStop}</h4>
+          <h4>Number of seats available: </h4>
         </div>
       );
 
@@ -413,7 +413,7 @@ class ContentArea extends Component {
           <br />
           <Panel bsStyle="info">
             <Panel.Heading>
-              <Panel.Title componentClass="h3">To be Picked Up</Panel.Title>
+              <Panel.Title componentClass="h3">To Be Picked Up</Panel.Title>
             </Panel.Heading>
             {queueview}
           </Panel>
