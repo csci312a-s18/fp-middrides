@@ -112,6 +112,7 @@ class ContentArea extends Component {
   handleLogin() {
     if (this.state.password === '12345') { // temporary password
       this.setState({ viewmode: 'DispatcherMode' });
+
     } else {
       alert('Incorrect password. Try again!'); // eslint-disable-line no-alert
     }
@@ -298,6 +299,7 @@ class ContentArea extends Component {
         completePickedUp={(id) => { this.makePickedUp(id); }}
         completeDroppedOff={(id) => { this.makeDroppedOff(id); }}
       />);
+
       const queueview2 = (<QueueView
         id="qvPickedUp"
         requests={this.state.requests.filter(request => request.isPickedUp === true)}

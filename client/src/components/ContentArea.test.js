@@ -13,7 +13,7 @@ const request = {
 };
 
 describe('ContentArea', () => {
-  test('Component renders Properly with interval', () => {
+  test('Component renders properly', () => {
     const wrapper = shallow(<ContentArea complete={jest.fn} />);
     expect(wrapper.exists()).toBe(true);
   });
