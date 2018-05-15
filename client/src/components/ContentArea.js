@@ -172,6 +172,7 @@ class ContentArea extends Component {
     this.setState({ viewmode: 'UserStart' });
     window.location.reload();
   }
+
   makeDroppedOff(id) {
     const findDroppedOffRequest = this.state.requests.find(request => request._id === id);
     const droppedOffRequest = Object.assign({}, findDroppedOffRequest, { active: false });
@@ -316,7 +317,8 @@ class ContentArea extends Component {
           bsSize="medium"
           onClick={this.handleLogout}>
         Log-out
-        </Button>);
+        </Button>
+      );
 
       const buttons = (<ButtonToolbar>{addRideButton}<div className="login"> {enterDispatcherView} </div></ButtonToolbar>
       );
