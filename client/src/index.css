@@ -23,10 +23,12 @@ body {
 .login {
   position: relative;
   float: right;
+  margin-right: -20px;
 }
 
 .gps {
   height: 380px;
   padding-top: 20px;
+  margin-left: -15px;
   position: relative;
 }
