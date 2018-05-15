@@ -28,5 +28,6 @@ body {
 .gps {
   height: 380px;
   padding-top: 20px;
+  margin-left: -15px;
   position: relative;
 }
