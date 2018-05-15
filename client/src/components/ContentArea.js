@@ -2,7 +2,7 @@
 /* eslint no-plusplus: ["error", { "allowForLoopAfterthoughts": true }] */
 
 import React, { Component } from 'react';
-import { Button, ButtonToolbar, Form, FormGroup, FormControl, ControlLabel, Col, Label, Panel, Well } from 'react-bootstrap';
+import { Button, ButtonToolbar, Form, FormGroup, FormControl, ControlLabel, Col, Panel, Well } from 'react-bootstrap';
 import QueueView from './QueueView';
 import RequestForm from './RequestForm';
 import GPS from './GPS';
@@ -65,8 +65,7 @@ class ContentArea extends Component {
       .catch(err => console.log(err)); // eslint-disable-line no-console
   }
 
-  updateNextStop() {
-    const nextStop = this.state.nextStop; // eslint-disable-line prefer-destructuring
+  updateNextStop(nextStop) {
     const newStop = Object.assign({}, {
       _id: {
         $oid: this.nextStopID,
@@ -77,6 +76,10 @@ class ContentArea extends Component {
   }
 
   runAlgorithm() {
+    if (this.state.requests.length === 0) {
+      this.setState({ nextStop: 'No request in queue' });
+      return;
+    }
     const paths = enumeratePaths(this.state.currentStop, this.state.requests, this.state.seatsLeft);
     const now = (new Date()).toISOString;
     const optimalPath = findOptimumPath(this.state.requests, paths, Date.parse(now) / 60000);
@@ -91,11 +94,14 @@ class ContentArea extends Component {
           }
           return request;
         });
+      }).then(() => { // eslint-disable-line no-loop-func
         this.setState({ requests: updatedRequests });
-        if (optimalPath[1].currentStop) {
+        if (optimalPath.length > 1) {
           this.setState({ nextStop: optimalPath[1].currentStop });
+        } else {
+          this.setState({ nextStop: 'No request in queue' });
         }
-        this.updateNextStop();
+        this.updateNextStop(this.state.nextStop);
         this.getNextStop();
       }).catch(err => console.log(err)); // eslint-disable-line no-console
     }
@@ -141,6 +147,9 @@ class ContentArea extends Component {
             requests: updatedRequests,
             currentRequest: createdRequest,
           });
+          if (this.state.nextStop === '' || this.state.nextStop === 'No request in queue') {
+            this.runAlgorithm();
+          }
         }).catch(err => console.log(err)); // eslint-disable-line no-console
       }
       this.setState({ viewmode: 'UserStart' });
@@ -152,6 +161,9 @@ class ContentArea extends Component {
           requests: updatedRequests,
           currentRequest: null, // allows for multiple requests by Dispatcher // unnecessary
         });
+        if (this.state.nextStop === '' || this.state.nextStop === 'No request in queue') {
+          this.runAlgorithm();
+        }
       }).catch(err => console.log(err)); // eslint-disable-line no-console
       this.setState({ viewmode: 'DispatcherMode' });
     }
@@ -278,12 +290,8 @@ class ContentArea extends Component {
           <br />
           <br />
           <h4>
-            <Label bsStyle="primary">
-          Next Stop: {this.state.nextStop}
-            </Label>
-            <Label bsStyle="primary">
-          Van ETA:
-            </Label>
+          Next Stop: {this.state.nextStop}<br />
+          Your Stop: {this.state.currentRequest ? this.state.currentRequest.currentLocation : '-'}
           </h4>
         </div>
       );
