@@ -1,4 +1,4 @@
-/* eslint-disable no-underscore-dangle */
+/* eslint-disable */
 /* eslint no-plusplus: ["error", { "allowForLoopAfterthoughts": true }] */
 
 import React, { Component } from 'react';
@@ -288,7 +288,7 @@ class ContentArea extends Component {
       const cancelRideButton = (
         <Button
           id="btnCancelRide"
-          bsStyle="primary"
+          bsStyle="danger"
           bsSize="small"
           onClick={this.handleCancel}
         >

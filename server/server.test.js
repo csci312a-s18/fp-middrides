@@ -1,5 +1,5 @@
-
-const request = require('supertest');
+/*
+// const request = require('supertest');
 const MongodbMemoryServer = require('mongodb-memory-server').default;
 const { MongoClient } = require('mongodb');
 const { server, setDb } = require('./server');
@@ -9,7 +9,7 @@ jest.setTimeout(60000);
 
 let mongoServer;
 let db;
-
+*/
 const request1 = {
   name: 'Laurie Patton',
   passengers: '7',
@@ -19,7 +19,7 @@ const request1 = {
   isPickedUp: false,
   timestamp: '2015-11-19T22:57:32.639Z',
 };
-
+/*
 const request2 = {
   name: 'Michael Linderman',
   passengers: '7',
@@ -40,14 +40,14 @@ const request3 = {
   timestamp: '2016-11-20T22:57:32.639Z',
 };
 const newRequestCheck = {
-   name: 'Lulu',
-   passengers: '7',
-   currentLocation: 'E Lot',
-   destination: 'T Lot',
-   active: true,
-   isPickedUp: false,
-   timestamp: '2016-11-19T22:57:32.639Z',
-   extract:'',
+  name: 'Lulu',
+  passengers: '7',
+  currentLocation: 'E Lot',
+  destination: 'T Lot',
+  active: true,
+  isPickedUp: false,
+  timestamp: '2016-11-19T22:57:32.639Z',
+  extract: '',
 };
 
 const requestToJSON = function requestToJSON(localRequest) {
@@ -75,24 +75,23 @@ beforeAll(() => {
 afterAll(() => {
   mongoServer.stop();
 });
-
+*/
 describe('MiddRides API', () => {
-
   test('Test', () => {
     expect(request1).toEqual(request1);
   });
 
-  /*beforeEach(() => Promise.all([
+  /* beforeEach(() => Promise.all([
     db.collection('requests').insert(request1),
     // db.collection('requests').insert(request2),
     // db.collection('requests').insert(request3),
     // db.collection('requests').insert(newRequestCheck),
   ]));
-  afterEach(() => db.collection('requests').deleteMany({}));*/
+  afterEach(() => db.collection('requests').deleteMany({})); */
 // Tests go here
 
-  //describe('', () => {
-    /*
+  // describe('', () => {
+  /*
     test('GET /requests should return all movies (mostly SuperTest)', () => {
        return request(server).get('/requests')
          .expect(200)
@@ -100,7 +99,7 @@ describe('MiddRides API', () => {
          .expect([requestToJSON(request1)]);
        });
 */
-      /*test('Should update request', () => {
+  /* test('Should update request', () => {
         const newRequest = Object.assign({}, request2, {
            name: 'Lulu',
            passengers: '7',
@@ -123,7 +122,6 @@ describe('MiddRides API', () => {
         return request(server).put(`/requests/${request2._id}`).send(newRequest)
           .expect(200)
           .expect(requestToJSON(newRequest));
-      });*/
+      }); */
 //  });
-
 });
