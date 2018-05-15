@@ -13,7 +13,7 @@ const request = {
 };
 
 describe('ContentArea', () => {
-  test('Component renders Properly', () => {
+  test('Component renders Properly with interval', () => {
     const wrapper = shallow(<ContentArea complete={jest.fn} />);
     expect(wrapper.exists()).toBe(true);
   });
@@ -37,6 +37,14 @@ describe('Request button functionality', () => {
     wrapper.update();
     expect(wrapper.state('viewmode')).toEqual('RequestRideUser');
   });
+
+  test('<btnRequestRideUser> isn\'t present if there\'s a currentRequest', () => {
+    const wrapper = shallow(<ContentArea complete={jest.fn} />);
+    wrapper.setState({ currentRequest: request });
+    expect(wrapper.state('currentRequest')).toEqual(request);
+    const btnRequestRidePost = wrapper.find('#btnRequestRide');
+    expect(btnRequestRidePost.exists()).toBe(false);
+  });
 });
 
 describe('Cancel button functionality', () => {
@@ -46,46 +54,149 @@ describe('Cancel button functionality', () => {
     expect(btncancelRideInitial.exists()).toBe(false);
     wrapper.setState({ currentRequest: request });
     expect(wrapper.state('currentRequest')).toEqual(request);
-    const btnRequestRide = wrapper.find('#btnRequestRide');
-    expect(btnRequestRide.exists()).toBe(false);
     const btncancelRidePost = wrapper.find('#btnCancelRide');
     expect(btncancelRidePost.exists()).toBe(true);
   });
 
 
-  test('<btnCancel> cancels currentRequest and reverts button', () => {
+  test('Clicking <btnCancel> cancels currentRequest', () => {
     const wrapper = shallow(<ContentArea complete={jest.fn} />);
     wrapper.setState({ currentRequest: request });
     const btncancelRide = wrapper.find('#btnCancelRide');
-
     btncancelRide.simulate('click');
     wrapper.update();
-
-    const btncancelRideClicked = wrapper.find('#btnCancelRide');
     expect(wrapper.state('currentRequest')).toEqual(null);
+  });
+
+  test('Clicking <btnCancel> cancels reverts to <btnRequestRide>', () => {
+    const wrapper = shallow(<ContentArea complete={jest.fn} />);
+    wrapper.setState({ currentRequest: request });
+    const btncancelRide = wrapper.find('#btnCancelRide');
+    btncancelRide.simulate('click');
+    wrapper.update();
+    const btncancelRideClicked = wrapper.find('#btnCancelRide');
     expect(btncancelRideClicked.exists()).toBe(false);
   });
 });
 
-
-describe('Temp', () => {
-  test('Component renders Properly', () => {
+describe('Dispatcher login button functionality', () => {
+  test('<btnDispatcherLogin> changes viewmode to DispatcherLogin', () => {
     const wrapper = shallow(<ContentArea complete={jest.fn} />);
-    expect(wrapper.exists()).toBe(true);
+    const btnDispatcherLogin = wrapper.find('#btnDispatcherLogin');
+    btnDispatcherLogin.simulate('click');
+    wrapper.update();
+    expect(wrapper.state('viewmode')).toEqual('DispatcherLogin');
+  });
+
+  test('<btnDispatcherLogin> is present if viewmode is UserStart', () => {
+    const wrapper = shallow(<ContentArea complete={jest.fn} />);
+    wrapper.setState({ viewmode: 'UserStart' });
+    wrapper.update();
+    const btnDispatcherLogin = wrapper.find('#btnDispatcherLogin');
+    expect(btnDispatcherLogin.exists()).toBe(true);
+  });
+});
+
+describe('Login View functionality', () => {
+  test('Login view renders correctly', () => {
+    const wrapper = shallow(<ContentArea complete={jest.fn} />);
+    wrapper.setState({ viewmode: 'DispatcherLogin' });
+    wrapper.update();
+    const formControlsText = wrapper.find('#formControlsText');
+    const btnDispatcherLoginFinal = wrapper.find('#btnDispatcherLoginFinal');
+    const btnCancelLogin = wrapper.find('#btnCancelLogin');
+    expect(formControlsText.exists()).toBe(true);
+    expect(btnDispatcherLoginFinal.exists()).toBe(true);
+    expect(btnCancelLogin.exists()).toBe(true);
+  });
+
+  test('Login fails if password is incorrect', () => {
+    const wrapper = shallow(<ContentArea complete={jest.fn} />);
+    wrapper.setState({ viewmode: 'DispatcherLogin' });
+
+    const formControlsText = wrapper.find('#formControlsText');
+    formControlsText.simulate('change', { target: { value: 'abc123' } });
+
+    const btnDispatcherLoginFinal = wrapper.find('#btnDispatcherLoginFinal');
+    btnDispatcherLoginFinal.simulate('click');
+    wrapper.update();
+    expect(wrapper.state('viewmode')).toEqual('DispatcherLogin');
   });
 
   test('Dispatcher logs in sucessfully', () => {
     const wrapper = shallow(<ContentArea complete={jest.fn} />);
-    expect(wrapper.exists()).toBe(true);
+    wrapper.setState({ viewmode: 'DispatcherLogin' });
+
+    const formControlsText = wrapper.find('#formControlsText');
+    formControlsText.simulate('change', { target: { value: '12345' } });
+
+    const btnDispatcherLoginFinal = wrapper.find('#btnDispatcherLoginFinal');
+    btnDispatcherLoginFinal.simulate('click');
+    wrapper.update();
+    expect(wrapper.state('viewmode')).toEqual('DispatcherMode');
   });
 
-  test('cancel exists only if user has ride', () => {
+  test('Login Cancel returns to userview', () => {
     const wrapper = shallow(<ContentArea complete={jest.fn} />);
-    expect(wrapper.exists()).toBe(true);
+    wrapper.setState({ viewmode: 'DispatcherLogin' });
+    const btnCancelLogin = wrapper.find('#btnCancelLogin');
+    btnCancelLogin.simulate('click');
+    wrapper.update();
+    expect(wrapper.state('viewmode')).toEqual('UserStart');
   });
 
-  test('Enter in login works to login', () => {
+  test('Login Cancel clears inputed passwords', () => {
     const wrapper = shallow(<ContentArea complete={jest.fn} />);
-    expect(wrapper.exists()).toBe(true);
+    wrapper.setState({ viewmode: 'DispatcherLogin' });
+    const btnCancelLogin = wrapper.find('#btnCancelLogin');
+    btnCancelLogin.simulate('click');
+    wrapper.update();
+    expect(wrapper.state('password')).toEqual('');
+  });
+});
+
+describe('DispatcherMode functionality', () => {
+  test('DispatcherMode renders properly', () => {
+    const wrapper = shallow(<ContentArea complete={jest.fn} />);
+    wrapper.setState({ viewmode: 'DispatcherMode' });
+    const btnAddRide = wrapper.find('#btnAddRide');
+    const btnLogout = wrapper.find('#btnLogout');
+    const qvActive = wrapper.find('#qvActive');
+    const qvPickedUp = wrapper.find('#qvPickedUp');
+    expect(btnAddRide.exists()).toBe(true);
+    expect(btnLogout.exists()).toBe(true);
+    expect(qvActive.exists()).toBe(true);
+    expect(qvPickedUp.exists()).toBe(true);
+  });
+
+  test('<btnAddRide> changes viewmode to RequestRideDispatcher', () => {
+    const wrapper = shallow(<ContentArea complete={jest.fn} />);
+    wrapper.setState({ viewmode: 'DispatcherMode' });
+    const btnAddRide = wrapper.find('#btnAddRide');
+    btnAddRide.simulate('click');
+    wrapper.update();
+    expect(wrapper.state('viewmode')).toEqual('RequestRideDispatcher');
+  });
+
+  test('<btnLogout> changes viewmode to UserStart', () => {
+    const wrapper = shallow(<ContentArea complete={jest.fn} />);
+    wrapper.setState({ viewmode: 'DispatcherMode' });
+    const btnLogout = wrapper.find('#btnLogout');
+    btnLogout.simulate('click');
+    wrapper.update();
+    expect(wrapper.state('viewmode')).toEqual('UserStart');
+  });
+});
+
+jest.useFakeTimers();
+describe('Interval functionality', () => {
+  test('interval occurs every second', () => {
+    const wrapper = shallow(<ContentArea // eslint-disable-line no-unused-vars
+      complete={jest.fn}
+    />);
+
+    // 18 was selected because of unseen calls to componentDidMount
+    expect(setInterval).toHaveBeenCalledTimes(18);
+    expect(setInterval).toHaveBeenLastCalledWith(expect.any(Function), 1000);
   });
 });

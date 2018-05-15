@@ -28,7 +28,7 @@ class ContentArea extends Component {
     this.handlePassword = this.handlePassword.bind(this);
     this.handleLogin = this.handleLogin.bind(this);
     this.handleCancelLogin = this.handleCancelLogin.bind(this);
-
+    this.handleLogout = this.handleLogout.bind(this);
     this.getNextStop();
   }
 
@@ -127,6 +127,7 @@ class ContentArea extends Component {
         currentRequest: null,
       });
     }).catch(err => console.log(err)); // eslint-disable-line no-console
+    this.setState({ currentRequest: null }); // this is done for tests that do not use the fetch
   }
 
 
@@ -165,6 +166,11 @@ class ContentArea extends Component {
       this.setState({ requests: updatedRequests });
       this.runAlgorithm();
     }).catch(err => console.log(err)); // eslint-disable-line no-console
+  }
+
+  handleLogout() {
+    this.setState({ viewmode: 'UserStart' });
+    window.location.reload();
   }
 
   makeDroppedOff(id) {
@@ -243,8 +249,6 @@ class ContentArea extends Component {
           bsStyle="primary"
           bsSize="small"
           onClick={this.handleCancel}
-          onClick={() => // eslint-disable-line react/jsx-no-duplicate-props
-            this.setState({ currentRequest: null })}
         >
         Cancel Ride
         </Button>);
@@ -280,6 +284,7 @@ class ContentArea extends Component {
     // view dispatcher mode
     } else if (this.state.viewmode === 'DispatcherMode') {
       const queueview = (<QueueView
+        id="qvActive"
         requests={this.state.requests.filter(request => request.isPickedUp === false)}
         mode={this.state.viewmode}
         completeInactive={(id) => { this.makeInactive(id); }}
@@ -287,6 +292,7 @@ class ContentArea extends Component {
         completeDroppedOff={(id) => { this.makeDroppedOff(id); }}
       />);
       const queueview2 = (<QueueView
+        id="qvPickedUp"
         requests={this.state.requests.filter(request => request.isPickedUp === true)}
         mode={this.state.viewmode}
         completeInactive={(id) => { this.makeInactive(id); }}
@@ -309,12 +315,11 @@ class ContentArea extends Component {
           id="btnLogout"
           bsStyle="link"
           bsSize="medium"
-          onClick={() => this.setState({ viewmode: 'UserStart' })}
-          onClick={() =>// eslint-disable-line react/jsx-no-duplicate-props
-            window.location.reload()} // ?
+          onClick={this.handleLogout}
         >
         Log-out
-        </Button>);
+        </Button>
+      );
 
       const buttons = (<ButtonToolbar>{addRideButton}<div className="login"> {enterDispatcherView} </div></ButtonToolbar>
       );
@@ -363,7 +368,7 @@ class ContentArea extends Component {
         </Well>
       );
     }
-    // view to login to dispatchermode
+    // viewmode is DispatcherLogin
     return (
       <div id="dispatcherform">
         <Well bsSize="large">
@@ -391,6 +396,7 @@ class ContentArea extends Component {
               </Col>
             </FormGroup>
             <Button
+              id="btnDispatcherLoginFinal"
               bsStyle="primary"
               bsSize="medium"
               onClick={this.handleLogin}
@@ -398,6 +404,7 @@ class ContentArea extends Component {
             Login
             </Button>
             <Button
+              id="btnCancelLogin"
               bsSize="medium"
               onClick={this.handleCancelLogin}
             >
