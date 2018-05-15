@@ -249,9 +249,10 @@ class ContentArea extends Component {
   findCookie() {
     if (localStorage.getItem('request')) {
       const id = localStorage.getItem('request');
-      if (this.state.requests.find(request => request._id === id) !== null) {
+      if (this.state.requests.find(request => request._id === id) !== null || false) {
         const findLocalRequest = this.state.requests.find(request => request._id === id);
         if (findLocalRequest !== this.state.currentRequest){
+
           this.setState({ currentRequest: findLocalRequest});
         }
       } else {
