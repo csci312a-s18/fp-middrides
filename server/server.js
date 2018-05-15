@@ -24,7 +24,7 @@ server.get('/requests', (request, response, next) => {
 });
 
 server.post('/requests', (request, response, next) => {
-  const newRequest = Object.assign({ extract: '' }, request.body);
+  const newRequest = Object.assign(request.body);
   db.collection('requests').insertOne(newRequest).then((result) => { // eslint-disable-line no-undef
     response.send(result.ops[0]);
   }, next);
@@ -32,7 +32,6 @@ server.post('/requests', (request, response, next) => {
 
 server.put('/requests/:id', (request, response, next) => {
   const updatedRequest = Object.assign(
-    { extract: '' },
     request.body,
     { _id: ObjectID.createFromHexString(request.params.id) },
   );
@@ -58,7 +57,6 @@ server.delete('/requests/:id', (request, response, next) => {
 
 server.put('/shuttleLocation/:id', (request, response, next) => {
   const updatedLocation = Object.assign(
-    { extract: '' },
     request.body,
     { _id: ObjectID.createFromHexString(request.params.id) },
   );
@@ -75,7 +73,6 @@ server.put('/shuttleLocation/:id', (request, response, next) => {
 
 server.put('/nextStop/:id', (request, response, next) => {
   const updatedStop = Object.assign(
-    { extract: '' },
     request.body,
     { _id: ObjectID.createFromHexString(request.params.id) },
   );
