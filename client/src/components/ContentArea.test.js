@@ -14,14 +14,10 @@ const request = {
 };
 
 
-
 describe('ContentArea', () => {
   test('Component renders properly', () => {
     const wrapper = shallow(<ContentArea complete={jest.fn} />);
     expect(wrapper.exists()).toBe(true);
-    afterAll(() => {
-      localStorageMock.clear();
-    });
   });
 
   test('Initial start display correct features', () => {
@@ -36,9 +32,6 @@ describe('ContentArea', () => {
 });
 
 describe('Request button functionality', () => {
-  afterAll(() => {
-    localStorageMock.clear();
-  });
   test('<btnRequestRideUser> loads RequestFormView', () => {
     const wrapper = shallow(<ContentArea complete={jest.fn} />);
     const btnRequestRide = wrapper.find('#btnRequestRide');
@@ -89,16 +82,12 @@ describe('Cancel button functionality', () => {
 });
 
 describe('Dispatcher login button functionality', () => {
-  afterAll(() => {
-    localStorageMock.clear();
-  });
   test('<btnDispatcherLogin> changes viewmode to DispatcherLogin', () => {
     const wrapper = shallow(<ContentArea complete={jest.fn} />);
     const btnDispatcherLogin = wrapper.find('#btnDispatcherLogin');
     btnDispatcherLogin.simulate('click');
     wrapper.update();
     expect(wrapper.state('viewmode')).toEqual('DispatcherLogin');
-
   });
 
   test('<btnDispatcherLogin> is present if viewmode is UserStart', () => {
@@ -111,9 +100,6 @@ describe('Dispatcher login button functionality', () => {
 });
 
 describe('Login View functionality', () => {
-  afterAll(() => {
-    localStorageMock.clear();
-  });
   test('Login view renders correctly', () => {
     const wrapper = shallow(<ContentArea complete={jest.fn} />);
     wrapper.setState({ viewmode: 'DispatcherLogin' });
@@ -172,9 +158,6 @@ describe('Login View functionality', () => {
 });
 
 describe('DispatcherMode functionality', () => {
-  afterAll(() => {
-    localStorageMock.clear();
-  });
   test('DispatcherMode renders properly', () => {
     const wrapper = shallow(<ContentArea complete={jest.fn} />);
     wrapper.setState({ viewmode: 'DispatcherMode' });
@@ -209,9 +192,6 @@ describe('DispatcherMode functionality', () => {
 
 jest.useFakeTimers();
 describe('Interval functionality', () => {
-  afterAll(() => {
-    localStorage.clear();
-  });
   test('interval occurs every second', () => {
     const wrapper = shallow(<ContentArea // eslint-disable-line no-unused-vars
       complete={jest.fn}
