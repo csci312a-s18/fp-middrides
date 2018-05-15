@@ -40,16 +40,14 @@ describe('QueueView renders', () => {
     const tdpassengers = wrapper.find('#tdpassengers');
     const tdcurrentLocation = wrapper.find('#tdcurrentLocation');
     const tddestination = wrapper.find('#tddestination');
-    const tdactive = wrapper.find('#tdactive');
     const tdETA = wrapper.find('#tdETA');
     expect(wrapper.exists()).toBe(true);
     expect(tdBody.exists()).toBe(true);
-    expect(tdBody.childAt(0).children().length).toEqual(8);
+    expect(tdBody.childAt(0).children().length).toEqual(7);
     expect(tdName.exists()).toBe(true);
     expect(tdpassengers.exists()).toBe(true);
     expect(tdcurrentLocation.exists()).toBe(true);
     expect(tddestination.exists()).toBe(true);
-    expect(tdactive.exists()).toBe(true);
     expect(tdETA.exists()).toBe(true);
   });
   test('Table maps correctly', () => {
