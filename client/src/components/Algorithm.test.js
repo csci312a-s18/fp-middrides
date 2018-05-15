@@ -64,20 +64,6 @@ const requests2 = [
   },
 ];
 
-
-// {
-//   _id: '5af4a7f0e156fcbb33112ce2',
-//   extract: '',
-//   name: 'Crystal',
-//   passengers: 5,
-//   currentLocation: 'T Lot',
-//   destination: 'Track Lot/KDR',
-//   active: true,
-//   isPickedUp: false,
-//   timestamp: '2018-05-10T20:13:36.552Z',
-//   ETA: -1,
-// },
-
 const requests3 = [
   {
     _id: '5af4a7e5e156fcbb33112ce1',
@@ -247,3 +233,18 @@ describe('calculateETA tests', () => {
   //   });
   // });
 });
+
+// describe('calculateWalkOns() tests', () => {
+//   test('calculates correct walk ons', () => {
+//     const paths = enumeratePaths('Adirondack Circle', requests3, 14);
+//     const optimalPath = findOptimumPath(requests3, paths, Date.parse(now) / 60000);
+//     //console.log(optimalPath);
+//     const expectedWalkOns = [11, 7, 11, 14];
+//     const seatsLeft = [14, 11, 7, 11];
+//     for (let i = 0; i < expectedWalkOns.length; i += 1) {
+//       //console.log(calculateWalkOns(requests3, optimalPath.slice(i), seatsLeft[i]));
+//       expect(calculateWalkOns(requests3, optimalPath.slice(i), seatsLeft[i]))
+//     .toEqual(expectedWalkOns[i]);
+//     }
+//   });
+// });

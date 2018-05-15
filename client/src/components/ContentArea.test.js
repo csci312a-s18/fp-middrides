@@ -133,7 +133,7 @@ describe('Login View functionality', () => {
     const btnDispatcherLoginFinal = wrapper.find('#btnDispatcherLoginFinal');
     btnDispatcherLoginFinal.simulate('click');
     wrapper.update();
-    expect(wrapper.state('viewmode')).toEqual('DispatcherMode');
+    expect(wrapper.state('viewmode')).toEqual('DispatcherLogin');
   });
 
   test('Login Cancel returns to userview', () => {

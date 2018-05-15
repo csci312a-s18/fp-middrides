@@ -20,6 +20,7 @@ class ContentArea extends Component {
       currentStop: 'Adirondack Circle',
       seatsLeft: 14,
       nextStop: '',
+      // walkOns: 14,
     };
 
     this.nextStopID = '5af88680f36d280cecd235bc';
@@ -91,9 +92,17 @@ class ContentArea extends Component {
     const paths = enumeratePaths(this.state.currentStop, this.state.requests, this.state.seatsLeft);
     const now = (new Date()).toISOString;
     const optimalPath = findOptimumPath(this.state.requests, paths, Date.parse(now) / 60000);
+    // const walkOns = calculateWalkOns(this.state.requests, optimalPath, this.state.seatsLeft);
+    // this.setState({ walkOns });
     let updatedRequests = [];
     this.state.requests.forEach(request => updatedRequests.push(Object.assign({}, request)));
-    const newRequests = calculateETA(updatedRequests, optimalPath, 0);
+    let newRequests;
+    if (optimalPath.length > 0) {
+      newRequests = calculateETA(updatedRequests, optimalPath, 0);
+    } else {
+      newRequests = [];
+    }
+
     for (let i = 0; i < newRequests.length; i++) {
       fetchHelper(`/requests/${newRequests[i]._id}`, 'PUT', newRequests[i]).then((updatedRequest) => { // eslint-disable-line no-loop-func
         updatedRequests = this.state.requests.map((request) => {
@@ -103,7 +112,7 @@ class ContentArea extends Component {
           return request;
         });
         this.setState({ requests: updatedRequests });
-        if (optimalPath[1].currentStop) {
+        if (optimalPath.length > 1) {
           this.setState({ nextStop: optimalPath[1].currentStop });
         }
         this.updateNextStop();
@@ -132,7 +141,7 @@ class ContentArea extends Component {
       .then((data) => {
         state = data[0].state; // eslint-disable-line prefer-destructuring
         if (this.state.password === '12345' && !state) { // temporary password
-          this.setState({ viewmode: 'DispatcherMode' });
+          this.setState({ viewmode: 'DispatcherLogin' });
           this.updateDispatcherState(true);
         } else if (!state) {
           alert('Incorrect password. Try again!'); // eslint-disable-line no-alert
@@ -218,7 +227,11 @@ class ContentArea extends Component {
     }).then(() => {
       const updatedRequests = this.state.requests
         .filter(request => request._id !== id);
-      this.setState({ requests: updatedRequests, currentStop: droppedOffRequest.destination });
+      this.setState({
+        requests: updatedRequests,
+        currentStop: droppedOffRequest.destination,
+        seatsLeft: this.state.seatsLeft + droppedOffRequest.passengers,
+      });
       this.runAlgorithm();
     }).catch(err => console.log(err)); // eslint-disable-line no-console
   }
@@ -236,6 +249,7 @@ class ContentArea extends Component {
       this.setState({
         requests: updatedRequests,
         currentStop: pickedUpRequest.currentLocation,
+        seatsLeft: this.state.seatsLeft - pickedUpRequest.passengers,
       });
       this.runAlgorithm();
     }).catch(err => console.log(err)); // eslint-disable-line no-console
@@ -360,10 +374,13 @@ class ContentArea extends Component {
 
       const nextUpText = (<p>Next Stop: {this.state.nextStop}</p>);
 
+      const walkOnsLabel = (<p>Walk Ons Allowed: {this.state.seatsLeft}</p>);
+
       return (
         <div>
           {buttons}
           {nextUpText}
+          {walkOnsLabel}
           <br />
           <Panel bsStyle="info">
             <Panel.Heading>
