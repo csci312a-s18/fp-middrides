@@ -3,7 +3,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Table, Button, ButtonToolbar } from 'react-bootstrap';
 
-const headers = ['Name', 'Passengers', 'Current Location', 'Destination', 'Status', 'ETA (mins)', 'Set Status'];
+const headers = ['Name', 'Passengers', 'Current Location', 'Destination', 'ETA (mins)', 'Set Status'];
 
 function QueueView(props) {
   // we are in user mode
@@ -55,17 +55,17 @@ function QueueView(props) {
                   <Button
                     bsStyle="primary"
                     bsSize="small"
-                    onClick={() => props.completeInactive(request._id)}
-                  >
-                  Inactive
-                  </Button>
-
-                  <Button
-                    bsStyle="primary"
-                    bsSize="small"
                     onClick={() => props.completeDroppedOff(request._id)}
                   >
-                  Dropped Off
+                  Drop Off
+                  </Button>
+                  <Button
+                    bsStyle="danger"
+                    bsSize="small"
+                    bscolor="danger"
+                    onClick={() => props.completeInactive(request._id)}
+                  >
+                  Cancel
                   </Button>
                 </ButtonToolbar>
               </td>) : (
@@ -74,18 +74,17 @@ function QueueView(props) {
                     <Button
                       bsStyle="primary"
                       bsSize="small"
-                      onClick={() => props.completeInactive(request._id)}
-                    >
-                    Inactive
-                    </Button>
-
-                    <Button
-                      bsStyle="primary"
-                      bsSize="small"
                       disabled={request.isPickedUp === true}
                       onClick={() => props.completePickedUp(request._id)}
                     >
-                    Picked Up
+                    Pick Up
+                    </Button>
+                    <Button
+                      bsStyle="danger"
+                      bsSize="small"
+                      onClick={() => props.completeInactive(request._id)}
+                    >
+                    Cancel
                     </Button>
                   </ButtonToolbar>
                 </td>)}
