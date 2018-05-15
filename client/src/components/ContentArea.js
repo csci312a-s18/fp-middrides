@@ -140,8 +140,10 @@ class ContentArea extends Component {
     if (this.state.password === '12345' && !getDispatcherExists()) { // temporary password
       this.setState({ viewmode: 'DispatcherMode' });
       this.updateDispatcherState(true);
-    } else {
+    } else if (!getDispatcherExists()) {
       alert('Incorrect password. Try again!'); // eslint-disable-line no-alert
+    } else {
+      alert('Dispatcher already logged in.'); // eslint-disable-line no-alert
     }
   }
 
