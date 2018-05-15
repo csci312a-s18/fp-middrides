@@ -118,6 +118,7 @@ class ContentArea extends Component {
   handleLogin() {
     if (this.state.password === '12345') { // temporary password
       this.setState({ viewmode: 'DispatcherMode' });
+      localStorage.setItem('dispatcher', '');
     } else {
       alert('Incorrect password. Try again!'); // eslint-disable-line no-alert
     }
@@ -134,6 +135,7 @@ class ContentArea extends Component {
       });
     }).catch(err => console.log(err)); // eslint-disable-line no-console
     this.setState({ currentRequest: null }); // this is done for tests that do not use the fetch
+    localStorage.removeItem('request');
   }
 
 
@@ -143,6 +145,7 @@ class ContentArea extends Component {
         fetchHelper('/requests', 'POST', newRequest).then((createdRequest) => {
           const updatedRequests = this.state.requests.slice();
           updatedRequests.push(createdRequest);
+          localStorage.setItem('request', createdRequest._id);
           this.setState({
             requests: updatedRequests,
             currentRequest: createdRequest,
@@ -182,7 +185,7 @@ class ContentArea extends Component {
 
   handleLogout() {
     this.setState({ viewmode: 'UserStart' });
-
+    localStorage.removeItem('dispatcher');
     window.location.reload();
   }
 
@@ -243,9 +246,35 @@ class ContentArea extends Component {
     return 0;
   }
 
+  findCookie() {
+    if (localStorage.getItem('request')) {
+      const id = localStorage.getItem('request');
+      if (this.state.requests.find(request => request._id === id) !== null) {
+        const findLocalRequest = this.state.requests.find(request => request._id === id);
+        if (findLocalRequest !== this.state.currentRequest){
+          this.setState({ currentRequest: findLocalRequest});
+        }
+      } else {
+        localStorage.removeItem('request');
+      }
+    }
+  }
+
+  findDispatcher() {
+    if (localStorage.getItem('dispatcher') !== null) {
+      if (this.state.viewmode !== "DispatcherMode"){
+        this.setState({ viewmode: "DispatcherMode"})
+      }
+    }
+  }
+
   render() {
     // view for user
+    this.findDispatcher();
     if (this.state.viewmode === 'UserStart') {
+      this.findDispatcher();
+      this.findCookie();
+    //  console.log(localStorage.getItem('request'));
       const requestRideButton = (
         <Button
           id="btnRequestRide"
