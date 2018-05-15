@@ -7,14 +7,13 @@ import QueueView from './QueueView';
 import RequestForm from './RequestForm';
 import GPS from './GPS';
 import { enumeratePaths, calculateETA, findOptimumPath } from './Algorithm';
-// import calculateETA from './Algorithm';
-// import findOptimumPath from './Algorithm';
+import fetchHelper from './Helpers';
 
 class ContentArea extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      viewmode: 'UserStart',
+      viewmode: 'UserStart', // DispatcherMode, DispatcherLogin, RequestRideUser, RequestRideDispatcher
       requests: [],
       currentRequest: null,
       password: '',
@@ -74,20 +73,7 @@ class ContentArea extends Component {
       },
       nextStop: null,
     }, { nextStop });
-
-    fetch(`/nextStop/${this.nextStopID}`, {
-      method: 'PUT',
-      body: JSON.stringify(newStop),
-      headers: new Headers({
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      }),
-    }).then((response) => {
-      if (!response.ok) {
-        throw new Error(response.status_text);
-      }
-      return response.json();
-    }).catch(err => console.log(err)); // eslint-disable-line no-console
+    fetchHelper(`/nextStop/${this.nextStopID}`, 'PUT', newStop).catch(err => console.log(err)); // eslint-disable-line no-console
   }
 
   runAlgorithm() {
@@ -97,29 +83,18 @@ class ContentArea extends Component {
     let updatedRequests = [];
     this.state.requests.forEach(request => updatedRequests.push(Object.assign({}, request)));
     const newRequests = calculateETA(updatedRequests, optimalPath, 0);
-
     for (let i = 0; i < newRequests.length; i++) {
-      fetch(`/requests/${newRequests[i]._id}`, {
-        method: 'PUT',
-        body: JSON.stringify(newRequests[i]),
-        headers: new Headers({
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-        }),
-      }).then((response) => {
-        if (!response.ok) {
-          throw new Error(response.status_text);
-        }
-        return response.json();
-      }).then((updatedRequest) => { // eslint-disable-line no-loop-func
+      fetchHelper(`/requests/${newRequests[i]._id}`, 'PUT', newRequests[i]).then((updatedRequest) => { // eslint-disable-line no-loop-func
         updatedRequests = this.state.requests.map((request) => {
           if (request._id === updatedRequest._id) {
             return updatedRequest;
           }
           return request;
         });
-        this.setState({ requests: updatedRequests });
-        this.setState({ nextStop: optimalPath[0].currentStop });
+        this.setState({
+          requests: updatedRequests,
+          nextStop: optimalPath[0].currentStop,
+        });
         this.updateNextStop();
         this.getNextStop();
       }).catch(err => console.log(err)); // eslint-disable-line no-console
@@ -144,102 +119,39 @@ class ContentArea extends Component {
 
   handleCancel() {
     const cancelledRequest = Object.assign({}, this.state.currentRequest, { active: false });
-    fetch(`/requests/${this.state.currentRequest._id}`, {
-      method: 'PUT',
-      body: JSON.stringify(cancelledRequest),
-      headers: new Headers({
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      }),
-    }).then((response) => {
-      if (!response.ok) {
-        throw new Error(response.status_text);
-      }
-      return response.json();
-    }).then(() => {
+    fetchHelper(`/requests/${this.state.currentRequest._id}`, 'PUT', cancelledRequest).then(() => {
       const updatedRequests = this.state.requests
         .filter(request => request._id !== this.state.currentRequest._id);
-      this.setState({ requests: updatedRequests });
-      this.setState({ currentRequest: null });
+      this.setState({
+        requests: updatedRequests,
+        currentRequest: null,
+      });
     }).catch(err => console.log(err)); // eslint-disable-line no-console
   }
 
 
   handleFormReturn(newRequest) {
     if (this.state.viewmode === 'RequestRideUser') {
-      if (newRequest) { // Not a cancel
-        if (this.state.currentRequest) { // Update existing request
-          fetch(`/requests/${this.state.currentRequest._id}`, {
-            method: 'PUT',
-            body: JSON.stringify(newRequest),
-            headers: new Headers({
-              Accept: 'application/json',
-              'Content-Type': 'application/json',
-            }),
-          }).then((response) => {
-            if (!response.ok) {
-              throw new Error(response.status_text);
-            }
-            return response.json();
-          }).then((updatedRequest) => {
-            const updatedRequests = this.state.requests.map((request) => {
-              if (request._id === updatedRequest._id) {
-                return updatedRequest;
-              }
-              return request;
-            });
-            this.setState({
-              requests: updatedRequests,
-              currentRequest: updatedRequest,
-            });
-          }).catch(err => console.log(err)); // eslint-disable-line no-console
-        } else { // Create new request
-          fetch('/requests', {
-            method: 'POST',
-            body: JSON.stringify(newRequest),
-            headers: new Headers({
-              Accept: 'application/json',
-              'Content-Type': 'application/json',
-            }),
-          }).then((response) => {
-            if (!response.ok) {
-              throw new Error(response.status_text);
-            }
-            return response.json();
-          }).then((createdRequest) => {
-            const updatedRequests = this.state.requests.slice();
-            updatedRequests.push(createdRequest);
-            this.setState({
-              requests: updatedRequests,
-              currentRequest: createdRequest,
-            });
-          }).catch(err => console.log(err)); // eslint-disable-line no-console
-        }
+      if (newRequest) {
+        fetchHelper('/requests', 'POST', newRequest).then((createdRequest) => {
+          const updatedRequests = this.state.requests.slice();
+          updatedRequests.push(createdRequest);
+          this.setState({
+            requests: updatedRequests,
+            currentRequest: createdRequest,
+          });
+        }).catch(err => console.log(err)); // eslint-disable-line no-console
       }
       this.setState({ viewmode: 'UserStart' });
     } else { // If requestor is the Dispatcher
-      fetch('/requests', {
-        method: 'POST',
-        body: JSON.stringify(newRequest),
-        headers: new Headers({
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-        }),
-      }).then((response) => {
-        if (!response.ok) {
-          throw new Error(response.status_text);
-        }
-        return response.json();
-      }).then((createdRequest) => {
+      fetchHelper('/requests', 'POST', newRequest).then((createdRequest) => {
         const updatedRequests = this.state.requests.slice();
         updatedRequests.push(createdRequest);
         this.setState({
           requests: updatedRequests,
-          currentRequest: null, // allows for multiple requests by Dispatcher
+          currentRequest: null, // allows for multiple requests by Dispatcher // unnecessary
         });
       }).catch(err => console.log(err)); // eslint-disable-line no-console
-
-
       this.setState({ viewmode: 'DispatcherMode' });
     }
   }
@@ -247,19 +159,7 @@ class ContentArea extends Component {
   makeInactive(id) {
     const findInactiveRequest = this.state.requests.find(request => request.id === id);
     const inactiveRequest = Object.assign({}, findInactiveRequest, { active: false });
-    fetch(`/requests/${id}`, {
-      method: 'PUT',
-      body: JSON.stringify(inactiveRequest),
-      headers: new Headers({
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      }),
-    }).then((response) => {
-      if (!response.ok) {
-        throw new Error(response.status_text);
-      }
-      return response.json();
-    }).then(() => {
+    fetchHelper(`/requests/${id}`, 'PUT', inactiveRequest).then(() => {
       const updatedRequests = this.state.requests
         .filter(request => request._id !== id);
       this.setState({ requests: updatedRequests });
@@ -270,29 +170,17 @@ class ContentArea extends Component {
   makePickedUp(id) {
     const findPickedUpRequest = this.state.requests.find(request => request._id === id);
     const pickedUpRequest = Object.assign({}, findPickedUpRequest, { isPickedUp: true, ETA: -1 });
-    fetch(`/requests/${id}`, {
-      method: 'PUT',
-      body: JSON.stringify(pickedUpRequest),
-      headers: new Headers({
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      }),
-    }).then((response) => {
-      if (!response.ok) {
-        throw new Error(response.status_text);
-      }
-      return response.json();
-    }).then(() => {
-      // const updatedRequests = this.state.requests
-      //   .filter(request => request._id !== id);
-      // this.setState({ requests: updatedRequests });
+    fetchHelper(`/requests/${id}`, 'PUT', pickedUpRequest).then(() => {
       const updatedRequests = this.state.requests.map((request) => {
         if (request._id === id) {
           return pickedUpRequest;
         }
         return request;
       });
-      this.setState({ requests: updatedRequests, currentStop: pickedUpRequest.currentLocation });
+      this.setState({
+        requests: updatedRequests,
+        currentStop: pickedUpRequest.currentLocation,
+      });
       this.runAlgorithm();
     }).catch(err => console.log(err)); // eslint-disable-line no-console
   }
@@ -356,7 +244,6 @@ class ContentArea extends Component {
         buttons = (<ButtonToolbar>{requestRideButton} <div className="login">  {enterDispatcherView} </div></ButtonToolbar>);
       }
 
-      // {queueview}
       return (
         <div>
           {buttons}
@@ -399,7 +286,7 @@ class ContentArea extends Component {
           bsSize="medium"
           onClick={() => this.setState({ viewmode: 'UserStart' })}
           onClick={() =>// eslint-disable-line react/jsx-no-duplicate-props
-            window.location.reload()}
+            window.location.reload()} // ?
         >
         Log-out
         </Button>);
