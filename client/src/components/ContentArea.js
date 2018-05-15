@@ -9,22 +9,6 @@ import GPS from './GPS';
 import { enumeratePaths, calculateETA, findOptimumPath } from './Algorithm';
 import fetchHelper from './Helpers';
 
-function getDispatcherExists() {
-  let state;
-  fetch('/dispatcherExists', { headers: new Headers({ Accept: 'application/json' }) })
-    .then((response) => {
-      if (!response.ok) {
-        throw new Error(response.status_text);
-      }
-      return response.json();
-    })
-    .then((data) => {
-      state = data[0].state; // eslint-disable-line prefer-destructuring
-    })
-    .catch(err => console.log(err)); // eslint-disable-line no-console
-  return state;
-}
-
 class ContentArea extends Component {
   constructor(props) {
     super(props);
@@ -137,14 +121,26 @@ class ContentArea extends Component {
   }
 
   handleLogin() {
-    if (this.state.password === '12345' && !getDispatcherExists()) { // temporary password
-      this.setState({ viewmode: 'DispatcherMode' });
-      this.updateDispatcherState(true);
-    } else if (!getDispatcherExists()) {
-      alert('Incorrect password. Try again!'); // eslint-disable-line no-alert
-    } else {
-      alert('Dispatcher already logged in.'); // eslint-disable-line no-alert
-    }
+    let state;
+    fetch('/dispatcherExists', { headers: new Headers({ Accept: 'application/json' }) })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(response.status_text);
+        }
+        return response.json();
+      })
+      .then((data) => {
+        state = data[0].state; // eslint-disable-line prefer-destructuring
+        if (this.state.password === '12345' && !state) { // temporary password
+          this.setState({ viewmode: 'DispatcherMode' });
+          this.updateDispatcherState(true);
+        } else if (!state) {
+          alert('Incorrect password. Try again!'); // eslint-disable-line no-alert
+        } else {
+          alert('Dispatcher already logged in.'); // eslint-disable-line no-alert
+        }
+      })
+      .catch(err => console.log(err)); // eslint-disable-line no-console
   }
 
   handleCancel() {
