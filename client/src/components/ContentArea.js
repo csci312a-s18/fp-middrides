@@ -2,7 +2,7 @@
 /* eslint no-plusplus: ["error", { "allowForLoopAfterthoughts": true }] */
 
 import React, { Component } from 'react';
-import { Alert, Button, ButtonToolbar, Form, FormGroup, FormControl, ControlLabel, Col, Label, Panel, Well} from 'react-bootstrap';
+import { Button, ButtonToolbar, Form, FormGroup, FormControl, ControlLabel, Col, Label, Panel, Well } from 'react-bootstrap';
 import QueueView from './QueueView';
 import RequestForm from './RequestForm';
 import GPS from './GPS';
@@ -274,10 +274,12 @@ class ContentArea extends Component {
           <br />
           <br />
           <h4>
-          <Label bsStyle="primary">
-          Next Stop: {this.state.nextStop}</Label>
-          <Label bsStyle="primary">
-          Van ETA: </Label>
+            <Label bsStyle="primary">
+          Next Stop: {this.state.nextStop}
+            </Label>
+            <Label bsStyle="primary">
+          Van ETA:
+            </Label>
           </h4>
         </div>
       );
