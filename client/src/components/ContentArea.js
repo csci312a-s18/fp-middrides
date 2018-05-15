@@ -9,6 +9,22 @@ import GPS from './GPS';
 import { enumeratePaths, calculateETA, findOptimumPath } from './Algorithm';
 import fetchHelper from './Helpers';
 
+function getDispatcherExists() {
+  let state;
+  fetch('/dispatcherExists', { headers: new Headers({ Accept: 'application/json' }) })
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error(response.status_text);
+      }
+      return response.json();
+    })
+    .then((data) => {
+      state = data[0].state; // eslint-disable-line prefer-destructuring
+    })
+    .catch(err => console.log(err)); // eslint-disable-line no-console
+  return state;
+}
+
 class ContentArea extends Component {
   constructor(props) {
     super(props);
@@ -23,6 +39,7 @@ class ContentArea extends Component {
     };
 
     this.nextStopID = '5af88680f36d280cecd235bc';
+    this.dispatcherExistsID = '5afb1243f36d28736375f968';
 
     this.handleCancel = this.handleCancel.bind(this);
     this.handlePassword = this.handlePassword.bind(this);
@@ -76,6 +93,16 @@ class ContentArea extends Component {
     fetchHelper(`/nextStop/${this.nextStopID}`, 'PUT', newStop).catch(err => console.log(err)); // eslint-disable-line no-console
   }
 
+  updateDispatcherState(state) {
+    const newState = Object.assign({}, {
+      _id: {
+        $oid: this.dispatcherExistsID,
+      },
+      state: null,
+    }, { state });
+    fetchHelper(`/dispatcherExists/${this.dispatcherExistsID}`, 'PUT', newState).catch(err => console.log(err)); // eslint-disable-line no-console
+  }
+
   runAlgorithm() {
     const paths = enumeratePaths(this.state.currentStop, this.state.requests, this.state.seatsLeft);
     const now = (new Date()).toISOString;
@@ -110,8 +137,9 @@ class ContentArea extends Component {
   }
 
   handleLogin() {
-    if (this.state.password === '12345') { // temporary password
+    if (this.state.password === '12345' && !getDispatcherExists()) { // temporary password
       this.setState({ viewmode: 'DispatcherMode' });
+      this.updateDispatcherState(true);
     } else {
       alert('Incorrect password. Try again!'); // eslint-disable-line no-alert
     }
@@ -170,6 +198,7 @@ class ContentArea extends Component {
 
   handleLogout() {
     this.setState({ viewmode: 'UserStart' });
+    this.updateDispatcherState(false);
     window.location.reload();
   }
 

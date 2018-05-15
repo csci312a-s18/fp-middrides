@@ -99,6 +99,27 @@ server.get('/nextStop', (request, response, next) => {
   }, next);
 });
 
+server.get('/dispatcherExists', (request, response, next) => {
+  db.collection('dispatcherExists').find().toArray().then((documents) => { // eslint-disable-line no-undef
+    response.send(documents);
+  }, next);
+});
+
+server.put('/dispatcherExists/:id', (request, response, next) => {
+  const updatedState = Object.assign(
+    request.body,
+    { _id: ObjectID.createFromHexString(request.params.id) },
+  );
+  db.collection('nextStop') // eslint-disable-line no-undef
+    .findOneAndUpdate(
+      { _id: updatedState._id },
+      { $set: updatedState },
+      { returnOriginal: false },
+    )
+    .then((result) => {
+      response.send(result.value);
+    }, next);
+});
 
 // express only serves static assets in production
 if (process.env.NODE_ENV === 'production') {
