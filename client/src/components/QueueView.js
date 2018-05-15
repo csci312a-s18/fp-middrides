@@ -49,26 +49,46 @@ function QueueView(props) {
             <td>{request.destination}</td>
             <td>{request.active}</td>
             <td>{request.ETA === 100000 ? 'Calculating...' : (request.ETA === -1 ? 'Picked Up' : request.ETA)}</td> {/* eslint-disable-line no-nested-ternary */}
-            <td>
-              <ButtonToolbar>
-                <Button
-                  bsStyle="primary"
-                  bsSize="small"
-                  onClick={() => props.completeInactive(request._id)}
-                >
-              Inactive
-                </Button>
+            {request.isPickedUp ? (
+              <td>
+                <ButtonToolbar>
+                  <Button
+                    bsStyle="primary"
+                    bsSize="small"
+                    onClick={() => props.completeInactive(request._id)}
+                  >
+                  Inactive
+                  </Button>
 
-                <Button
-                  bsStyle="primary"
-                  bsSize="small"
-                  disabled={request.isPickedUp === true}
-                  onClick={() => props.completePickedUp(request._id)}
-                >
-              Picked Up
-                </Button>
-              </ButtonToolbar>
-            </td>
+                  <Button
+                    bsStyle="primary"
+                    bsSize="small"
+                    onClick={() => props.completeDroppedOff(request._id)}
+                  >
+                  Dropped Off
+                  </Button>
+                </ButtonToolbar>
+              </td>) :
+              (<td>
+                <ButtonToolbar>
+                  <Button
+                    bsStyle="primary"
+                    bsSize="small"
+                    onClick={() => props.completeInactive(request._id)}
+                  >
+                  Inactive
+                  </Button>
+
+                  <Button
+                    bsStyle="primary"
+                    bsSize="small"
+                    disabled={request.isPickedUp === true}
+                    onClick={() => props.completePickedUp(request._id)}
+                  >
+                  Picked Up
+                  </Button>
+                </ButtonToolbar>
+              </td>)}
           </tr>))}
       </tbody>
     </Table>
