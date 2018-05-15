@@ -112,7 +112,6 @@ class ContentArea extends Component {
   handleLogin() {
     if (this.state.password === '12345') { // temporary password
       this.setState({ viewmode: 'DispatcherMode' });
-
     } else {
       alert('Incorrect password. Try again!'); // eslint-disable-line no-alert
     }
@@ -171,6 +170,7 @@ class ContentArea extends Component {
 
   handleLogout() {
     this.setState({ viewmode: 'UserStart' });
+
     window.location.reload();
   }
 

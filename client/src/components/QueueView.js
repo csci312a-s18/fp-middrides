@@ -61,7 +61,7 @@ function QueueView(props) {
                   Drop Off
                   </Button>
                   <Button
-                  id="btnCancelPickUpRide"
+                    id="btnCancelPickUpRide"
                     bsStyle="danger"
                     bsSize="small"
                     bscolor="danger"
