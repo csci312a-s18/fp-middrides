@@ -10,7 +10,9 @@ const request = {
   destination: 'T Lot',
   active: true, // needs to be converted to boolean to be handled
   isPickedUp: false,
+  id: '1',
 };
+
 
 describe('ContentArea', () => {
   test('Component renders properly', () => {
@@ -48,7 +50,7 @@ describe('Request button functionality', () => {
 });
 
 describe('Cancel button functionality', () => {
-  test('<btnCancel> exists only if user has ride', () => {
+  test('<btnCancelRide> exists only if user has ride', () => {
     const wrapper = shallow(<ContentArea complete={jest.fn} />);
     const btncancelRideInitial = wrapper.find('#btnCancelRide');
     expect(btncancelRideInitial.exists()).toBe(false);

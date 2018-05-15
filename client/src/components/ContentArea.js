@@ -9,6 +9,7 @@ import GPS from './GPS';
 import { enumeratePaths, calculateETA, findOptimumPath } from './Algorithm';
 import fetchHelper from './Helpers';
 
+
 class ContentArea extends Component {
   constructor(props) {
     super(props);
@@ -160,6 +161,7 @@ class ContentArea extends Component {
       });
     }).catch(err => console.log(err)); // eslint-disable-line no-console
     this.setState({ currentRequest: null }); // this is done for tests that do not use the fetch
+    localStorage.removeItem('request');
   }
 
 
@@ -173,6 +175,7 @@ class ContentArea extends Component {
         fetchHelper('/requests', 'POST', newRequest).then((createdRequest) => {
           const updatedRequests = this.state.requests.slice();
           updatedRequests.push(createdRequest);
+          localStorage.setItem('request', createdRequest._id);
           this.setState({
             requests: updatedRequests,
             currentRequest: createdRequest,
@@ -213,6 +216,7 @@ class ContentArea extends Component {
   handleLogout() {
     this.setState({ viewmode: 'UserStart' });
     this.updateDispatcherState(false);
+    localStorage.removeItem('dispatcher');
     window.location.reload();
   }
 
@@ -273,9 +277,34 @@ class ContentArea extends Component {
     return 0;
   }
 
+  findCookie() {
+    if (localStorage.getItem('request')) {
+      const id = localStorage.getItem('request');
+      if (this.state.requests.find(request => request._id === id) !== null || false) {
+        const findLocalRequest = this.state.requests.find(request => request._id === id);
+        if (findLocalRequest !== this.state.currentRequest) {
+          this.setState({ currentRequest: findLocalRequest });
+        }
+      } else {
+        localStorage.clear();
+      }
+    }
+  }
+
+  findDispatcher() {
+    if (localStorage.getItem('dispatcher') !== null) {
+      if (this.state.viewmode !== 'DispatcherMode') {
+        this.setState({ viewmode: 'DispatcherMode' });
+      }
+    }
+  }
+
   render() {
     // view for user
     if (this.state.viewmode === 'UserStart') {
+      this.findDispatcher();
+      this.findCookie();
+      //  console.log(localStorage.getItem('request'));
       const requestRideButton = (
         <Button
           id="btnRequestRide"
@@ -289,7 +318,7 @@ class ContentArea extends Component {
       const cancelRideButton = (
         <Button
           id="btnCancelRide"
-          bsStyle="primary"
+          bsStyle="danger"
           bsSize="small"
           onClick={this.handleCancel}
         >
