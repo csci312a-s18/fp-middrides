@@ -138,6 +138,10 @@ class ContentArea extends Component {
 
 
   handleFormReturn(newRequest) {
+    if (this.state.requests.length === 10) {
+      alert('Sorry, the queue is full. Please try again later.'); // eslint-disable-line no-alert
+      return;
+    }
     if (this.state.viewmode === 'RequestRideUser') {
       if (newRequest) {
         fetchHelper('/requests', 'POST', newRequest).then((createdRequest) => {
