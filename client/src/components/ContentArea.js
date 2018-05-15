@@ -170,6 +170,7 @@ class ContentArea extends Component {
 
   handleLogout() {
     this.setState({ viewmode: 'UserStart' });
+
     window.location.reload();
   }
 
@@ -298,6 +299,7 @@ class ContentArea extends Component {
         completePickedUp={(id) => { this.makePickedUp(id); }}
         completeDroppedOff={(id) => { this.makeDroppedOff(id); }}
       />);
+
       const queueview2 = (<QueueView
         id="qvPickedUp"
         requests={this.state.requests.filter(request => request.isPickedUp === true)}
