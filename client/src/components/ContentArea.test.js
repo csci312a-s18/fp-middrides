@@ -128,7 +128,6 @@ describe('Login View functionality', () => {
   test('Dispatcher logs in sucessfully', () => {
     const wrapper = shallow(<ContentArea complete={jest.fn} />);
     wrapper.setState({ viewmode: 'DispatcherLogin' });
-
     const formControlsText = wrapper.find('#formControlsText');
     formControlsText.simulate('change', { target: { value: '12345' } });
 
