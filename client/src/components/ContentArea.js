@@ -186,7 +186,6 @@ class ContentArea extends Component {
       const updatedRequests = this.state.requests
         .filter(request => request._id !== id);
       this.setState({ requests: updatedRequests, currentStop: droppedOffRequest.destination });
-      console.log(this.state.requests);
       this.runAlgorithm();
     }).catch(err => console.log(err)); // eslint-disable-line no-console
   }

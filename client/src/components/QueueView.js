@@ -68,27 +68,27 @@ function QueueView(props) {
                   Dropped Off
                   </Button>
                 </ButtonToolbar>
-              </td>) :
-              (<td>
-                <ButtonToolbar>
-                  <Button
-                    bsStyle="primary"
-                    bsSize="small"
-                    onClick={() => props.completeInactive(request._id)}
-                  >
-                  Inactive
-                  </Button>
+              </td>) : (
+                <td>
+                  <ButtonToolbar>
+                    <Button
+                      bsStyle="primary"
+                      bsSize="small"
+                      onClick={() => props.completeInactive(request._id)}
+                    >
+                    Inactive
+                    </Button>
 
-                  <Button
-                    bsStyle="primary"
-                    bsSize="small"
-                    disabled={request.isPickedUp === true}
-                    onClick={() => props.completePickedUp(request._id)}
-                  >
-                  Picked Up
-                  </Button>
-                </ButtonToolbar>
-              </td>)}
+                    <Button
+                      bsStyle="primary"
+                      bsSize="small"
+                      disabled={request.isPickedUp === true}
+                      onClick={() => props.completePickedUp(request._id)}
+                    >
+                    Picked Up
+                    </Button>
+                  </ButtonToolbar>
+                </td>)}
           </tr>))}
       </tbody>
     </Table>
