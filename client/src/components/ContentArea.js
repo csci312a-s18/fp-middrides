@@ -2,7 +2,7 @@
 /* eslint no-plusplus: ["error", { "allowForLoopAfterthoughts": true }] */
 
 import React, { Component } from 'react';
-import { Button, ButtonToolbar, Form, FormGroup, FormControl, ControlLabel, Col, Panel, Well } from 'react-bootstrap';
+import { Button, ButtonToolbar, Form, FormGroup, FormControl, ControlLabel, Col, Panel, Well, Label } from 'react-bootstrap';
 import QueueView from './QueueView';
 import RequestForm from './RequestForm';
 import GPS from './GPS';
@@ -336,8 +336,8 @@ class ContentArea extends Component {
           <br />
           <br />
           <h4>
-          Next Stop: {this.state.nextStop}<br />
-          Your Stop: {this.state.currentRequest ? this.state.currentRequest.currentLocation : '-'}
+          <strong>Next Stop: </strong>{this.state.nextStop} arriving in ___ minutes <br /><br />
+          <strong>Your Stop: </strong>{this.state.currentRequest ? this.state.currentRequest.currentLocation : '-'} arriving in ___ minutes
           </h4>
         </div>
       );
@@ -380,16 +380,23 @@ class ContentArea extends Component {
         Log-out
         </Button>
       );
+      const label = (
+        <Label
+          bsStyle="success"
+          bsSize="medium"
+        >
+        Next stop: {this.state.nextStop}
+        </Label>
+      );
 
       const buttons = (<ButtonToolbar>{addRideButton}<div className="login"> {enterDispatcherView} </div></ButtonToolbar>
       );
 
-      const nextUpText = (<p>Next Stop: {this.state.nextStop}</p>);
-
       return (
         <div>
           {buttons}
-          {nextUpText}
+          {label}
+          <br />
           <br />
           <Panel bsStyle="info">
             <Panel.Heading>
