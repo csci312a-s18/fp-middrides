@@ -148,7 +148,8 @@ class ContentArea extends Component {
       });
     }).catch(err => console.log(err)); // eslint-disable-line no-console
     this.setState({ currentRequest: null }); // this is done for tests that do not use the fetch
-    localStorage.removeItem('request');
+    localStorage.clear();
+    alert('Thank you for using MiddRides!\nYour ride has been terminated.'); // eslint-disable-line no-alert
   }
 
 
@@ -248,12 +249,6 @@ class ContentArea extends Component {
   }
 
   sortRequests(a, b) { // eslint-disable-line class-methods-use-this
-    // if (a.ETA === 'Calculating...' && b.ETA !== 'Calculating...') {
-    //   return 1;
-    // }
-    // if (a.ETA !== 'Calculating...' && b.ETA === 'Calculating...') {
-    //   return -1;
-    // }
     if (a.ETA < b.ETA) {
       return -1;
     }
@@ -266,13 +261,15 @@ class ContentArea extends Component {
   findCookie() {
     if (localStorage.getItem('request')) {
       const id = localStorage.getItem('request');
-      if (this.state.requests.find(request => request._id === id) !== null || false) {
+      if (this.state.requests.find(request => request._id === id) === undefined) {
+        alert('Thank you for using MiddRides!\nYour ride has been terminated.'); // eslint-disable-line no-alert
+        localStorage.clear();
+        this.setState({ currentRequest: '' });
+      } else if (this.state.requests.find(request => request._id === id) !== false) {
         const findLocalRequest = this.state.requests.find(request => request._id === id);
         if (findLocalRequest !== this.state.currentRequest) {
           this.setState({ currentRequest: findLocalRequest });
         }
-      } else {
-        localStorage.clear();
       }
     }
   }
@@ -290,7 +287,7 @@ class ContentArea extends Component {
     if (this.state.viewmode === 'UserStart') {
       this.findDispatcher();
       this.findCookie();
-      //  console.log(localStorage.getItem('request'));
+
       const requestRideButton = (
         <Button
           id="btnRequestRide"
