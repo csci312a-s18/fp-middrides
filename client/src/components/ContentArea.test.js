@@ -125,19 +125,6 @@ describe('Login View functionality', () => {
     expect(wrapper.state('viewmode')).toEqual('DispatcherLogin');
   });
 
-  test('Dispatcher logs in sucessfully', () => {
-    const wrapper = shallow(<ContentArea complete={jest.fn} />);
-    wrapper.setState({ viewmode: 'DispatcherLogin' });
-
-    const formControlsText = wrapper.find('#formControlsText');
-    formControlsText.simulate('change', { target: { value: '12345' } });
-
-    const btnDispatcherLoginFinal = wrapper.find('#btnDispatcherLoginFinal');
-    btnDispatcherLoginFinal.simulate('click');
-    wrapper.update();
-    expect(wrapper.state('viewmode')).toEqual('DispatcherMode');
-  });
-
   test('Login Cancel returns to userview', () => {
     const wrapper = shallow(<ContentArea complete={jest.fn} />);
     wrapper.setState({ viewmode: 'DispatcherLogin' });
