@@ -9,6 +9,16 @@ import GPS from './GPS';
 import { enumeratePaths, calculateETA, findOptimumPath, calculateWalkOns } from './Algorithm';
 import fetchHelper from './Helpers';
 
+function returnTime(date, eta) {
+  let mins = ((date.getMinutes() + Math.round(eta)) % 60);
+  if (mins.toString().length === 1) {
+    mins = `0${mins.toString()}`;
+  }
+  const addToHour = Math.floor((date.getMinutes() + Math.round(eta)) / 60);
+  const hour = (date.getHours() + addToHour) % 12;
+  const time = `${hour}:${mins}`;
+  return time;
+}
 
 class ContentArea extends Component {
   constructor(props) {
@@ -33,6 +43,7 @@ class ContentArea extends Component {
     this.handleLogin = this.handleLogin.bind(this);
     this.handleCancelLogin = this.handleCancelLogin.bind(this);
     this.handleLogout = this.handleLogout.bind(this);
+    this.getNextStop();
   }
 
   componentDidMount() {
@@ -88,6 +99,17 @@ class ContentArea extends Component {
     fetchHelper(`/dispatcherExists/${this.dispatcherExistsID}`, 'PUT', newState).catch(err => console.log(err)); // eslint-disable-line no-console
   }
 
+  returnTime(date, eta) { // eslint-disable-line class-methods-use-this
+    let mins = ((date.getMinutes() + Math.round(eta)) % 60);
+    if (mins.toString().length === 1) {
+      mins = `0${mins.toString()}`;
+    }
+    const addToHour = Math.floor((date.getMinutes() + Math.round(eta)) / 60);
+    const hour = (date.getHours() + addToHour) % 12;
+    const time = `${hour}:${mins}`;
+    return time;
+  }
+
   runAlgorithm() {
     if (this.state.requests.length === 0) {
       this.setState({ nextStop: 'No request in queue' });
@@ -124,7 +146,6 @@ class ContentArea extends Component {
           this.setState({ nextStop: 'No request in queue' });
         }
         this.updateNextStop(this.state.nextStop);
-        this.getNextStop();
       }).catch(err => console.log(err)); // eslint-disable-line no-console
     }
   }
@@ -218,7 +239,7 @@ class ContentArea extends Component {
           requests: updatedRequests,
           currentRequest: null, // allows for multiple requests by Dispatcher // unnecessary
         });
-        if (this.state.nextStop === '' || this.state.nextStop === 'No request in queue') {
+        if (this.state.nextStop === 'No request in queue') {
           this.runAlgorithm();
         }
       }).catch(err => console.log(err)); // eslint-disable-line no-console
@@ -368,6 +389,24 @@ class ContentArea extends Component {
         buttons = (<ButtonToolbar>{requestRideButton} <div className="login">  {enterDispatcherView} </div></ButtonToolbar>);
       }
 
+      const calculatingETA = (
+        <h4>
+          <strong>
+            Your Stop:
+          </strong>
+          {this.state.currentRequest ? ` ${this.state.currentRequest.currentLocation} (Calculating ETA)` : '-'}
+        </h4>
+      );
+
+      const notCalculatingETA = (
+        <h4>
+          <strong>
+            Your Stop:
+          </strong>
+          {this.state.currentRequest ? ` ${this.state.currentRequest.currentLocation}
+          (arriving at ${returnTime(this.state.time, this.state.currentRequest.ETA)})` : ' -'}
+        </h4>);
+
       return (
         <div>
           {buttons}
@@ -375,8 +414,9 @@ class ContentArea extends Component {
           <br />
           <br />
           <h4>
-            <strong>Next Stop: </strong>{this.state.nextStop} arriving in ___ minutes <br /><br />
-            <strong>Your Stop: </strong>{this.state.currentRequest ? this.state.currentRequest.currentLocation : '-'} arriving in ___ minutes
+            <strong>Next Stop: </strong>{this.state.nextStop} <br /><br />
+            { (this.state.currentRequest && this.state.currentRequest.ETA === 100000) ?
+               calculatingETA : notCalculatingETA }
           </h4>
         </div>
       );

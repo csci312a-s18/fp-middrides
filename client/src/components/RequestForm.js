@@ -105,7 +105,7 @@ class RequestForm extends Component {
         </FormControl>
       </FormGroup>);
 
-    const stops = ['Adirondack Circle', 'Track Lot/KDR', 'E Lot', 'R Lot', 'T Lot', 'Q Lot', 'Robert A Jones House', 'McCullough Student Center', 'Frog Hollow'];
+    const stops = ['Adirondack Circle', 'Track Lot/KDR', 'E Lot', 'R Lot', 'T Lot', 'Q Lot', 'Robert A. Jones House', 'McCullough Student Center', 'Frog Hollow'];
 
     const stopOptions = stops.map(stop => (
       <option value={stop}>{stop}</option>
@@ -126,7 +126,7 @@ class RequestForm extends Component {
 
     const destination = (
       <FormGroup controlId="destination">
-        <ControlLabel>Select a Destination</ControlLabel>
+        <ControlLabel>Destination</ControlLabel>
         <FormControl
           componentClass="select"
           value={this.state.destination}
