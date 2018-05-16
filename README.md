@@ -1,8 +1,8 @@
+# Project MiddRides Top-level [![Build Status](https://travis-ci.com/csci312a-s18/fp-middrides.svg?token=qYmu3y7BTGS4dNjpSe2a&branch=master)](https://travis-ci.com/csci312a-s18/fp-middrides)
 
-## Travis-CI badge
+This repository combines the client and server into a single repository that can be co-developed, tested and ultimately deployed to Heroku or basin.cs.middlebury.edu.
 
-[![Build Status](https://travis-ci.com/csci312a-s18/fp-middrides.svg?token=qYmu3y7BTGS4dNjpSe2a&branch=master)](https://travis-ci.com/csci312a-s18/fp-middrides)
-
+The client was created with [create-react-app](https://github.com/facebookincubator/create-react-app) (CRA) and the server is a separate Node.js application. The client-server integration is based on this [tutorial](https://www.fullstackreact.com/articles/using-create-react-app-with-a-server/) and [repository](https://github.com/fullstackreact/food-lookup-demo). This repository will be referred to as the "top-level" to distinguish it from the client and server.
 
 ## Need the Application Addresses:
 The application aims to increase the efficiency of the "Midd Rides" bus service at Middlebury College. The serves as a platform to request rides and provides the live location about of the van.
@@ -10,13 +10,6 @@ The application aims to increase the efficiency of the "Midd Rides" bus service 
 ## Link to deployed application on Heroku
 
 https://gentle-sea-19680.herokuapp.com/
-
-
-# Project MiddRides Top-level
-
-This repository combines the client and server into a single repository that can be co-developed, tested and ultimately deployed to Heroku or basin.cs.middlebury.edu.
-
-The client was created with [create-react-app](https://github.com/facebookincubator/create-react-app) (CRA) and the server is a separate Node.js application. The client-server integration is based on this [tutorial](https://www.fullstackreact.com/articles/using-create-react-app-with-a-server/) and [repository](https://github.com/fullstackreact/food-lookup-demo). This repository will be referred to as the "top-level" to distinguish it from the client and server.
 
 ## Installing Dependencies
 
