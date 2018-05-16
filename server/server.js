@@ -105,6 +105,12 @@ server.get('/dispatcherExists', (request, response, next) => {
   }, next);
 });
 
+server.get('/dispatcherPassword', (request, response, next) => {
+  db.collection('dispatcherPassword').find().toArray().then((documents) => { // eslint-disable-line no-undef
+    response.send(documents);
+  }, next);
+});
+
 server.put('/dispatcherExists/:id', (request, response, next) => {
   const updatedState = Object.assign(
     request.body,

@@ -2,10 +2,13 @@
   RequestForm implements a form for creating a new ride request or editing an existing
   one.
 
+  Note: Editing functionality is not currently implemented.
+
   props:
     request: The request to be edited [optional]
     complete: A callback to submit a new or edited request
 */
+
 import React, { Component } from 'react';
 import { FormGroup, FormControl, ControlLabel, Button } from 'react-bootstrap';
 import PropTypes from 'prop-types';
@@ -50,7 +53,6 @@ class RequestForm extends Component {
       timestamp: now.toISOString(),
       ETA: 100000,
     };
-
     this.props.complete(newRequest);
   }
 
@@ -73,90 +75,77 @@ class RequestForm extends Component {
   }
 
   render() {
+    const name = (
+      <FormGroup controlId="name">
+        <ControlLabel>Name</ControlLabel>
+        <FormControl
+          type="text"
+          value={this.state.name}
+          placeholder="Name"
+          onChange={this.handleName}
+        />
+      </FormGroup>);
+
+    const numbers = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14'];
+
+    const passengerOptions = numbers.map(number => (
+      <option value={number}>{number}</option>
+    ));
+
+    const passengers = (
+      <FormGroup controlId="passengers">
+        <ControlLabel>Number of Passengers</ControlLabel>
+        <FormControl
+          componentClass="select"
+          value={this.state.passengers}
+          onChange={this.handlePassengers}
+        >
+          <option value="" disabled hidden>0</option>
+          {passengerOptions}
+        </FormControl>
+      </FormGroup>);
+
+    const stops = ['Adirondack Circle', 'Track Lot/KDR', 'E Lot', 'R Lot', 'T Lot', 'Q Lot', 'Robert A Jones House', 'McCullough Student Center', 'Frog Hollow'];
+
+    const stopOptions = stops.map(stop => (
+      <option value={stop}>{stop}</option>
+    ));
+
+    const currentLocation = (
+      <FormGroup controlId="currentLocation">
+        <ControlLabel>Current Location</ControlLabel>
+        <FormControl
+          componentClass="select"
+          value={this.state.currentLocation}
+          onChange={this.handleCurrentLocation}
+        >
+          <option value="" disabled hidden>Select a current location</option>
+          {stopOptions}
+        </FormControl>
+      </FormGroup>);
+
+    const destination = (
+      <FormGroup controlId="destination">
+        <ControlLabel>Select a Destination</ControlLabel>
+        <FormControl
+          componentClass="select"
+          value={this.state.destination}
+          onChange={this.handleDestination}
+        >
+          <option value="" disabled hidden>Select a destination</option>
+          {stopOptions}
+        </FormControl>
+      </FormGroup>);
+
     return (
       <form>
-        <FormGroup controlId="name">
-          <ControlLabel>Name</ControlLabel>
-          <FormControl
-            type="text"
-            value={this.state.name}
-            placeholder="Name"
-            onChange={this.handleName}
-          />
-        </FormGroup>
-
-        <FormGroup controlId="passengers">
-          <ControlLabel>Number of Passengers</ControlLabel>
-          <FormControl
-            componentClass="select"
-            placeholder="Passengers"
-            value={this.state.passengers}
-            onChange={this.handlePassengers}
-          >
-            <option value="select"> select </option>
-            <option value="1"> 1 </option>
-            <option value="2"> 2 </option>
-            <option value="3"> 3 </option>
-            <option value="4"> 4 </option>
-            <option value="5"> 5 </option>
-            <option value="6"> 6 </option>
-            <option value="7"> 7 </option>
-            <option value="8"> 8 </option>
-            <option value="9"> 9 </option>
-            <option value="10"> 10 </option>
-            <option value="11"> 11 </option>
-            <option value="12"> 12 </option>
-            <option value="13"> 13 </option>
-            <option value="14"> 14 </option>
-          </FormControl>
-        </FormGroup>
-
-        <FormGroup controlId="currentLocation">
-          <ControlLabel>Select a Current Location</ControlLabel>
-          <FormControl
-            componentClass="select"
-            placeholder="CurrentLocation"
-            value={this.state.currentLocation}
-            onChange={this.handleCurrentLocation}
-          >
-            <option value="select"> select </option>
-            <option value="Adirondack Circle"> Adirondack Circle </option>
-            <option value="Track Lot/KDR"> Track Lot/KDR </option>
-            <option value="E Lot"> E Lot </option>
-            <option value="R Lot"> R Lot </option>
-            <option value="T Lot"> T Lot </option>
-            <option value="Q Lot"> Q Lot </option>
-            <option value="Robert A. Jones House"> Robert A. Jones House </option>
-            <option value="McCullough Student Center"> McCullough Student Center </option>
-            <option value="Frog Hollow"> Frog Hollow </option>
-          </FormControl>
-        </FormGroup>
-
-        <FormGroup controlId="destination">
-          <ControlLabel>Select a Destination</ControlLabel>
-          <FormControl
-            componentClass="select"
-            placeholder="Destination"
-            value={this.state.destination}
-            onChange={this.handleDestination}
-          >
-            <option value="select"> select </option>
-            <option value="Adirondack Circle"> Adirondack Circle </option>
-            <option value="Track Lot/KDR"> Track Lot/KDR </option>
-            <option value="E Lot"> E Lot </option>
-            <option value="R Lot"> R Lot </option>
-            <option value="T Lot"> T Lot </option>
-            <option value="Q Lot"> Q Lot </option>
-            <option value="Robert A. Jones House"> Robert A. Jones House </option>
-            <option value="McCullough Student Center"> McCullough Student Center </option>
-            <option value="Frog Hollow"> Frog Hollow </option>
-          </FormControl>
-        </FormGroup>
-
-        <Button id="btnSubmitRide" bsStyle="primary" disabled={this.isDisabled()} onClick={this.handleSubmit}> Submit </Button>
-        <Button id="btnCancel" onClick={this.handleCancel}> Cancel </Button>
+        {name}
+        {passengers}
+        {currentLocation}
+        {destination}
+        <Button id="btnSubmitRide" bsStyle="primary" disabled={this.isDisabled()} onClick={this.handleSubmit}>Submit</Button>
+        <Button id="btnCancel" onClick={this.handleCancel}>Cancel</Button>
       </form>
-
     );
   }
 }

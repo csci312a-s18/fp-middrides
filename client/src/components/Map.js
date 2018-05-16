@@ -8,7 +8,7 @@ import { Grid, Col } from 'react-bootstrap';
 const style = {
   height: '380px',
   position: 'contained',
-  width: '80%',
+  width: '100%',
 };
 
 const middleburyLatLong = { lat: 44.0153, lng: -73.1673 };

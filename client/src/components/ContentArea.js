@@ -6,7 +6,7 @@ import { Button, ButtonToolbar, Form, FormGroup, FormControl, ControlLabel, Col,
 import QueueView from './QueueView';
 import RequestForm from './RequestForm';
 import GPS from './GPS';
-import { enumeratePaths, calculateETA, findOptimumPath } from './Algorithm';
+import { enumeratePaths, calculateETA, findOptimumPath, calculateWalkOns } from './Algorithm';
 import fetchHelper from './Helpers';
 
 
@@ -20,7 +20,9 @@ class ContentArea extends Component {
       password: '',
       currentStop: 'Adirondack Circle',
       seatsLeft: 14,
-      nextStop: '',
+      nextStop: 'No request in queue',
+      walkOns: 14,
+      time: new Date(),
     };
 
     this.nextStopID = '5af88680f36d280cecd235bc';
@@ -31,7 +33,6 @@ class ContentArea extends Component {
     this.handleLogin = this.handleLogin.bind(this);
     this.handleCancelLogin = this.handleCancelLogin.bind(this);
     this.handleLogout = this.handleLogout.bind(this);
-    this.getNextStop();
   }
 
   componentDidMount() {
@@ -96,9 +97,16 @@ class ContentArea extends Component {
     const paths = enumeratePaths(this.state.currentStop, this.state.requests, this.state.seatsLeft);
     const now = (new Date()).toISOString;
     const optimalPath = findOptimumPath(this.state.requests, paths, Date.parse(now) / 60000);
+    const getWalkOns = calculateWalkOns(this.state.requests, optimalPath, this.state.seatsLeft);
     let updatedRequests = [];
     this.state.requests.forEach(request => updatedRequests.push(Object.assign({}, request)));
-    const newRequests = calculateETA(updatedRequests, optimalPath, 0);
+    let newRequests;
+    if (optimalPath.length > 0) {
+      newRequests = calculateETA(updatedRequests, optimalPath, 0);
+    } else {
+      newRequests = [];
+    }
+
     for (let i = 0; i < newRequests.length; i++) {
       fetchHelper(`/requests/${newRequests[i]._id}`, 'PUT', newRequests[i]).then((updatedRequest) => { // eslint-disable-line no-loop-func
         updatedRequests = this.state.requests.map((request) => {
@@ -108,7 +116,8 @@ class ContentArea extends Component {
           return request;
         });
       }).then(() => { // eslint-disable-line no-loop-func
-        this.setState({ requests: updatedRequests });
+        const date = new Date();
+        this.setState({ requests: updatedRequests, walkOns: getWalkOns, time: date });
         if (optimalPath.length > 1) {
           this.setState({ nextStop: optimalPath[1].currentStop });
         } else {
@@ -131,7 +140,7 @@ class ContentArea extends Component {
   handleLogin() {
     let state;
     fetch('/dispatcherExists', { headers: new Headers({ Accept: 'application/json' }) })
-      .then((response) => {
+    .then((response) => {
         if (!response.ok) {
           throw new Error(response.status_text);
         }
@@ -139,16 +148,26 @@ class ContentArea extends Component {
       })
       .then((data) => {
         state = data[0].state; // eslint-disable-line prefer-destructuring
-        if (this.state.password === '12345' && !state) { // temporary password
-          this.setState({ viewmode: 'DispatcherMode' });
-          this.updateDispatcherState(true);
-        } else if (!state) {
-          alert('Incorrect password. Try again!'); // eslint-disable-line no-alert
-        } else {
-          alert('Dispatcher already logged in.'); // eslint-disable-line no-alert
+        fetch('/dispatcherPassword', { headers: new Headers({ Accept: 'application/json' }) })
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error(response.status_text);
+          }
+          return response.json();
+        })
+        .then((data) => {
+          const password = data[0].password; // eslint-disable-line prefer-destructuring
+          if (this.state.password === password && !state) {
+            this.setState({ viewmode: 'DispatcherMode' });
+            localStorage.setItem('dispatcher', '');
+          } else {
+            alert('Incorrect password. Try again!'); // eslint-disable-line no-alert
+          }
+        })
+        .catch(err => console.log(err)); // eslint-disable-line no-console
         }
       })
-      .catch(err => console.log(err)); // eslint-disable-line no-console
+      .catch(err => console.log(err)); // eslint-disable-line no-console    
   }
 
   handleCancel() {
@@ -162,13 +181,15 @@ class ContentArea extends Component {
       });
     }).catch(err => console.log(err)); // eslint-disable-line no-console
     this.setState({ currentRequest: null }); // this is done for tests that do not use the fetch
-    localStorage.removeItem('request');
+    localStorage.clear();
+    alert('Thank you for using MiddRides!\nYour ride has been terminated.'); // eslint-disable-line no-alert
   }
 
 
   handleFormReturn(newRequest) {
-    if (this.state.requests.length === 10) {
+    if (this.state.requests.length === 7) { // can't take more than 7 requests at a time
       alert('Sorry, the queue is full. Please try again later.'); // eslint-disable-line no-alert
+      this.setState({ viewmode: this.state.viewmode === 'RequestRideUser' ? 'UserStart' : 'DispatcherMode' });
       return;
     }
     if (this.state.viewmode === 'RequestRideUser') {
@@ -181,7 +202,7 @@ class ContentArea extends Component {
             requests: updatedRequests,
             currentRequest: createdRequest,
           });
-          if (this.state.nextStop === '' || this.state.nextStop === 'No request in queue') {
+          if (this.state.nextStop === 'No request in queue') {
             this.runAlgorithm();
           }
         }).catch(err => console.log(err)); // eslint-disable-line no-console
@@ -239,7 +260,11 @@ class ContentArea extends Component {
     }).then(() => {
       const updatedRequests = this.state.requests
         .filter(request => request._id !== id);
-      this.setState({ requests: updatedRequests, currentStop: droppedOffRequest.destination });
+      this.setState({
+        requests: updatedRequests,
+        currentStop: droppedOffRequest.destination,
+        seatsLeft: this.state.seatsLeft + droppedOffRequest.passengers,
+      });
       this.runAlgorithm();
     }).catch(err => console.log(err)); // eslint-disable-line no-console
   }
@@ -257,18 +282,13 @@ class ContentArea extends Component {
       this.setState({
         requests: updatedRequests,
         currentStop: pickedUpRequest.currentLocation,
+        seatsLeft: this.state.seatsLeft - pickedUpRequest.passengers,
       });
       this.runAlgorithm();
     }).catch(err => console.log(err)); // eslint-disable-line no-console
   }
 
   sortRequests(a, b) { // eslint-disable-line class-methods-use-this
-    // if (a.ETA === 'Calculating...' && b.ETA !== 'Calculating...') {
-    //   return 1;
-    // }
-    // if (a.ETA !== 'Calculating...' && b.ETA === 'Calculating...') {
-    //   return -1;
-    // }
     if (a.ETA < b.ETA) {
       return -1;
     }
@@ -281,13 +301,15 @@ class ContentArea extends Component {
   findCookie() {
     if (localStorage.getItem('request')) {
       const id = localStorage.getItem('request');
-      if (this.state.requests.find(request => request._id === id) !== null || false) {
+      if (this.state.requests.find(request => request._id === id) === undefined) {
+        alert('Thank you for using MiddRides!\nYour ride has been terminated.'); // eslint-disable-line no-alert
+        localStorage.clear();
+        this.setState({ currentRequest: '' });
+      } else if (this.state.requests.find(request => request._id === id) !== false) {
         const findLocalRequest = this.state.requests.find(request => request._id === id);
         if (findLocalRequest !== this.state.currentRequest) {
           this.setState({ currentRequest: findLocalRequest });
         }
-      } else {
-        localStorage.clear();
       }
     }
   }
@@ -305,7 +327,7 @@ class ContentArea extends Component {
     if (this.state.viewmode === 'UserStart') {
       this.findDispatcher();
       this.findCookie();
-      //  console.log(localStorage.getItem('request'));
+
       const requestRideButton = (
         <Button
           id="btnRequestRide"
@@ -330,7 +352,7 @@ class ContentArea extends Component {
         <Button
           id="btnDispatcherLogin"
           bsStyle="link"
-          bsSize="medium"
+          bsSize="small"
           onClick={() => this.setState({ viewmode: 'DispatcherLogin' })}
         >
         Log-In
@@ -351,8 +373,8 @@ class ContentArea extends Component {
           <br />
           <br />
           <h4>
-          Next Stop: {this.state.nextStop}<br />
-          Your Stop: {this.state.currentRequest ? this.state.currentRequest.currentLocation : '-'}
+            <strong>Next Stop: </strong>{this.state.nextStop} arriving in ___ minutes <br /><br />
+            <strong>Your Stop: </strong>{this.state.currentRequest ? this.state.currentRequest.currentLocation : '-'} arriving in ___ minutes
           </h4>
         </div>
       );
@@ -365,6 +387,7 @@ class ContentArea extends Component {
         completeInactive={(id) => { this.makeInactive(id); }}
         completePickedUp={(id) => { this.makePickedUp(id); }}
         completeDroppedOff={(id) => { this.makeDroppedOff(id); }}
+        time={this.state.time}
       />);
 
       const queueview2 = (<QueueView
@@ -373,6 +396,7 @@ class ContentArea extends Component {
         completeInactive={(id) => { this.makeInactive(id); }}
         completePickedUp={(id) => { this.makePickedUp(id); }}
         completeDroppedOff={(id) => { this.makeDroppedOff(id); }}
+        time={this.state.time}
       />);
 
       const addRideButton = (
@@ -389,7 +413,7 @@ class ContentArea extends Component {
         <Button
           id="btnLogout"
           bsStyle="link"
-          bsSize="medium"
+          bsSize="small"
           onClick={this.handleLogout}
         >
         Log-out
@@ -401,10 +425,16 @@ class ContentArea extends Component {
 
       const nextUpText = (<p>Next Stop: {this.state.nextStop}</p>);
 
+      const walkOnsLabel = (<p>Walk Ons Allowed: { this.state.walkOns } </p>);
+
+      const seatsLeftLabel = (<p>Seats Left: {this.state.seatsLeft } </p>);
+
       return (
         <div>
           {buttons}
           {nextUpText}
+          {seatsLeftLabel}
+          {walkOnsLabel}
           <br />
           <Panel bsStyle="info">
             <Panel.Heading>
@@ -473,14 +503,14 @@ class ContentArea extends Component {
             <Button
               id="btnDispatcherLoginFinal"
               bsStyle="primary"
-              bsSize="medium"
+              bsSize="small"
               onClick={this.handleLogin}
             >
             Login
             </Button>
             <Button
               id="btnCancelLogin"
-              bsSize="medium"
+              bsSize="small"
               onClick={this.handleCancelLogin}
             >
             Cancel
