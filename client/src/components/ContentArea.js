@@ -79,6 +79,7 @@ class ContentArea extends Component {
   runAlgorithm() {
     if (this.state.requests.length === 0) {
       this.setState({ nextStop: 'No request in queue' });
+      this.updateNextStop(this.state.nextStop);
       return;
     }
     const paths = enumeratePaths(this.state.currentStop, this.state.requests, this.state.seatsLeft);
