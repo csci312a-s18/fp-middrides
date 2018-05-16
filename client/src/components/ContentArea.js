@@ -3,12 +3,22 @@
 
 import React, { Component } from 'react';
 import { Button, ButtonToolbar, Form, FormGroup, FormControl, ControlLabel, Col, Panel, Well } from 'react-bootstrap';
-import { QueueView, returnTime } from './QueueView';
+import QueueView from './QueueView';
 import RequestForm from './RequestForm';
 import GPS from './GPS';
 import { enumeratePaths, calculateETA, findOptimumPath, calculateWalkOns } from './Algorithm';
 import fetchHelper from './Helpers';
 
+function returnTime(date, eta) {
+  let mins = ((date.getMinutes() + Math.round(eta)) % 60);
+  if (mins.toString().length === 1) {
+    mins = `0${mins.toString()}`;
+  }
+  const addToHour = Math.floor((date.getMinutes() + Math.round(eta)) / 60);
+  const hour = (date.getHours() + addToHour) % 12;
+  const time = `${hour}:${mins}`;
+  return time;
+}
 
 class ContentArea extends Component {
   constructor(props) {
@@ -87,6 +97,17 @@ class ContentArea extends Component {
       state: null,
     }, { state });
     fetchHelper(`/dispatcherExists/${this.dispatcherExistsID}`, 'PUT', newState).catch(err => console.log(err)); // eslint-disable-line no-console
+  }
+
+  returnTime(date, eta) { // eslint-disable-line class-methods-use-this
+    let mins = ((date.getMinutes() + Math.round(eta)) % 60);
+    if (mins.toString().length === 1) {
+      mins = `0${mins.toString()}`;
+    }
+    const addToHour = Math.floor((date.getMinutes() + Math.round(eta)) / 60);
+    const hour = (date.getHours() + addToHour) % 12;
+    const time = `${hour}:${mins}`;
+    return time;
   }
 
   runAlgorithm() {

@@ -5,7 +5,7 @@ import { Table, Button, ButtonToolbar } from 'react-bootstrap';
 
 const headers = ['Name', 'Passengers', 'Current Location', 'Destination', 'ETA', 'Set Status'];
 
-function returnTime(date, eta) {
+function returnTime(date, eta) { // eslint-disable-line class-methods-use-this
   let mins = ((date.getMinutes() + Math.round(eta)) % 60);
   if (mins.toString().length === 1) {
     mins = `0${mins.toString()}`;
@@ -96,5 +96,4 @@ QueueView.propTypes = {
   time: PropTypes.instanceOf(Date).isRequired,
 };
 
-export { returnTime };
 export default QueueView;
