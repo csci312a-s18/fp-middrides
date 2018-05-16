@@ -2,7 +2,7 @@
 /* eslint no-plusplus: ["error", { "allowForLoopAfterthoughts": true }] */
 
 import React, { Component } from 'react';
-import { Button, ButtonToolbar, Form, FormGroup, FormControl, ControlLabel, Col, Panel, Well } from 'react-bootstrap';
+import { Button, ButtonToolbar, Form, FormGroup, FormControl, ControlLabel, Col, Panel, Well, Label } from 'react-bootstrap';
 import QueueView from './QueueView';
 import RequestForm from './RequestForm';
 import GPS from './GPS';
@@ -168,7 +168,8 @@ class ContentArea extends Component {
       });
     }).catch(err => console.log(err)); // eslint-disable-line no-console
     this.setState({ currentRequest: null }); // this is done for tests that do not use the fetch
-    localStorage.removeItem('request');
+    localStorage.clear();
+    alert('Thank you for using MiddRides!\nYour ride has been terminated.'); // eslint-disable-line no-alert
   }
 
 
@@ -274,12 +275,6 @@ class ContentArea extends Component {
   }
 
   sortRequests(a, b) { // eslint-disable-line class-methods-use-this
-    // if (a.ETA === 'Calculating...' && b.ETA !== 'Calculating...') {
-    //   return 1;
-    // }
-    // if (a.ETA !== 'Calculating...' && b.ETA === 'Calculating...') {
-    //   return -1;
-    // }
     if (a.ETA < b.ETA) {
       return -1;
     }
@@ -292,13 +287,15 @@ class ContentArea extends Component {
   findCookie() {
     if (localStorage.getItem('request')) {
       const id = localStorage.getItem('request');
-      if (this.state.requests.find(request => request._id === id) !== null || false) {
+      if (this.state.requests.find(request => request._id === id) === undefined) {
+        alert('Thank you for using MiddRides!\nYour ride has been terminated.'); // eslint-disable-line no-alert
+        localStorage.clear();
+        this.setState({ currentRequest: '' });
+      } else if (this.state.requests.find(request => request._id === id) !== false) {
         const findLocalRequest = this.state.requests.find(request => request._id === id);
         if (findLocalRequest !== this.state.currentRequest) {
           this.setState({ currentRequest: findLocalRequest });
         }
-      } else {
-        localStorage.clear();
       }
     }
   }
@@ -316,7 +313,7 @@ class ContentArea extends Component {
     if (this.state.viewmode === 'UserStart') {
       this.findDispatcher();
       this.findCookie();
-      //  console.log(localStorage.getItem('request'));
+
       const requestRideButton = (
         <Button
           id="btnRequestRide"
@@ -362,8 +359,8 @@ class ContentArea extends Component {
           <br />
           <br />
           <h4>
-          Next Stop: {this.state.nextStop}<br />
-          Your Stop: {this.state.currentRequest ? this.state.currentRequest.currentLocation : '-'}
+            <strong>Next Stop: </strong>{this.state.nextStop} arriving in ___ minutes <br /><br />
+            <strong>Your Stop: </strong>{this.state.currentRequest ? this.state.currentRequest.currentLocation : '-'} arriving in ___ minutes
           </h4>
         </div>
       );
@@ -407,6 +404,14 @@ class ContentArea extends Component {
         >
         Log-out
         </Button>
+      );
+      const label = (
+        <Label
+          bsStyle="success"
+          bsSize="medium"
+        >
+        Next stop: {this.state.nextStop}
+        </Label>
       );
 
       const buttons = (<ButtonToolbar>{addRideButton}<div className="login"> {enterDispatcherView} </div></ButtonToolbar>

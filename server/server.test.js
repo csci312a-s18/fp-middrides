@@ -1,5 +1,5 @@
-/*
-// const request = require('supertest');
+
+const request = require('supertest');
 const MongodbMemoryServer = require('mongodb-memory-server').default;
 const { MongoClient } = require('mongodb');
 const { server, setDb } = require('./server');
@@ -9,7 +9,7 @@ jest.setTimeout(60000);
 
 let mongoServer;
 let db;
-*/
+
 const request1 = {
   name: 'Laurie Patton',
   passengers: '7',
@@ -18,42 +18,18 @@ const request1 = {
   active: true,
   isPickedUp: false,
   timestamp: '2015-11-19T22:57:32.639Z',
-};
-/*
-const request2 = {
-  name: 'Michael Linderman',
-  passengers: '7',
-  currentLocation: 'T Lot',
-  destination: 'E Lot',
-  active: true,
-  isPickedUp: true,
-  timestamp: '2016-11-21T22:57:32.639Z',
+  _id: '2',
 };
 
-const request3 = {
-  name: 'Pete',
-  passengers: '7',
-  currentLocation: 'E Lot',
-  destination: 'T Lot',
-  active: false,
-  isPickedUp: false,
-  timestamp: '2016-11-20T22:57:32.639Z',
+const shuttleLocation = {
+  latitude: 44,
+  longitude: -73,
+  _id: '1',
 };
-const newRequestCheck = {
-  name: 'Lulu',
-  passengers: '7',
-  currentLocation: 'E Lot',
-  destination: 'T Lot',
-  active: true,
-  isPickedUp: false,
-  timestamp: '2016-11-19T22:57:32.639Z',
-  extract: '',
-};
-
-const requestToJSON = function requestToJSON(localRequest) {
-  return Object.assign({}, localRequest, {
-    _id: localRequest._id, // eslint-disable-line no-underscore-dangle
-  });
+const nextStop = {
+  nextStop: 'E Lot',
+  stop: 'T Lot',
+  _id: '2',
 };
 
 beforeAll(() => {
@@ -66,7 +42,11 @@ beforeAll(() => {
     setDb(db);
   }).then(() => {
     db.collection('requests').createIndex(
-      { title: 1 },
+      { name: 1 },
+      { unique: true },
+    );
+    db.collection('shuttleLocation').createIndex(
+      { name: 1 },
       { unique: true },
     );
   });
@@ -75,53 +55,39 @@ beforeAll(() => {
 afterAll(() => {
   mongoServer.stop();
 });
-*/
+
 describe('MiddRides API', () => {
-  test('Test', () => {
-    expect(request1).toEqual(request1);
+  afterEach(() => db.collection('requests').deleteMany({}));
+  // Tests go here
+  describe('Get requests', () => {
+    beforeEach(() => db.collection('requests').insert(request1));
+    test('GET /requests should return added requests', () => request(server).get('/requests')
+      .expect(200)
+      .expect('Content-Type', /json/)
+      .expect([request1]));
   });
 
-  /* beforeEach(() => Promise.all([
-    db.collection('requests').insert(request1),
-    // db.collection('requests').insert(request2),
-    // db.collection('requests').insert(request3),
-    // db.collection('requests').insert(newRequestCheck),
-  ]));
-  afterEach(() => db.collection('requests').deleteMany({})); */
-// Tests go here
+  describe('Get shuttleLocation', () => {
+    beforeEach(() => db.collection('shuttleLocation').insert(shuttleLocation));
+    test('GET /shuttleLocation should return added location', () => request(server).get('/shuttleLocation')
+      .expect(200)
+      .expect('Content-Type', /json/)
+      .expect([shuttleLocation]));
+  });
+  describe('Get nextStop', () => {
+    beforeEach(() => db.collection('nextStop').insert(nextStop));
+    test('Get /nextStop should return added nextStop and stop', () => request(server).get('/nextStop')
+      .expect(200)
+      .expect('Content-Type', /json/)
+      .expect([nextStop]));
+  });
 
-  // describe('', () => {
-  /*
-    test('GET /requests should return all movies (mostly SuperTest)', () => {
-       return request(server).get('/requests')
-         .expect(200)
-         .expect('Content-Type', /json/)
-         .expect([requestToJSON(request1)]);
-       });
-*/
-  /* test('Should update request', () => {
-        const newRequest = Object.assign({}, request2, {
-           name: 'Lulu',
-           passengers: '7',
-           currentLocation: 'E Lot',
-           destination: 'T Lot',
-           active: true,
-           isPickedUp: false,
-           timestamp: '2016-11-19T22:57:32.639Z',
-         });
-         const newRequestCheck = Object.assign({}, request2, {
-            name: 'Lulu',
-            passengers: '7',
-            currentLocation: 'E Lot',
-            destination: 'T Lot',
-            active: true,
-            isPickedUp: false,
-            timestamp: '2016-11-19T22:57:32.639Z',
-            extract:'',
-          });
-        return request(server).put(`/requests/${request2._id}`).send(newRequest)
-          .expect(200)
-          .expect(requestToJSON(newRequest));
-      }); */
-//  });
+  describe('Post requests', () => {
+    test('Should create new request', () => request(server).post('/requests').send(request1)
+      .expect(200)
+      .expect('Content-Type', /json/)
+      .then((response) => {
+        expect(response.body).toMatchObject(request1);
+      }));
+  });
 });
