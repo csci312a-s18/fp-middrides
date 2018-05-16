@@ -99,6 +99,12 @@ server.get('/nextStop', (request, response, next) => {
   }, next);
 });
 
+server.get('/dispatcherPassword', (request, response, next) => {
+  db.collection('dispatcherPassword').find().toArray().then((documents) => { // eslint-disable-line no-undef
+    response.send(documents);
+  }, next);
+});
+
 
 // express only serves static assets in production
 if (process.env.NODE_ENV === 'production') {
