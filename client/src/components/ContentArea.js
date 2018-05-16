@@ -20,8 +20,9 @@ class ContentArea extends Component {
       password: '',
       currentStop: 'Adirondack Circle',
       seatsLeft: 14,
-      nextStop: '',
+      nextStop: 'No request in queue',
       walkOns: 14,
+      time: new Date(),
     };
 
     this.nextStopID = '5af88680f36d280cecd235bc';
@@ -32,7 +33,6 @@ class ContentArea extends Component {
     this.handleLogin = this.handleLogin.bind(this);
     this.handleCancelLogin = this.handleCancelLogin.bind(this);
     this.handleLogout = this.handleLogout.bind(this);
-    this.getNextStop();
   }
 
   componentDidMount() {
@@ -116,7 +116,8 @@ class ContentArea extends Component {
           return request;
         });
       }).then(() => { // eslint-disable-line no-loop-func
-        this.setState({ requests: updatedRequests, walkOns: getWalkOns });
+        const date = new Date();
+        this.setState({ requests: updatedRequests, walkOns: getWalkOns, time: date });
         if (optimalPath.length > 1) {
           this.setState({ nextStop: optimalPath[1].currentStop });
         } else {
@@ -187,7 +188,7 @@ class ContentArea extends Component {
             requests: updatedRequests,
             currentRequest: createdRequest,
           });
-          if (this.state.nextStop === '' || this.state.nextStop === 'No request in queue') {
+          if (this.state.nextStop === 'No request in queue') {
             this.runAlgorithm();
           }
         }).catch(err => console.log(err)); // eslint-disable-line no-console
@@ -340,7 +341,7 @@ class ContentArea extends Component {
         <Button
           id="btnDispatcherLogin"
           bsStyle="link"
-          bsSize="medium"
+          bsSize="small"
           onClick={() => this.setState({ viewmode: 'DispatcherLogin' })}
         >
         Log-In
@@ -375,6 +376,7 @@ class ContentArea extends Component {
         completeInactive={(id) => { this.makeInactive(id); }}
         completePickedUp={(id) => { this.makePickedUp(id); }}
         completeDroppedOff={(id) => { this.makeDroppedOff(id); }}
+        time={this.state.time}
       />);
 
       const queueview2 = (<QueueView
@@ -383,6 +385,7 @@ class ContentArea extends Component {
         completeInactive={(id) => { this.makeInactive(id); }}
         completePickedUp={(id) => { this.makePickedUp(id); }}
         completeDroppedOff={(id) => { this.makeDroppedOff(id); }}
+        time={this.state.time}
       />);
 
       const addRideButton = (
@@ -399,7 +402,7 @@ class ContentArea extends Component {
         <Button
           id="btnLogout"
           bsStyle="link"
-          bsSize="medium"
+          bsSize="small"
           onClick={this.handleLogout}
         >
         Log-out
@@ -489,14 +492,14 @@ class ContentArea extends Component {
             <Button
               id="btnDispatcherLoginFinal"
               bsStyle="primary"
-              bsSize="medium"
+              bsSize="small"
               onClick={this.handleLogin}
             >
             Login
             </Button>
             <Button
               id="btnCancelLogin"
-              bsSize="medium"
+              bsSize="small"
               onClick={this.handleCancelLogin}
             >
             Cancel

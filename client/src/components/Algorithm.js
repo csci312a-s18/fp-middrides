@@ -9,13 +9,10 @@ function getTime(source, destination) {
 }
 
 function calculateWalkOns(requests, path, seatsLeft) {
-  // console.log('path: ', path);
   let walkOns = seatsLeft;
   if (path[1]) {
     path[1].id.forEach((id) => {
       const request = requests.find(findRequest => findRequest._id === id);
-      // console.log('currentLocation: ', request.currentLocation, 'current stop: ',
-      // path[1].currentStop, 'destination: ', request.destination;
       if (request.currentLocation === path[1].currentStop) {
         walkOns -= request.passengers;
       } else if (request.destination === path[1].currentStop) {
@@ -85,7 +82,6 @@ function enumeratePaths(currStop, reqs, remainingSeats) {
       paths.push(path);
     } else {
       for (let i = 0; i < available.length; i++) {
-        // double check if we need to copy seatsLeft before passing to the next funciton
         recursiveAlgorithm(available[i], updatedRequests, path.slice(), seatsLeft);
       }
     }

@@ -59,26 +59,6 @@ describe('Cancel button functionality', () => {
     const btncancelRidePost = wrapper.find('#btnCancelRide');
     expect(btncancelRidePost.exists()).toBe(true);
   });
-
-
-  test('Clicking <btnCancel> cancels currentRequest', () => {
-    const wrapper = shallow(<ContentArea complete={jest.fn} />);
-    wrapper.setState({ currentRequest: request });
-    const btncancelRide = wrapper.find('#btnCancelRide');
-    btncancelRide.simulate('click');
-    wrapper.update();
-    expect(wrapper.state('currentRequest')).toEqual(null);
-  });
-
-  test('Clicking <btnCancel> cancels reverts to <btnRequestRide>', () => {
-    const wrapper = shallow(<ContentArea complete={jest.fn} />);
-    wrapper.setState({ currentRequest: request });
-    const btncancelRide = wrapper.find('#btnCancelRide');
-    btncancelRide.simulate('click');
-    wrapper.update();
-    const btncancelRideClicked = wrapper.find('#btnCancelRide');
-    expect(btncancelRideClicked.exists()).toBe(false);
-  });
 });
 
 describe('Dispatcher login button functionality', () => {
@@ -99,7 +79,7 @@ describe('Dispatcher login button functionality', () => {
   });
 });
 
-describe('Login View functionality', () => {
+describe('Login View hallow(<ContentArea cofunctionality', () => {
   test('Login view renders correctly', () => {
     const wrapper = shallow(<ContentArea complete={jest.fn} />);
     wrapper.setState({ viewmode: 'DispatcherLogin' });
@@ -110,19 +90,6 @@ describe('Login View functionality', () => {
     expect(formControlsText.exists()).toBe(true);
     expect(btnDispatcherLoginFinal.exists()).toBe(true);
     expect(btnCancelLogin.exists()).toBe(true);
-  });
-
-  test('Login fails if password is incorrect', () => {
-    const wrapper = shallow(<ContentArea complete={jest.fn} />);
-    wrapper.setState({ viewmode: 'DispatcherLogin' });
-
-    const formControlsText = wrapper.find('#formControlsText');
-    formControlsText.simulate('change', { target: { value: 'abc123' } });
-
-    const btnDispatcherLoginFinal = wrapper.find('#btnDispatcherLoginFinal');
-    btnDispatcherLoginFinal.simulate('click');
-    wrapper.update();
-    expect(wrapper.state('viewmode')).toEqual('DispatcherLogin');
   });
 
   test('Login Cancel returns to userview', () => {
@@ -184,8 +151,8 @@ describe('Interval functionality', () => {
       complete={jest.fn}
     />);
 
-    // 17 was selected because of number of tests
-    expect(setInterval).toHaveBeenCalledTimes(17);
+    // 14 was selected because of number of tests
+    expect(setInterval).toHaveBeenCalledTimes(14);
     expect(setInterval).toHaveBeenLastCalledWith(expect.any(Function), 1000);
   });
 });
