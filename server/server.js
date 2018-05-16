@@ -101,7 +101,7 @@ server.get('/nextStop', (request, response, next) => {
 
 server.get('/dispatcherExists', (request, response, next) => {
   db.collection('dispatcherExists').find().toArray().then((documents) => { // eslint-disable-line no-undef
-  response.send(documents);
+    response.send(documents);
   }, next);
 });
 
