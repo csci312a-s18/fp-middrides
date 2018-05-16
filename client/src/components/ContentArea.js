@@ -160,7 +160,7 @@ class ContentArea extends Component {
             if (this.state.password === password && !state) {
               this.setState({ viewmode: 'DispatcherMode' });
               localStorage.setItem('dispatcher', '');
-            } else if (!state) {
+            } else if (state) {
               alert('Dispatcher already logged in'); // eslint-disable-line no-alert
             } else {
               alert('Incorrect password. Try again!'); // eslint-disable-line no-alert
@@ -424,18 +424,16 @@ class ContentArea extends Component {
       const buttons = (<ButtonToolbar>{addRideButton}<div className="login"> {enterDispatcherView} </div></ButtonToolbar>
       );
 
-      const nextUpText = (<p>Next Stop: {this.state.nextStop}</p>);
+      const nextUpText = (<h4><strong>Next Stop:</strong> {this.state.nextStop}</h4>);
 
-      const walkOnsLabel = (<p>Walk Ons Allowed: { this.state.walkOns } </p>);
+      const walkOnsLabel = (<h4><strong>Walk Ons Allowed:</strong> { this.state.walkOns } </h4>);
 
-      const seatsLeftLabel = (<p>Seats Left: {this.state.seatsLeft } </p>);
+      const seatsLeftLabel = (<h4><strong>Seats Left</strong>: {this.state.seatsLeft } </h4>);
 
       return (
         <div>
           {buttons}
           {nextUpText}
-          {seatsLeftLabel}
-          {walkOnsLabel}
           <br />
           <Panel bsStyle="info">
             <Panel.Heading>
@@ -450,6 +448,8 @@ class ContentArea extends Component {
             </Panel.Heading>
             {queueview2}
           </Panel>
+          {seatsLeftLabel}
+          {walkOnsLabel}
           <div className="gps"> <GPS isDispatcher /> </div>
         </div>
       );
