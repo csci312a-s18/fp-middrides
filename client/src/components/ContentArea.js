@@ -159,6 +159,7 @@ class ContentArea extends Component {
             const password = dataa[0].password; // eslint-disable-line prefer-destructuring
             if (this.state.password === password && !state) {
               this.setState({ viewmode: 'DispatcherMode' });
+              this.updateDispatcherState(true);
               localStorage.setItem('dispatcher', '');
             } else if (state) {
               alert('Dispatcher already logged in'); // eslint-disable-line no-alert

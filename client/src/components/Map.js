@@ -13,8 +13,6 @@ const style = {
 
 const middleburyLatLong = { lat: 44.0153, lng: -73.1673 };
 
-const googleApiKey = process.env.GOOGLEAPI_KEY;
-
 export class MapContainer extends Component {
   constructor(props) {
     super(props);
@@ -74,7 +72,7 @@ export class MapContainer extends Component {
 }
 
 export default GoogleApiWrapper({
-  apiKey: googleApiKey,
+  apiKey: 'AIzaSyAvOrHV6khC62g8fEuiExotGDSVBBGxPOA',
 })(MapContainer);
 
 // MapContainer.propTypes = {
