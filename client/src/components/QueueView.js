@@ -3,10 +3,13 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Table, Button, ButtonToolbar } from 'react-bootstrap';
 
-const headers = ['Name', 'Passengers', 'Current Location', 'Destination', 'ETA (mins)', 'Set Status'];
+const headers = ['Name', 'Passengers', 'Current Location', 'Destination', 'ETA', 'Set Status'];
 
 function returnTime(date, eta) {
-  const mins = (date.getMinutes() + Math.round(eta)) % 60;
+  let mins = ((date.getMinutes() + Math.round(eta)) % 60);
+  if (mins.toString().length === 1) {
+    mins = `0${mins.toString()}`;
+  }
   const addToHour = Math.floor((date.getMinutes() + Math.round(eta)) / 60);
   const hour = (date.getHours() + addToHour) % 12;
   const time = `${hour}:${mins}`;
@@ -93,4 +96,5 @@ QueueView.propTypes = {
   time: PropTypes.instanceOf(Date).isRequired,
 };
 
+export { returnTime };
 export default QueueView;

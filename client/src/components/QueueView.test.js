@@ -3,8 +3,6 @@ import { shallow } from 'enzyme';
 
 import QueueView from './QueueView';
 
-const date = new Date();
-
 const requestActive = {
   name: 'Beyonce Knowles-Carter',
   passengers: 3, // needs to be converted to integer to be handled
@@ -28,15 +26,16 @@ const requestPickedUp = {
 
 const requestArray = [requestActive, requestPickedUp];
 
+const date = new Date();
 
 describe('QueueView renders', () => {
   test('Component renders properly', () => {
-    const wrapper = shallow(<QueueView requests={requestArray} mode="DispatcherMode" complete={jest.fn} time={date} />);
+    const wrapper = shallow(<QueueView requests={requestArray} complete={jest.fn} time={date} />);
     expect(wrapper.exists()).toBe(true);
   });
 
   test('Table renders', () => {
-    const wrapper = shallow(<QueueView requests={requestArray} mode="DispatcherMode" complete={jest.fn} time={date} />);
+    const wrapper = shallow(<QueueView requests={requestArray} complete={jest.fn} time={date} />);
     const tdBody = wrapper.find('#tdBody');
     const tdName = wrapper.find('#tdName');
     const tdpassengers = wrapper.find('#tdpassengers');
@@ -57,7 +56,7 @@ describe('QueueView renders', () => {
 describe('Ride Buttons function', () => {
   test('Active rides have <btnPickUp> and not <btnDropOff>', () => {
     const activeRequest = requestArray.filter(request => request.isPickedUp === false);
-    const wrapper = shallow(<QueueView requests={activeRequest} mode="DispatcherMode" complete={jest.fn} time={date} />);
+    const wrapper = shallow(<QueueView requests={activeRequest} complete={jest.fn} time={date} />);
     const btnPickup = wrapper.find('#btnPickup');
     const btnDropOff = wrapper.find('#btnDropOff');
     expect(btnPickup.exists()).toBe(true);
@@ -66,7 +65,7 @@ describe('Ride Buttons function', () => {
 
   test('Active rides have <btnCancelActiveRide> and not <btnCanclePickUpRide>', () => {
     const activeRequest = requestArray.filter(request => request.isPickedUp === false);
-    const wrapper = shallow(<QueueView requests={activeRequest} mode="DispatcherMode" complete={jest.fn} time={date} />);
+    const wrapper = shallow(<QueueView requests={activeRequest} complete={jest.fn} time={date} />);
     const btnCancleActiveRide = wrapper.find('#btnCancleActiveRide');
     const btnCancelPickUpRide = wrapper.find('#btnCancelPickUpRide');
     expect(btnCancleActiveRide.exists()).toBe(true);
@@ -75,7 +74,7 @@ describe('Ride Buttons function', () => {
 
   test('Picked up rides have <btnDropOff>', () => {
     const activeRequest = requestArray.filter(request => request.isPickedUp === true);
-    const wrapper = shallow(<QueueView requests={activeRequest} mode="DispatcherMode" complete={jest.fn} time={date} />);
+    const wrapper = shallow(<QueueView requests={activeRequest} complete={jest.fn} time={date} />);
     const btnPickup = wrapper.find('#btnPickup');
     const btnDropOff = wrapper.find('#btnDropOff');
     expect(btnPickup.exists()).toBe(false);
@@ -84,7 +83,7 @@ describe('Ride Buttons function', () => {
 
   test('Picked up rides have <btnCanclePickUpRide>', () => {
     const activeRequest = requestArray.filter(request => request.isPickedUp === true);
-    const wrapper = shallow(<QueueView requests={activeRequest} mode="DispatcherMode" complete={jest.fn} time={date} />);
+    const wrapper = shallow(<QueueView requests={activeRequest} complete={jest.fn} time={date} />);
     const btnCancleActiveRide = wrapper.find('#btnCancleActiveRide');
     const btnCancelPickUpRide = wrapper.find('#btnCancelPickUpRide');
     expect(btnCancleActiveRide.exists()).toBe(false);
