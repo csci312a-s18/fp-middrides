@@ -160,6 +160,8 @@ class ContentArea extends Component {
             if (this.state.password === password && !state) {
               this.setState({ viewmode: 'DispatcherMode' });
               localStorage.setItem('dispatcher', '');
+            } else if (!state) {
+              alert('Dispatcher already logged in'); // eslint-disable-line no-alert
             } else {
               alert('Incorrect password. Try again!'); // eslint-disable-line no-alert
             }
