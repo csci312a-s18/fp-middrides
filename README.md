@@ -66,7 +66,7 @@ The skeleton is setup for CI with Travis-CI. Travis will run build the client an
 
 ## Deploying to Heroku
 
-The Film Explorer can be deployed to [Heroku](heroku.com) using the approach demonstrated in this [repository](https://github.com/mars/heroku-cra-node). The key additions to the top-level `package.json` file to enable Heroku deployment:
+The MiddRides app can be deployed to [Heroku](heroku.com) using the approach demonstrated in this [repository](https://github.com/mars/heroku-cra-node). The key additions to the top-level `package.json` file to enable Heroku deployment:
 
 * Specify the node version in the `engines` field
 * Add a `heroku-postbuild` script field that will install dependencies for the client and server and create the production build of the client application.
