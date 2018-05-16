@@ -5,6 +5,14 @@ import { Table, Button, ButtonToolbar } from 'react-bootstrap';
 
 const headers = ['Name', 'Passengers', 'Current Location', 'Destination', 'ETA (mins)', 'Set Status'];
 
+function returnTime(date, eta) {
+  const mins = (date.getMinutes() + Math.round(eta)) % 60;
+  const addToHour = Math.floor((date.getMinutes() + Math.round(eta)) / 60);
+  const hour = (date.getHours() + addToHour) % 12;
+  const time = `${hour}:${mins}`;
+  return time;
+}
+
 function QueueView(props) {
   return (
     <Table striped bordered hover responsive>
@@ -21,7 +29,10 @@ function QueueView(props) {
             <td id="tdpassengers">{request.passengers}</td>
             <td id="tdcurrentLocation">{request.currentLocation}</td>
             <td id="tddestination">{request.destination}</td>
-            <td id="tdETA">{request.ETA === 100000 ? 'Calculating...' : (request.ETA === -1 ? 'Picked Up' : request.ETA)}</td> {/* eslint-disable-line no-nested-ternary */}
+            <td id="tdETA">{
+              request.ETA === 100000 ? 'Calculating...' : (/* eslint-disable-line no-nested-ternary */
+                request.ETA === -1 ? 'Picked Up' : returnTime(props.time, request.ETA))}
+            </td>
             {request.isPickedUp ? (
               <td>
                 <ButtonToolbar>
@@ -79,6 +90,7 @@ QueueView.propTypes = {
     currentLocation: PropTypes.string,
     destination: PropTypes.string,
   })).isRequired,
+  time: PropTypes.instanceOf(Date).isRequired,
 };
 
 export default QueueView;

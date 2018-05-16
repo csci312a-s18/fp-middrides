@@ -1,6 +1,6 @@
 /* eslint-disable no-underscore-dangle */
 
-import { enumeratePaths, getTime, calculateETA, findOptimumPath, calculateMaxWaitTime } from './Algorithm';
+import { enumeratePaths, getTime, calculateETA, findOptimumPath, calculateMaxWaitTime, calculateWalkOns } from './Algorithm';
 
 const requests = [
   {
@@ -63,20 +63,6 @@ const requests2 = [
     ETA: -1,
   },
 ];
-
-
-// {
-//   _id: '5af4a7f0e156fcbb33112ce2',
-//   extract: '',
-//   name: 'Crystal',
-//   passengers: 5,
-//   currentLocation: 'T Lot',
-//   destination: 'Track Lot/KDR',
-//   active: true,
-//   isPickedUp: false,
-//   timestamp: '2018-05-10T20:13:36.552Z',
-//   ETA: -1,
-// },
 
 const requests3 = [
   {
@@ -231,19 +217,19 @@ describe('calculateETA tests', () => {
       count += 1;
     });
   });
+});
 
-  // test('bug2', () => {
-  //   const paths = enumeratePaths('Adirondack Circle', requests3, 14);
-  //   const optimalPath3 = findOptimumPath(requests3, paths, Date.parse(now)/60000);
-  //   const updatedRequests = calculateETA(requests3, optimalPath3, 0);
-  //   const ids = ['5af4a7fae156fcbb33112ce3', '5af4a7e5e156fcbb33112ce1'];
-  //   const expectedETA = [1.8, 6.6, 11.399999999999999, 14.4, 16.2];
-  //
-  //   let count = 0;
-  //   ids.forEach((id) => {
-  //     const request = updatedRequests.find(item => item._id === id);
-  //     expect(request.ETA).toEqual(expectedETA[count]);
-  //     count += 1;
-  //   });
-  // });
+describe('calculateWalkOns() tests', () => {
+  test('calculates correct walk ons', () => {
+    const paths = enumeratePaths('Adirondack Circle', requests3, 14);
+    const optimalPath = findOptimumPath(requests3, paths, Date.parse(now) / 60000);
+    // console.log(optimalPath);
+    const expectedWalkOns = [11, 7, 11, 14];
+    const seatsLeft = [14, 11, 7, 11];
+    for (let i = 0; i < expectedWalkOns.length; i += 1) {
+      // console.log(calculateWalkOns(requests3, optimalPath.slice(i), seatsLeft[i]));
+      expect(calculateWalkOns(requests3, optimalPath.slice(i), seatsLeft[i]))
+        .toEqual(expectedWalkOns[i]);
+    }
+  });
 });
