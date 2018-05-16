@@ -108,4 +108,4 @@ No add-ons used.
 
 ## Secrets
 
-2 evironment variables are passed using Heroku config vars. A Google API Key and MongoDB URI are required environment variables.
+2 environment variables are passed using Heroku config vars. A Google API Key and MongoDB URI are required environment variables.
