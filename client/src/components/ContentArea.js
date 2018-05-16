@@ -336,8 +336,8 @@ class ContentArea extends Component {
           <br />
           <br />
           <h4>
-          <strong>Next Stop: </strong>{this.state.nextStop} arriving in ___ minutes <br /><br />
-          <strong>Your Stop: </strong>{this.state.currentRequest ? this.state.currentRequest.currentLocation : '-'} arriving in ___ minutes
+            <strong>Next Stop: </strong>{this.state.nextStop} arriving in ___ minutes <br /><br />
+            <strong>Your Stop: </strong>{this.state.currentRequest ? this.state.currentRequest.currentLocation : '-'} arriving in ___ minutes
           </h4>
         </div>
       );
