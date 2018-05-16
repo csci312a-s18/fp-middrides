@@ -2,7 +2,7 @@
 /* eslint no-plusplus: ["error", { "allowForLoopAfterthoughts": true }] */
 
 import React, { Component } from 'react';
-import { Button, ButtonToolbar, Form, FormGroup, FormControl, ControlLabel, Col, Panel, Well, Label } from 'react-bootstrap';
+import { Button, ButtonToolbar, Form, FormGroup, FormControl, ControlLabel, Col, Panel, Well } from 'react-bootstrap';
 import QueueView from './QueueView';
 import RequestForm from './RequestForm';
 import GPS from './GPS';
@@ -404,14 +404,6 @@ class ContentArea extends Component {
         >
         Log-out
         </Button>
-      );
-      const label = (
-        <Label
-          bsStyle="success"
-          bsSize="medium"
-        >
-        Next stop: {this.state.nextStop}
-        </Label>
       );
 
       const buttons = (<ButtonToolbar>{addRideButton}<div className="login"> {enterDispatcherView} </div></ButtonToolbar>
