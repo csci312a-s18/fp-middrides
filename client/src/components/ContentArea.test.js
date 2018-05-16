@@ -185,7 +185,7 @@ describe('Interval functionality', () => {
     />);
 
     // 18 was selected because of unseen calls to componentDidMount
-    expect(setInterval).toHaveBeenCalledTimes(18);
+    expect(setInterval).toHaveBeenCalledTimes(17);
     expect(setInterval).toHaveBeenLastCalledWith(expect.any(Function), 1000);
   });
 });
