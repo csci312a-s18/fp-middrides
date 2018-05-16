@@ -184,7 +184,7 @@ describe('Interval functionality', () => {
       complete={jest.fn}
     />);
 
-    // 18 was selected because of unseen calls to componentDidMount
+    // 17 was selected because of number of tests
     expect(setInterval).toHaveBeenCalledTimes(17);
     expect(setInterval).toHaveBeenLastCalledWith(expect.any(Function), 1000);
   });

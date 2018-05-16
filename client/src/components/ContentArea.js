@@ -137,12 +137,23 @@ class ContentArea extends Component {
   }
 
   handleLogin() {
-    if (this.state.password === '12345') { // temporary password
-      this.setState({ viewmode: 'DispatcherMode' });
-      localStorage.setItem('dispatcher', '');
-    } else {
-      alert('Incorrect password. Try again!'); // eslint-disable-line no-alert
-    }
+    fetch('/dispatcherPassword', { headers: new Headers({ Accept: 'application/json' }) })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(response.status_text);
+        }
+        return response.json();
+      })
+      .then((data) => {
+        const password = data[0].password; // eslint-disable-line prefer-destructuring
+        if (this.state.password === password) {
+          this.setState({ viewmode: 'DispatcherMode' });
+          localStorage.setItem('dispatcher', '');
+        } else {
+          alert('Incorrect password. Try again!'); // eslint-disable-line no-alert
+        }
+      })
+      .catch(err => console.log(err)); // eslint-disable-line no-console
   }
 
   handleCancel() {
