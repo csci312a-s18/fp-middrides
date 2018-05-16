@@ -106,3 +106,13 @@ Your project can be deployed to basin.cs.middlebury.edu (where it is typically r
   	NODE_ENV=production PORT=5042 npm run start --prefix server
 
   	```
+
+## Server
+
+Application uses MongoDB server located at: https://www.mlab.com/databases/heroku_b4q7q9zw
+
+No add-ons used. 
+
+## Secrets
+
+2 evironment variables are passed using Heroku config vars. A Google API Key and MongoDB URI are required environment variables.
