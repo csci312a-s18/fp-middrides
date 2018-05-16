@@ -6,7 +6,7 @@ import { Button, ButtonToolbar, Form, FormGroup, FormControl, ControlLabel, Col,
 import QueueView from './QueueView';
 import RequestForm from './RequestForm';
 import GPS from './GPS';
-import { enumeratePaths, calculateETA, findOptimumPath } from './Algorithm';
+import { enumeratePaths, calculateETA, findOptimumPath, calculateWalkOns } from './Algorithm';
 import fetchHelper from './Helpers';
 
 
@@ -21,9 +21,11 @@ class ContentArea extends Component {
       currentStop: 'Adirondack Circle',
       seatsLeft: 14,
       nextStop: '',
+      walkOns: 14,
     };
 
     this.nextStopID = '5af88680f36d280cecd235bc';
+    this.dispatcherExistsID = '5afb1243f36d28736375f968';
 
     this.handleCancel = this.handleCancel.bind(this);
     this.handlePassword = this.handlePassword.bind(this);
@@ -76,6 +78,16 @@ class ContentArea extends Component {
     fetchHelper(`/nextStop/${this.nextStopID}`, 'PUT', newStop).catch(err => console.log(err)); // eslint-disable-line no-console
   }
 
+  updateDispatcherState(state) {
+    const newState = Object.assign({}, {
+      _id: {
+        $oid: this.dispatcherExistsID,
+      },
+      state: null,
+    }, { state });
+    fetchHelper(`/dispatcherExists/${this.dispatcherExistsID}`, 'PUT', newState).catch(err => console.log(err)); // eslint-disable-line no-console
+  }
+
   runAlgorithm() {
     if (this.state.requests.length === 0) {
       this.setState({ nextStop: 'No request in queue' });
@@ -85,9 +97,16 @@ class ContentArea extends Component {
     const paths = enumeratePaths(this.state.currentStop, this.state.requests, this.state.seatsLeft);
     const now = (new Date()).toISOString;
     const optimalPath = findOptimumPath(this.state.requests, paths, Date.parse(now) / 60000);
+    const getWalkOns = calculateWalkOns(this.state.requests, optimalPath, this.state.seatsLeft);
     let updatedRequests = [];
     this.state.requests.forEach(request => updatedRequests.push(Object.assign({}, request)));
-    const newRequests = calculateETA(updatedRequests, optimalPath, 0);
+    let newRequests;
+    if (optimalPath.length > 0) {
+      newRequests = calculateETA(updatedRequests, optimalPath, 0);
+    } else {
+      newRequests = [];
+    }
+
     for (let i = 0; i < newRequests.length; i++) {
       fetchHelper(`/requests/${newRequests[i]._id}`, 'PUT', newRequests[i]).then((updatedRequest) => { // eslint-disable-line no-loop-func
         updatedRequests = this.state.requests.map((request) => {
@@ -97,7 +116,7 @@ class ContentArea extends Component {
           return request;
         });
       }).then(() => { // eslint-disable-line no-loop-func
-        this.setState({ requests: updatedRequests });
+        this.setState({ requests: updatedRequests, walkOns: getWalkOns });
         if (optimalPath.length > 1) {
           this.setState({ nextStop: optimalPath[1].currentStop });
         } else {
@@ -142,8 +161,9 @@ class ContentArea extends Component {
 
 
   handleFormReturn(newRequest) {
-    if (this.state.requests.length === 10) {
+    if (this.state.requests.length === 7) { // can't take more than 7 requests at a time
       alert('Sorry, the queue is full. Please try again later.'); // eslint-disable-line no-alert
+      this.setState({ viewmode: this.state.viewmode === 'RequestRideUser' ? 'UserStart' : 'DispatcherMode' });
       return;
     }
     if (this.state.viewmode === 'RequestRideUser') {
@@ -213,7 +233,11 @@ class ContentArea extends Component {
     }).then(() => {
       const updatedRequests = this.state.requests
         .filter(request => request._id !== id);
-      this.setState({ requests: updatedRequests, currentStop: droppedOffRequest.destination });
+      this.setState({
+        requests: updatedRequests,
+        currentStop: droppedOffRequest.destination,
+        seatsLeft: this.state.seatsLeft + droppedOffRequest.passengers,
+      });
       this.runAlgorithm();
     }).catch(err => console.log(err)); // eslint-disable-line no-console
   }
@@ -231,6 +255,7 @@ class ContentArea extends Component {
       this.setState({
         requests: updatedRequests,
         currentStop: pickedUpRequest.currentLocation,
+        seatsLeft: this.state.seatsLeft - pickedUpRequest.passengers,
       });
       this.runAlgorithm();
     }).catch(err => console.log(err)); // eslint-disable-line no-console
@@ -375,10 +400,16 @@ class ContentArea extends Component {
 
       const nextUpText = (<p>Next Stop: {this.state.nextStop}</p>);
 
+      const walkOnsLabel = (<p>Walk Ons Allowed: { this.state.walkOns } </p>);
+
+      const seatsLeftLabel = (<p>Seats Left: {this.state.seatsLeft } </p>);
+
       return (
         <div>
           {buttons}
           {nextUpText}
+          {seatsLeftLabel}
+          {walkOnsLabel}
           <br />
           <Panel bsStyle="info">
             <Panel.Heading>

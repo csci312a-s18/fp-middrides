@@ -1,10 +1,31 @@
 /* eslint no-plusplus: ["error", { "allowForLoopAfterthoughts": true }] */
 /* eslint no-underscore-dangle: [2, { "allow": ["_id"] }] */
+/* eslint-disable no-loop-func */
 
 import campusMap from '../campus-map.json';
 
 function getTime(source, destination) {
   return campusMap[source][destination];
+}
+
+function calculateWalkOns(requests, path, seatsLeft) {
+  // console.log('path: ', path);
+  let walkOns = seatsLeft;
+  if (path[1]) {
+    path[1].id.forEach((id) => {
+      const request = requests.find(findRequest => findRequest._id === id);
+      // console.log('currentLocation: ', request.currentLocation, 'current stop: ',
+      // path[1].currentStop, 'destination: ', request.destination;
+      if (request.currentLocation === path[1].currentStop) {
+        walkOns -= request.passengers;
+      } else if (request.destination === path[1].currentStop) {
+        walkOns += request.passengers;
+      }
+    });
+  } else {
+    walkOns = 14;
+  }
+  return walkOns;
 }
 
 function enumeratePaths(currStop, reqs, remainingSeats) {
@@ -95,18 +116,21 @@ function calculateMaxWaitTime(requests, path, now) {
 }
 
 function findOptimumPath(requests, paths, now) {
-  let optimalPath = paths[0];
-  let optimalMetric = calculateMaxWaitTime(requests, optimalPath, now);
+  if (paths[0]) {
+    let optimalPath = paths[0];
+    let optimalMetric = calculateMaxWaitTime(requests, optimalPath, now);
 
-  for (let path = 1; path < paths.length; path++) {
-    const metric = calculateMaxWaitTime(requests, paths[path], now);
+    for (let path = 1; path < paths.length; path++) {
+      const metric = calculateMaxWaitTime(requests, paths[path], now);
 
-    if (metric < optimalMetric) {
-      optimalMetric = metric;
-      optimalPath = paths[path];
+      if (metric < optimalMetric) {
+        optimalMetric = metric;
+        optimalPath = paths[path];
+      }
     }
+    return optimalPath;
   }
-  return optimalPath;
+  return [];
 }
 
 function calculateETA(requests, optimalPath, runningTime) {
@@ -135,4 +159,7 @@ function calculateETA(requests, optimalPath, runningTime) {
 }
 
 
-export { enumeratePaths, calculateETA, findOptimumPath, getTime, calculateMaxWaitTime };
+export {
+  enumeratePaths, calculateETA, findOptimumPath, getTime,
+  calculateMaxWaitTime, calculateWalkOns,
+};

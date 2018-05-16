@@ -21,7 +21,7 @@ function QueueView(props) {
             <td id="tdpassengers">{request.passengers}</td>
             <td id="tdcurrentLocation">{request.currentLocation}</td>
             <td id="tddestination">{request.destination}</td>
-            <td id="tdETA">{request.ETA === 100000 ? 'Calculating...' : (request.ETA === -1 ? 'Picked Up' : request.ETA)}</td> {/* eslint-disable-line no-nested-ternary */}
+            <td id="tdETA">{request.ETA === 100000 ? 'Calculating...' : (request.ETA === -1 ? 'Picked Up' : Number((request.ETA).toFixed(2)))}</td> {/* eslint-disable-line no-nested-ternary */}
             {request.isPickedUp ? (
               <td>
                 <ButtonToolbar>
